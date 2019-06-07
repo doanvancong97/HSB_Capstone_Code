@@ -233,7 +233,7 @@ public class MainActivity extends AppCompatActivity {
 
         mSuggestions.add(new Suggesttion("4rau Barber "));
         mSuggestions.add(new Suggesttion("Cắt Tóc Sài Gòn"));
-        mSuggestions.add(new Suggesttion("69Shine"));
+        mSuggestions.add(new Suggesttion("SunShine"));
         mSuggestions.add(new Suggesttion("FreeStyle Salon"));
         mSuggestions.add(new Suggesttion("Tony Hair Salon"));
 
@@ -255,11 +255,11 @@ public class MainActivity extends AppCompatActivity {
 
 
         if (intent.getStringExtra("phonenumber") != null) {
-            txtTestLogin.setText("Da login");
+            txtTestLogin.setText("Welcome: "+intent.getStringExtra("phonenumber"));
         } else {
 
 
-            txtTestLogin.setText("chua login");
+            txtTestLogin.setText("");
         }
 
 

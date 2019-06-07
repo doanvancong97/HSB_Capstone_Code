@@ -41,7 +41,7 @@ public class LoginActivity extends AppCompatActivity {
                 intent.putExtra("phonenumber",edtUsername.getText().toString());
                 startActivity(intent);
             } else {
-                txtResult.setText("Số điện thoại hoặc mật khẩu không đúng!");
+                txtResult.setText("Tên đăng nhập hoặc mật khẩu không đúng!");
 
             }
 
