@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+
+    tools:context=".BookingDetailActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+
+
+
+
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:text="THÔNG TIN ĐẶT CHỖ"
+            android:textColor="@color/red2"
+            android:textStyle="bold" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:src="@drawable/rau_location_map" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:drawableLeft="@drawable/locaton_icon"
+            android:gravity="center|start"
+            android:paddingLeft="70dp"
+            android:text="1084 Quang Trung, Gò Vấp, TP. HCM" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:drawableLeft="@drawable/icons8_near_me_16px"
+                android:paddingLeft="50dp"
+                android:text="  Chỉ đường"
+                android:textColor="@color/red2" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:drawableLeft="@drawable/phone"
+                android:paddingLeft="50dp"
+                android:text="  Gọi cửa hàng"
+                android:textColor="@color/red2" />
+
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingTop="20dp"
+            android:text="MÃ ĐẶT CHỖ"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:gravity="center"
+            android:text="HSB040619"
+            android:textColor="@color/red2"
+            android:textSize="25dp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp">
+
+            <TextView
+                android:layout_width="0dp"
+
+                android:layout_height="fill_parent"
+
+                android:layout_weight="1"
+                android:paddingLeft="20dp"
+                android:text="Thời gian đến" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+
+
+                android:layout_weight="1"
+
+                android:paddingLeft="40dp"
+                android:text="9:00 03/06/2019"
+                android:textColor="@color/red2" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp">
+
+            <TextView
+                android:layout_width="0dp"
+
+                android:layout_height="fill_parent"
+
+                android:layout_weight="1"
+                android:paddingLeft="20dp"
+                android:text="Ưu đãi" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+
+
+                android:layout_weight="1"
+
+                android:paddingLeft="40dp"
+                android:text="Giảm 30% dịch vụ "
+                android:textColor="@color/red2" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp">
+
+            <TextView
+                android:layout_width="0dp"
+
+                android:layout_height="fill_parent"
+
+                android:layout_weight="1"
+                android:paddingLeft="20dp"
+                android:text="Tên khách hàng" />
+
+            <TextView
+                android:layout_width="0dp"
+
+                android:layout_height="fill_parent"
+
+                android:layout_weight="1"
+                android:paddingLeft="40dp"
+                android:text="Đoàn Văn Công" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp">
+
+            <TextView
+                android:layout_width="0dp"
+
+                android:layout_height="fill_parent"
+
+                android:layout_weight="1"
+                android:paddingLeft="20dp"
+                android:text="Số điện thoại liên hệ" />
+
+            <TextView
+                android:layout_width="0dp"
+
+                android:layout_height="fill_parent"
+
+                android:layout_weight="1"
+                android:paddingLeft="40dp"
+                android:text="0329427417" />
+
+
+        </LinearLayout>
+
+        <com.borjabravo.readmoretextview.ReadMoreTextView
+
+            android:id="@+id/txt_description2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
+            app:colorClickableText="#2644EB"
+            app:trimLines="6" />
+
+        <Button
+            android:id="@+id/btnConfirm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:background="@drawable/button_cancel"
+
+
+            android:text="Hủy đặt chỗ"
+            android:textSize="18sp"
+
+            />
+
+
+
+
+    </LinearLayout>
+
+</ScrollView>

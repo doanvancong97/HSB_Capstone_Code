@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_action_bar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
+
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <!--<SearchView-->
+
+        <!--android:id="@+id/searchView1"-->
+
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="35dp"-->
+        <!--android:layout_weight="4"-->
+        <!--android:background="@drawable/search_bg"-->
+        <!--android:iconifiedByDefault="false"-->
+        <!--android:paddingLeft="10dp"-->
+        <!--android:queryBackground="@color/transparent"-->
+
+        <!--android:queryHint="Tìm kiếm"-->
+        <!--android:searchIcon="@drawable/icon_search"-->
+
+
+        <!--/>-->
+
+        <com.arlib.floatingsearchview.FloatingSearchView
+            android:id="@+id/floating_search_view"
+            android:layout_width="0dp"
+            android:layout_height="500dp"
+            android:layout_weight="4"
+            app:floatingSearch_dimBackground="false"
+            android:backgroundTint="@color/gray"
+            app:floatingSearch_showSearchKey="true"
+            app:floatingSearch_leftActionMode="showSearch"
+
+
+
+
+
+
+            >
+
+
+        </com.arlib.floatingsearchview.FloatingSearchView>
+
+
+
+
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:paddingTop="10dp"
+            android:src="@drawable/filter_icon" />
+
+
+    </LinearLayout>
+
+
+</android.support.v7.widget.Toolbar>
+
+
+<!--<RelativeLayout-->
+    <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+    <!--android:id="@+id/toolbar_container"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content">-->
+
+    <!--<android.support.v7.widget.Toolbar-->
+        <!--android:id="@+id/toolbar"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:background="@drawable/search_bg" />-->
+
+    <!--<com.miguelcatalan.materialsearchview.MaterialSearchView-->
+        <!--android:id="@+id/search_view"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content" />-->
+<!--</RelativeLayout>-->

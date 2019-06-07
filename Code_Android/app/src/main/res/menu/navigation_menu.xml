@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:id="@+id/group_4">
+        <item android:title="">
+            <menu>
+
+
+                <item
+                    android:icon="@drawable/coupon_icon"
+                    android:title="Lịch sử đặt chỗ"
+
+                    />
+            </menu>
+        </item>
+    </group>
+    <group android:id="@+id/group_one">
+        <item android:title="Danh mục">
+            <menu>
+
+                <item
+                    android:id="@+id/nav_lesson"
+                    android:icon="@drawable/new_salon2"
+                    android:title="Mới khai trương" />
+                <item
+
+                    android:icon="@drawable/sale2"
+                    android:title="Giảm giá sốc" />
+                <item
+                    android:icon="@drawable/location"
+                    android:title="Gần đây" />
+            </menu>
+        </item>
+    </group>
+
+    <group android:id="@+id/group_two">
+        <item android:title="Khám phá">
+            <menu>
+                <item
+
+                    android:icon="@drawable/organizer"
+                    android:title="Bộ sưu tập" />
+                <item
+
+                    android:icon="@drawable/salon"
+                    android:title="Tiệm làm tóc" />
+            </menu>
+        </item>
+    </group>
+
+    <group android:id="@+id/group_three">
+
+        <item android:title="">
+            <menu>
+                <item
+
+                    android:icon="@drawable/favorites"
+                    android:title="Đánh giá HSB" />
+                <item
+
+                    android:icon="@drawable/agenda"
+                    android:title="Điều khoản" />
+                <item
+
+                    android:icon="@drawable/locked"
+                    android:title="Chính sách bảo mật" />
+            </menu>
+        </item>
+
+    </group>
+</menu>
