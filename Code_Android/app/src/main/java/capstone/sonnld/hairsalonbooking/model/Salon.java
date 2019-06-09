@@ -1,124 +1,84 @@
 package capstone.sonnld.hairsalonbooking.model;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 public class Salon {
+    @SerializedName("salon_id")
+    @Expose
+    private Integer salonId;
+    @SerializedName("name")
+    @Expose
+    private String name;
+    @SerializedName("phone_number")
+    @Expose
+    private String phoneNumber;
+    @SerializedName("email")
+    @Expose
+    private String email;
+    @SerializedName("status")
+    @Expose
+    private Object status;
+    @SerializedName("manager_id")
+    @Expose
+    private Integer managerId;
+    @SerializedName("url")
+    @Expose
+    private String url;
 
-    private String salonName;
-    private String promotionName;
-    private String address;
-    private String description;
-    private String thumbnailUrl;
-    private String salonServiceListName;
-    private String saleValue;
-    private double rate;
-
-    public Salon() {
+    public Integer getSalonId() {
+        return salonId;
     }
 
-    public Salon(String salonName, String address, String description, String thumbnailUrl, String salonServiceListName, String saleValue) {
-        this.salonName = salonName;
-        this.address = address;
-        this.description = description;
-        this.thumbnailUrl = thumbnailUrl;
-        this.salonServiceListName = salonServiceListName;
-        this.saleValue = saleValue;
+    public void setSalonId(Integer salonId) {
+        this.salonId = salonId;
     }
 
-    public Salon(String salonName, String address, String description, String thumbnailUrl, String saleValue, double rate) {
-        this.salonName = salonName;
-        this.address = address;
-        this.description = description;
-        this.thumbnailUrl = thumbnailUrl;
-        this.saleValue = saleValue;
-        this.rate = rate;
+    public String getName() {
+        return name;
     }
 
-    public Salon(String salonName, String promotionName, String address, String description, String thumbnailUrl, String saleValue, double rate) {
-        this.salonName = salonName;
-        this.promotionName = promotionName;
-        this.address = address;
-        this.description = description;
-        this.thumbnailUrl = thumbnailUrl;
-        this.saleValue = saleValue;
-        this.rate = rate;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public Salon(String salonName, String address, String description, String thumbnailUrl) {
-        this.salonName = salonName;
-        this.address = address;
-        this.description = description;
-        this.thumbnailUrl = thumbnailUrl;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public Salon(String salonName, String address, String description, String thumbnailUrl, String saleValue) {
-        this.salonName = salonName;
-        this.address = address;
-        this.description = description;
-        this.thumbnailUrl = thumbnailUrl;
-        this.saleValue = saleValue;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
-    public double getRate() {
-        return rate;
+    public String getEmail() {
+        return email;
     }
 
-    public void setRate(double rate) {
-        this.rate = rate;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public String getPromotionName() {
-        return promotionName;
+    public Object getStatus() {
+        return status;
     }
 
-    public void setPromotionName(String promotionName) {
-        this.promotionName = promotionName;
+    public void setStatus(Object status) {
+        this.status = status;
     }
 
-    public String getSalonName() {
-        return salonName;
+    public Integer getManagerId() {
+        return managerId;
     }
 
-    public void setSalonName(String salonName) {
-        this.salonName = salonName;
+    public void setManagerId(Integer managerId) {
+        this.managerId = managerId;
     }
 
-    public String getAddress() {
-        return address;
+    public String getUrl() {
+        return url;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getThumbnailUrl() {
-        return thumbnailUrl;
-    }
-
-    public void setThumbnailUrl(String thumbnailUrl) {
-        this.thumbnailUrl = thumbnailUrl;
-    }
-
-    public String getSalonServiceListName() {
-        return salonServiceListName;
-    }
-
-    public void setSalonServiceListName(String salonServiceListName) {
-        this.salonServiceListName = salonServiceListName;
-    }
-
-    public String getSaleValue() {
-        return saleValue;
-    }
-
-    public void setSaleValue(String saleValue) {
-        this.saleValue = saleValue;
+    public void setUrl(String url) {
+        this.url = url;
     }
 }
-

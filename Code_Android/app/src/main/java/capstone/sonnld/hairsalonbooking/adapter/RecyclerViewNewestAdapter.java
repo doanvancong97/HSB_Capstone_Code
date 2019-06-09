@@ -1,7 +1,6 @@
 package capstone.sonnld.hairsalonbooking.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -15,18 +14,18 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import capstone.sonnld.hairsalonbooking.model.Salon;
-import capstone.sonnld.hairsalonbooking.DetailSalonActivity;
 import capstone.sonnld.hairsalonbooking.R;
+import capstone.sonnld.hairsalonbooking.model.Salon;
+import capstone.sonnld.hairsalonbooking.model.SalonService;
 
 public class RecyclerViewNewestAdapter extends RecyclerView.Adapter<RecyclerViewNewestAdapter.MyViewHolder> {
 
     private Context mContext;
-    private List<Salon> mSalonList;
+    private List<SalonService> salonServices;
 
-    public RecyclerViewNewestAdapter(Context mContext, List<Salon> mSalonList) {
+    public RecyclerViewNewestAdapter(Context mContext, List<SalonService> salonServices) {
         this.mContext = mContext;
-        this.mSalonList = mSalonList;
+        this.salonServices = salonServices;
     }
 
 
@@ -42,36 +41,36 @@ public class RecyclerViewNewestAdapter extends RecyclerView.Adapter<RecyclerView
     @Override
     public void onBindViewHolder( MyViewHolder holder, final int position) {
         //show item
-        holder.txtSalonName.setText(mSalonList.get(position).getSalonName());
-//        holder.imgSalonThumb.setImageResource(mSalonList.get(position).getThumbnail());
-        holder.txtSalonAddress.setText(mSalonList.get(position).getAddress());
-        holder.txtSaleValue.setText(" - " + mSalonList.get(position).getSaleValue());
-        holder.txtRate.setText(mSalonList.get(position).getRate() + "");
+        holder.txtSalonName.setText(salonServices.get(position).getService().getServiceName());
+//        holder.imgSalonThumb.setImageResource(salonServices.get(position).getThumbnail());
+        holder.txtSalonAddress.setText(salonServices.get(position).getSalon().getAddress());
+        holder.txtSaleValue.setText(" - " + salonServices.get(position).getDiscount().getDiscountValue());
+        holder.txtRate.setText( "5" );
         Picasso.with(mContext).
-                load(mSalonList.get(position).getThumbnailUrl())
+                load(salonServices.get(position).getSalon().getUrl())
                 .into(holder.imgSalonThumb);
 
         // event when tap on a item
-        holder.cardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //pass data to Detail salon activity
-                Intent intent = new Intent(mContext, DetailSalonActivity.class);
-                intent.putExtra("SalonName",mSalonList.get(position).getSalonName());
-                intent.putExtra("Description",mSalonList.get(position).getDescription());
-                intent.putExtra("Thumbnail",mSalonList.get(position).getThumbnailUrl());
-                intent.putExtra("Address",mSalonList.get(position).getAddress());
-//                intent.putExtra("ServiceListName",mSalonList.get(position).getSalonServiceListName());
-                // data need to be received in DetailSalonA
-                mContext.startActivity(intent);
-
-            }
-        });
+//        holder.cardView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //pass data to Detail salon activity
+//                Intent intent = new Intent(mContext, DetailSalonActivity.class);
+//                intent.putExtra("SalonName",salonServices.get(position).getSalonName());
+//                intent.putExtra("Description",salonServices.get(position).getDescription());
+//                intent.putExtra("Thumbnail",salonServices.get(position).getThumbnailUrl());
+//                intent.putExtra("Address",salonServices.get(position).getAddress());
+////                intent.putExtra("ServiceListName",salonServices.get(position).getSalonServiceListName());
+//                // data need to be received in DetailSalonA
+//                mContext.startActivity(intent);
+//
+//            }
+//        });
     }
 
     @Override
     public int getItemCount() {
-        return mSalonList.size();
+        return salonServices.size();
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{

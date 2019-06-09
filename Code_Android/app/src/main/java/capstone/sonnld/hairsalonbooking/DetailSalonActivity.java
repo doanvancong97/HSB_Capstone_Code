@@ -26,21 +26,16 @@ public class DetailSalonActivity extends AppCompatActivity {
 
 
     private TextView txtSalonName;
-    private TextView txtPromotionName;
+    private TextView txtSalonService;
     private TextView txtDescription;
 
     private ImageView imgThumb;
-    private RecyclerView recyclerView;
     private ImageView imgLogo;
 
     private Spinner spAddress,spService;
     private static final String[] listAddress =
             {"1084 Quang Trung, F.12, Quận Gò Vấp, TP. HCM", "18 Nguyễn Ảnh Thủ, F. Trung Mỹ Tây, Quận 12, TP. HCM", "30 Nguyễn Trãi, F.10,  Quận 10"};
 
-    List<SalonService> shop1ServiceList = new ArrayList<>();
-    List<SalonService> shop2ServiceList = new ArrayList<>();
-    List<SalonService> shop3ServiceList;
-    List<SalonService> shop4ServiceList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,55 +53,24 @@ public class DetailSalonActivity extends AppCompatActivity {
         spAddress.setAdapter(addressAdapter);
 
 
-
-        //setup tool bar
-//        mToolbar = (Toolbar) findViewById(R.id.nav_action_bar);
-//        setSupportActionBar(mToolbar);
-
-
-        txtPromotionName = findViewById(R.id.txt_promotion_name);
+        txtSalonService = findViewById(R.id.txt_promotion_name);
         txtSalonName = findViewById(R.id.txtSalonName);
         txtDescription = findViewById(R.id.txt_description);
         imgThumb = findViewById(R.id.img_thumbnail);
-//        recyclerView = findViewById(R.id.detail_salon_service);
+
         imgLogo = findViewById(R.id.img_logo);
-
-
-
-        shop1ServiceList.add(new SalonService("Gội Đầu", R.drawable.hair_wash, 87));
-        shop1ServiceList.add(new SalonService("Đắp mặt nạ", R.drawable.beauty1, 87));
-        shop1ServiceList.add(new SalonService("Tấy tóc", R.drawable.glue, 87));
-        shop1ServiceList.add(new SalonService("Nhuộm tóc", R.drawable.dye, 200));
-
-
-
-        shop2ServiceList.add(new SalonService("Gội Đầu", R.drawable.hair_wash, 100));
-        shop2ServiceList.add(new SalonService("Đắp mặt nạ", R.drawable.beauty1, 287));
-        shop2ServiceList.add(new SalonService("Tấy tóc", R.drawable.glue, 90));
-        shop2ServiceList.add(new SalonService("Nhuộm tóc", R.drawable.dye, 200));
-
 
 
         //Receive data from view adapter
         Intent intent = getIntent();
         String salonName = intent.getExtras().getString("SalonName");
-        String promotionName = intent.getExtras().getString("PromotionName");
+        String promotionName = intent.getExtras().getString("SalonService");
         String description = intent.getExtras().getString("Description");
         String imgUrl = intent.getExtras().getString("Thumbnail");
-//        String serviceListName = intent.getExtras().getString("ServiceListName");
 
-//        RecyclerViewDetailServiceAdapter detailServiceAdapter = new RecyclerViewDetailServiceAdapter(this,shop1ServiceList);
-//        if(serviceListName.equals("shop1Service")){
-//            detailServiceAdapter = new RecyclerViewDetailServiceAdapter(this,shop1ServiceList);
-//
-//        }else if(serviceListName.equals("shop2Service")){
-//            detailServiceAdapter = new RecyclerViewDetailServiceAdapter(this,shop2ServiceList);
-//        }
-//        recyclerView.setLayoutManager(new GridLayoutManager(this,2));
-//        recyclerView.setAdapter(detailServiceAdapter);
         //set new value for view
         txtSalonName.setText(salonName);
-        txtPromotionName.setText(promotionName);
+        txtSalonService.setText(promotionName);
         txtDescription.setText(description);
         Picasso.with(this).load(imgUrl).into(imgThumb);
 

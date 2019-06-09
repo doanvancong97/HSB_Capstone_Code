@@ -1,45 +1,73 @@
 package capstone.sonnld.hairsalonbooking.model;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 public class SalonService {
-    private String serviceName;
-    private int serviceIcon;
-    private int price;
+    @SerializedName("id")
+    @Expose
+    private Integer id;
+    @SerializedName("salon")
+    @Expose
+    private Salon salon;
+    @SerializedName("service")
+    @Expose
+    private Service service;
+    @SerializedName("discount")
+    @Expose
+    private Discount discount;
+    @SerializedName("price")
+    @Expose
+    private String price;
+    @SerializedName("status")
+    @Expose
+    private Object status;
 
-    public SalonService(String serviceName, int serviceIcon) {
-        this.serviceName = serviceName;
-        this.serviceIcon = serviceIcon;
+    public Integer getId() {
+        return id;
     }
 
-    public SalonService(String serviceName, int serviceIcon, int price) {
-        this.serviceName = serviceName;
-        this.serviceIcon = serviceIcon;
-        this.price = price;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public SalonService() {
+    public Salon getSalon() {
+        return salon;
     }
 
-    public int getPrice() {
+    public void setSalon(Salon salon) {
+        this.salon = salon;
+    }
+
+    public Service getService() {
+        return service;
+    }
+
+    public void setService(Service service) {
+        this.service = service;
+    }
+
+    public Discount getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Discount discount) {
+        this.discount = discount;
+    }
+
+    public String getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(String price) {
         this.price = price;
     }
 
-    public String getServiceName() {
-        return serviceName;
+    public Object getStatus() {
+        return status;
     }
 
-    public void setServiceName(String serviceName) {
-        this.serviceName = serviceName;
-    }
-
-    public int getServiceIcon() {
-        return serviceIcon;
-    }
-
-    public void setServiceIcon(int serviceIcon) {
-        this.serviceIcon = serviceIcon;
+    public void setStatus(Object status) {
+        this.status = status;
     }
 }
