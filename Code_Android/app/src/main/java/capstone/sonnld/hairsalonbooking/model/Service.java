@@ -15,7 +15,7 @@ public class Service {
     private String unit;
     @SerializedName("status")
     @Expose
-    private Object status;
+    private String status;
     @SerializedName("category")
     @Expose
     private Category category;
@@ -44,11 +44,11 @@ public class Service {
         this.unit = unit;
     }
 
-    public Object getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Object status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
@@ -59,4 +59,5 @@ public class Service {
     public void setCategory(Category category) {
         this.category = category;
     }
+
 }

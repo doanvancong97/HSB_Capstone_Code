@@ -19,12 +19,12 @@ import capstone.sonnld.hairsalonbooking.DetailSalonActivity;
 import capstone.sonnld.hairsalonbooking.R;
 import capstone.sonnld.hairsalonbooking.model.SalonService;
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> {
+public class RecyclerViewSalonByDiscountAdapter extends RecyclerView.Adapter<RecyclerViewSalonByDiscountAdapter.MyViewHolder> {
 
     private Context mContext;
     private List<SalonService> salonServices;
 
-    public RecyclerViewAdapter(Context mContext, List<SalonService> salonServices) {
+    public RecyclerViewSalonByDiscountAdapter(Context mContext, List<SalonService> salonServices) {
         this.mContext = mContext;
         this.salonServices = salonServices;
     }
@@ -42,42 +42,33 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
         //show item
-        final String txtDumb = "*KHÔNG ÁP DỤNG DỊCH VỤ GIAO HÀNG* \n" +
+        final String des = "ÁP DỤNG KHI DÙNG DỊCH VỤ TẠI CỬA HÀNG* \n" +
                 "\n" +
-                "- Đồng giá 45K/cốc, áp dụng với sản phẩm Sữa tươi kem trứng trân châu đường đen size M (Giá gốc 65K) \n" +
-                "\n" +
-                "- Ưu đãi không bao gồm topping gọi thêm \n" +
-                "\n" +
-                "- Mỗi mã ưu đãi chỉ sử dụng 01 lần trong suốt chương trình \n" +
-                "- Mỗi mã ưu đãi áp dụng để mua 01 cốc \n" +
+                "- Giảm 20% tổng hóa đơn áp dụng cho tất cả các dịch vụ \n" +
+                "- Áp dụng cho khách hàng nữ \n" +
+                "- Mỗi mã ưu đãi đổi được nhiều suất trong suốt chương trình \n" +
                 "- Khách hàng có thể lấy nhiều mã trong suốt chương trình \n" +
                 "\n" +
                 "THỜI GIAN ÁP DỤNG \n" +
-                "- Khung giờ: 9h00 - 22h30 \n" +
+                "- Khung giờ: 9h30 - 19h00\t\n" +
                 "- Áp dụng tất cả các ngày trong tuần \n" +
-                "- Có áp dụng các ngày lễ, Tết \n" +
+                "- Không áp dụng các ngày lễ, Tết: 30/4, 1/5 \n" +
                 "\n" +
                 "Chi tiết địa điểm xem tại \"Điểm áp dụng\" \n" +
                 "\n" +
                 "Vui lòng bấm XÁC NHẬN ĐẶT CHỖ để nhận mã giảm giá \n" +
                 "\n" +
                 "LƯU Ý \n" +
-                "- Chương trình chỉ áp dụng với khách dùng tại cửa hàng & mua mang về. Không áp dụng giao hàng \n" +
+                "- Chương trình chỉ áp dụng với khách dùng dịch vụ tại cửa hàng \n" +
+                "- Không áp dụng đồng thời với các chương trình khác của MIA.Nails & Cafe \n" +
                 "- Không áp dụng phụ thu \n" +
-                "- Ưu đãi đã bao gồm VAT \n" +
-                "- Không áp dụng đồng thời với các chương trình khác của The Alley \n" +
-                "- Thông báo mã JAMJA ngay khi đến cửa hàng để được hướng dẫn nhận khuyến mãi \n" +
+                "- Ưu đãi chưa bao gồm VAT \n" +
                 "- Khách hàng được phép đến sớm hoặc muộn hơn 15 phút so với giờ hẹn đến \n" +
-                "- Mã giảm giá không có giá trị quy đổi thành tiền mặt \n" +
-                "\n" +
-                "HOTLINE \n" +
-                "- JAMJA: 1900 565 665 \n" +
-                "\n" +
-                "MẸO: Bấm \"Theo dõi\" thương hiệu để cập nhật những thay đổi về ưu đãi ngay tức thì.";
-        final String dumbAdd = "6969696 Tran Duy Hung";
+                "- Mã giảm giá không có giá trị quy đổi thành tiền mặt ";
+
         holder.txtSalonName.setText(salonServices.get(position).getService().getServiceName());
 //        holder.imgSalonThumb.setImageResource(salonServices.get(position).getThumbnail());
-        holder.txtSalonAddress.setText("696969 HCM");
+        holder.txtSalonAddress.setText(salonServices.get(position).getSalon().getLocation().getCity());
         holder.txtSaleValue.setText(" - " + salonServices.get(position).getDiscount().getDiscountValue());
         Picasso.with(mContext).
                 load(salonServices.get(position).getSalon().getUrl())
@@ -91,9 +82,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 Intent intent = new Intent(mContext, DetailSalonActivity.class);
                 intent.putExtra("SalonService", salonServices.get(position).getService().getServiceName());
                 intent.putExtra("SalonName", salonServices.get(position).getSalon().getName());
-                intent.putExtra("Description", txtDumb);
+                intent.putExtra("Description", des);
                 intent.putExtra("Thumbnail", salonServices.get(position).getSalon().getUrl());
-                intent.putExtra("Address", dumbAdd);
+                intent.putExtra("Address", salonServices.get(position).getSalon().getLocation().getCity());
 //                intent.putExtra("ServiceListName",salonServices.get(position).getSalonServiceListName());
                 // data need to be received in DetailSalonA
                 mContext.startActivity(intent);

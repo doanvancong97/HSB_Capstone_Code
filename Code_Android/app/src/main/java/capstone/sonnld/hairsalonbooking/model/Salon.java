@@ -25,6 +25,9 @@ public class Salon {
     @SerializedName("url")
     @Expose
     private String url;
+    @SerializedName("location")
+    @Expose
+    private Location location;
 
     public Integer getSalonId() {
         return salonId;
@@ -80,5 +83,13 @@ public class Salon {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
     }
 }

@@ -16,6 +16,9 @@ public class SalonService {
     @SerializedName("discount")
     @Expose
     private Discount discount;
+    @SerializedName("review")
+    @Expose
+    private Review review;
     @SerializedName("price")
     @Expose
     private String price;
@@ -53,6 +56,14 @@ public class SalonService {
 
     public void setDiscount(Discount discount) {
         this.discount = discount;
+    }
+
+    public Review getReview() {
+        return review;
+    }
+
+    public void setReview(Review review) {
+        this.review = review;
     }
 
     public String getPrice() {

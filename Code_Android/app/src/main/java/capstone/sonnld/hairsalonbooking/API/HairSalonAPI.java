@@ -8,5 +8,8 @@ import retrofit2.http.GET;
 
 public interface HairSalonAPI {
     @GET("salonservice")
-    Call<List<SalonService>> getAllService();
+    Call<List<SalonService>> getAllServiceByDiscountValue();
+
+    @GET("salonservices")
+    Call<List<SalonService>> getAllServiceByRating();
 }

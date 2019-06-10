@@ -25,15 +25,12 @@ public class Discount {
     @SerializedName("couponCode")
     @Expose
     private Object couponCode;
-    @SerializedName("minimumBookingValue")
-    @Expose
-    private Object minimumBookingValue;
-    @SerializedName("maximumDiscountAmount")
-    @Expose
-    private Object maximumDiscountAmount;
     @SerializedName("status")
     @Expose
-    private Object status;
+    private String status;
+    @SerializedName("user_id")
+    @Expose
+    private Integer userId;
 
     public Integer getDiscountId() {
         return discountId;
@@ -91,27 +88,19 @@ public class Discount {
         this.couponCode = couponCode;
     }
 
-    public Object getMinimumBookingValue() {
-        return minimumBookingValue;
-    }
-
-    public void setMinimumBookingValue(Object minimumBookingValue) {
-        this.minimumBookingValue = minimumBookingValue;
-    }
-
-    public Object getMaximumDiscountAmount() {
-        return maximumDiscountAmount;
-    }
-
-    public void setMaximumDiscountAmount(Object maximumDiscountAmount) {
-        this.maximumDiscountAmount = maximumDiscountAmount;
-    }
-
-    public Object getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Object status) {
+    public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 }

@@ -8,133 +8,120 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <!--<ScrollView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent">-->
 
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Not Login"
-            android:id="@+id/txtTestLogin"
-            />
-
-
-
-
-
-
-    <RelativeLayout
-
-
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-        <!--android:orientation="vertical">-->
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/txtTestLogin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Not Login" />
 
 
+            <!--<RelativeLayout-->
 
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content">-->
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="60dp">
+                <include
+                    layout="@layout/navigation_action_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/white"
-                android:orientation="vertical"
-                android:padding="10dp">
-
-
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:background="@drawable/my_text_view_bg"
-                    android:padding="5dp"
-                    android:text="Dịch vụ nổi bật"
-                    android:textAllCaps="true"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"
+                    android:orientation="vertical">
 
-                    />
+                    <ScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="5dp">
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/recycler_view_salon"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@color/white"
+                            android:orientation="vertical"
+                            android:padding="10dp">
 
-                </android.support.v7.widget.RecyclerView>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:background="@drawable/my_text_view_bg"
-                    android:padding="5dp"
-                    android:text="Dịch vụ mới nhất"
-                    android:textAllCaps="true"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="10dp"
+                                android:background="@drawable/my_text_view_bg"
+                                android:padding="5dp"
+                                android:text="Dịch vụ nổi bật"
+                                android:textAllCaps="true"
+                                android:textColor="@color/black"
+                                android:textStyle="bold"
 
-                    />
+                                />
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/recycler_view_newest"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                            <android.support.v7.widget.RecyclerView
+                                android:id="@+id/recycler_view_salon"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
 
-                </android.support.v7.widget.RecyclerView>
+                            </android.support.v7.widget.RecyclerView>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:background="@drawable/my_text_view_bg"
-                    android:padding="5dp"
-                    android:text="Dịch vụ tốt nhất"
-                    android:textAllCaps="true"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="10dp"
+                                android:background="@drawable/my_text_view_bg"
+                                android:padding="5dp"
+                                android:text="Dịch vụ tốt nhất"
+                                android:textAllCaps="true"
+                                android:textColor="@color/black"
+                                android:textStyle="bold"
 
-                    />
+                                />
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/recycler_view_best_salon"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                            <android.support.v7.widget.RecyclerView
+                                android:id="@+id/recycler_view_good_service"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
 
-                </android.support.v7.widget.RecyclerView>
-            </LinearLayout>
-        </ScrollView>
+                            </android.support.v7.widget.RecyclerView>
+
+                            <!--<TextView-->
+                                <!--android:layout_width="match_parent"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_margin="10dp"-->
+                                <!--android:background="@drawable/my_text_view_bg"-->
+                                <!--android:padding="5dp"-->
+                                <!--android:text="Dịch vụ tốt nhất"-->
+                                <!--android:textAllCaps="true"-->
+                                <!--android:textColor="@color/black"-->
+                                <!--android:textStyle="bold"-->
+
+                                <!--/>-->
+
+                            <!--<android.support.v7.widget.RecyclerView-->
+                                <!--android:id="@+id/recycler_view_best_salon"-->
+                                <!--android:layout_width="match_parent"-->
+                                <!--android:layout_height="wrap_content">-->
+
+                            <!--</android.support.v7.widget.RecyclerView>-->
+                        </LinearLayout>
+                    </ScrollView>
+                </LinearLayout>
+
+
+            <!--</RelativeLayout>-->
+
         </LinearLayout>
 
-        <include
-            layout="@layout/navigation_action_bar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-
-
-
-    </RelativeLayout>
-
-    </LinearLayout>
-
-    </ScrollView>
+    <!--</ScrollView>-->
 
 
     <android.support.design.widget.NavigationView
