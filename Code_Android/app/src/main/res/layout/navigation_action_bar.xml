@@ -3,14 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_action_bar"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
 
 
     >
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:weightSum="16">
 
 
         <!--<SearchView-->
@@ -34,12 +35,12 @@
         <com.arlib.floatingsearchview.FloatingSearchView
             android:id="@+id/floating_search_view"
             android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="4"
+            android:layout_height="500dp"
             app:floatingSearch_dimBackground="false"
             android:backgroundTint="@color/gray"
             app:floatingSearch_showSearchKey="true"
             app:floatingSearch_leftActionMode="showSearch"
+            android:layout_weight="15"
 
 
 
@@ -55,12 +56,7 @@
 
 
 
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:paddingTop="10dp"
-            android:src="@drawable/filter_icon" />
+
 
 
     </LinearLayout>

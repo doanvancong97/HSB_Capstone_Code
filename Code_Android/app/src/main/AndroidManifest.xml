@@ -11,7 +11,9 @@
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".BookingDetailActivity"></activity>
+        <activity android:name=".UserDetailActivity"></activity>
+        <activity android:name=".SearchActivity" />
+        <activity android:name=".BookingDetailActivity" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".MainActivity">

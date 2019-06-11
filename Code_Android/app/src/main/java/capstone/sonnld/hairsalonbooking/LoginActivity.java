@@ -38,7 +38,7 @@ public class LoginActivity extends AppCompatActivity {
             if (edtUsername.getText().toString().equals("user") && edtPassword.getText().toString().equals("123")) {
 
                 Intent intent = new Intent(this, MainActivity.class);
-                intent.putExtra("phonenumber",edtUsername.getText().toString());
+                intent.putExtra("username",edtUsername.getText().toString());
                 startActivity(intent);
             } else {
                 txtResult.setText("Tên đăng nhập hoặc mật khẩu không đúng!");
