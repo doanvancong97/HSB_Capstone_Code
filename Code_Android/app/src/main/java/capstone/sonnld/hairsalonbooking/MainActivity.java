@@ -19,7 +19,7 @@ import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import java.util.ArrayList;
 import java.util.List;
 
-import capstone.sonnld.hairsalonbooking.API.HairSalonAPI;
+import capstone.sonnld.hairsalonbooking.api.HairSalonAPI;
 import capstone.sonnld.hairsalonbooking.adapter.RecyclerViewSalonByDiscountAdapter;
 import capstone.sonnld.hairsalonbooking.adapter.RecyclerViewSalonByRatingAdapter;
 import capstone.sonnld.hairsalonbooking.model.SalonService;
@@ -31,6 +31,9 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
+
+    private String BASE_URL = "http://192.168.1.6:8080/api/";
+
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mActionBarDrawerToggle;
@@ -102,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
 
 
-        //setup sideBar
+        //setup sideBar(left menu)
 
         mActionBarDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
         mDrawerLayout.addDrawerListener(mActionBarDrawerToggle);
@@ -115,12 +118,15 @@ public class MainActivity extends AppCompatActivity {
 
         salonServiceList = new ArrayList<>();
         //init retro
+
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.1.4:8080/api/")
+                .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-
         hairSalonAPI = retrofit.create(HairSalonAPI.class);
+        //
+
+        // getAllServiceByDiscountValue API
         Call<List<SalonService>> callServiceByDV = hairSalonAPI.getAllServiceByDiscountValue();
         callServiceByDV.enqueue(new Callback<List<SalonService>>() {
             @Override
@@ -131,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
                 salonServiceList = response.body();
+
                 RecyclerView recyclerView = findViewById(R.id.recycler_view_salon);
                 RecyclerViewSalonByDiscountAdapter viewAdapter = new RecyclerViewSalonByDiscountAdapter(MainActivity.this, salonServiceList);
                 recyclerView.setLayoutManager(new GridLayoutManager(MainActivity.this, 2));
@@ -147,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        // recycler view for best service
+
 
         Call<List<SalonService>> callServiceByRating = hairSalonAPI.getAllServiceByRating();
         callServiceByRating.enqueue(new Callback<List<SalonService>>() {

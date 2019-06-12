@@ -1,4 +1,4 @@
-package capstone.sonnld.hairsalonbooking.API;
+package capstone.sonnld.hairsalonbooking.api;
 
 import java.util.List;
 

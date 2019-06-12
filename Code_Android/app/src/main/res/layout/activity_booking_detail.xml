@@ -13,13 +13,6 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-
-
-
-
-
-
-
         <TextView
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -28,10 +21,15 @@
             android:textColor="@color/red2"
             android:textStyle="bold" />
 
-        <android.support.v7.widget.AppCompatImageView
+        <!--<android.support.v7.widget.AppCompatImageView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="150dp"-->
+            <!--android:src="@drawable/rau_location_map" />-->
+        <ImageView
             android:layout_width="match_parent"
             android:layout_height="150dp"
-            android:src="@drawable/rau_location_map" />
+            android:src="@drawable/rau_location_map"
+            />
 
         <TextView
             android:layout_width="match_parent"

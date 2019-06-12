@@ -23,6 +23,11 @@ public class RecyclerViewSalonByDiscountAdapter extends RecyclerView.Adapter<Rec
 
     private Context mContext;
     private List<SalonService> salonServices;
+    private String des;
+    private String salonServiceName;
+    private String salonAddress;
+    private String saleValue;
+    private String salonImgUrl;
 
     public RecyclerViewSalonByDiscountAdapter(Context mContext, List<SalonService> salonServices) {
         this.mContext = mContext;
@@ -34,7 +39,7 @@ public class RecyclerViewSalonByDiscountAdapter extends RecyclerView.Adapter<Rec
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         LayoutInflater mInflater = LayoutInflater.from(mContext);
-        view = mInflater.inflate(R.layout.card_view_item_salon_service,parent,false);
+        view = mInflater.inflate(R.layout.card_view_item_salon_service_discount, parent, false);
 
         return new MyViewHolder(view);
     }
@@ -42,7 +47,7 @@ public class RecyclerViewSalonByDiscountAdapter extends RecyclerView.Adapter<Rec
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
         //show item
-        final String des = "ÁP DỤNG KHI DÙNG DỊCH VỤ TẠI CỬA HÀNG* \n" +
+        des = "ÁP DỤNG KHI DÙNG DỊCH VỤ TẠI CỬA HÀNG* \n" +
                 "\n" +
                 "- Giảm 20% tổng hóa đơn áp dụng cho tất cả các dịch vụ \n" +
                 "- Áp dụng cho khách hàng nữ \n" +
@@ -66,12 +71,19 @@ public class RecyclerViewSalonByDiscountAdapter extends RecyclerView.Adapter<Rec
                 "- Khách hàng được phép đến sớm hoặc muộn hơn 15 phút so với giờ hẹn đến \n" +
                 "- Mã giảm giá không có giá trị quy đổi thành tiền mặt ";
 
-        holder.txtSalonName.setText(salonServices.get(position).getService().getServiceName());
-//        holder.imgSalonThumb.setImageResource(salonServices.get(position).getThumbnail());
-        holder.txtSalonAddress.setText(salonServices.get(position).getSalon().getLocation().getCity());
-        holder.txtSaleValue.setText(" - " + salonServices.get(position).getDiscount().getDiscountValue());
+        salonServiceName = salonServices.get(position).getService().getServiceName();
+        salonAddress = salonServices.get(position).getSalon().getLocation().getStreetAddress() + ", " +
+                salonServices.get(position).getSalon().getLocation().getDistrict() + ", " +
+                salonServices.get(position).getSalon().getLocation().getCity();
+        saleValue = " - " + salonServices.get(position).getDiscount().getDiscountValue();
+        salonImgUrl = salonServices.get(position).getSalon().getUrl();
+
+
+        holder.txtSalonServiceName.setText(capFirstLetter(salonServiceName));
+        holder.txtSalonAddress.setText(capFirstLetter(salonAddress));
+        holder.txtSaleValue.setText(saleValue);
         Picasso.with(mContext).
-                load(salonServices.get(position).getSalon().getUrl())
+                load(salonImgUrl)
                 .into(holder.imgSalonThumb);
 
         // event when tap on a item
@@ -85,12 +97,16 @@ public class RecyclerViewSalonByDiscountAdapter extends RecyclerView.Adapter<Rec
                 intent.putExtra("Description", des);
                 intent.putExtra("Thumbnail", salonServices.get(position).getSalon().getUrl());
                 intent.putExtra("Address", salonServices.get(position).getSalon().getLocation().getCity());
-//                intent.putExtra("ServiceListName",salonServices.get(position).getSalonServiceListName());
-                // data need to be received in DetailSalonA
+
                 mContext.startActivity(intent);
 
             }
         });
+    }
+
+    public String capFirstLetter(String str) {
+        return str.substring(0, 1).toUpperCase() + str.substring(1);
+
     }
 
     @Override
@@ -98,9 +114,9 @@ public class RecyclerViewSalonByDiscountAdapter extends RecyclerView.Adapter<Rec
         return salonServices.size();
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder{
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView txtSalonName;
+        TextView txtSalonServiceName;
         TextView txtSalonAddress;
         TextView txtSaleValue;
         ImageView imgSalonThumb;
@@ -109,7 +125,7 @@ public class RecyclerViewSalonByDiscountAdapter extends RecyclerView.Adapter<Rec
         public MyViewHolder(View itemView) {
             super(itemView);
 
-            txtSalonName = itemView.findViewById(R.id.salon_service_name);
+            txtSalonServiceName = itemView.findViewById(R.id.salon_service_name);
             txtSalonAddress = itemView.findViewById(R.id.salon_address);
             txtSaleValue = itemView.findViewById(R.id.txt_sale_value);
             imgSalonThumb = itemView.findViewById(R.id.salon_img);

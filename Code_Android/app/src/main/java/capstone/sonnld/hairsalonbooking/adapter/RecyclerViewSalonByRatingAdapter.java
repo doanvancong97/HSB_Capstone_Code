@@ -24,6 +24,12 @@ public class RecyclerViewSalonByRatingAdapter extends RecyclerView.Adapter<Recyc
     private Context mContext;
     private List<SalonService> salonServices;
     private String des;
+    private String salonServiceName;
+    private String salonAddress;
+    private String saleValue;
+    private String salonImgUrl;
+    private String salonName;
+    private String rating;
 
     public RecyclerViewSalonByRatingAdapter(Context mContext, List<SalonService> salonServices) {
         this.mContext = mContext;
@@ -35,7 +41,7 @@ public class RecyclerViewSalonByRatingAdapter extends RecyclerView.Adapter<Recyc
     public MyViewHolder onCreateViewHolder( ViewGroup parent, int viewType) {
         View view;
         LayoutInflater mInflater = LayoutInflater.from(mContext);
-        view = mInflater.inflate(R.layout.card_view_item_newest,parent,false);
+        view = mInflater.inflate(R.layout.card_view_item_salon_service_rating,parent,false);
 
         return new MyViewHolder(view);
     }
@@ -66,13 +72,23 @@ public class RecyclerViewSalonByRatingAdapter extends RecyclerView.Adapter<Recyc
                 "- Ưu đãi chưa bao gồm VAT \n" +
                 "- Khách hàng được phép đến sớm hoặc muộn hơn 15 phút so với giờ hẹn đến \n" +
                 "- Mã giảm giá không có giá trị quy đổi thành tiền mặt ";
-        holder.txtServiceName.setText(salonServices.get(position).getService().getServiceName());
-        holder.txtSalonName.setText(salonServices.get(position).getSalon().getName());
-        holder.txtSalonAddress.setText(salonServices.get(position).getSalon().getLocation().getCity());
-        holder.txtSaleValue.setText(" - " + salonServices.get(position).getDiscount().getDiscountValue());
-        holder.txtRate.setText(salonServices.get(position).getReview().getRating());
+
+        salonServiceName = salonServices.get(position).getService().getServiceName();
+        salonAddress = salonServices.get(position).getSalon().getLocation().getStreetAddress() + ", " +
+                salonServices.get(position).getSalon().getLocation().getDistrict() + ", " +
+                salonServices.get(position).getSalon().getLocation().getCity();
+        saleValue = " - " + salonServices.get(position).getDiscount().getDiscountValue();
+        salonName = salonServices.get(position).getSalon().getName();
+        salonImgUrl = salonServices.get(position).getSalon().getUrl();
+        rating = salonServices.get(position).getReview().getRating();
+
+        holder.txtServiceName.setText(capFirstLetter(salonServiceName));
+        holder.txtSalonAddress.setText(capFirstLetter(salonAddress));
+        holder.txtSaleValue.setText(saleValue);
+        holder.txtSalonName.setText(salonName);
+        holder.txtRate.setText(rating);
         Picasso.with(mContext).
-                load(salonServices.get(position).getSalon().getUrl())
+                load(salonImgUrl)
                 .into(holder.imgSalonThumb);
 
          //event when tap on a item
@@ -94,6 +110,10 @@ public class RecyclerViewSalonByRatingAdapter extends RecyclerView.Adapter<Recyc
         });
     }
 
+    public String capFirstLetter(String str) {
+        return str.substring(0, 1).toUpperCase() + str.substring(1);
+
+    }
     @Override
     public int getItemCount() {
         return salonServices.size();

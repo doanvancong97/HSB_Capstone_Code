@@ -18,11 +18,11 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/txtTestLogin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Not Login" />
+            <!--<TextView-->
+                <!--android:id="@+id/txtTestLogin"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="Not Login" />-->
 
 
             <!--<RelativeLayout-->
@@ -93,25 +93,6 @@
 
                             </android.support.v7.widget.RecyclerView>
 
-                            <!--<TextView-->
-                                <!--android:layout_width="match_parent"-->
-                                <!--android:layout_height="wrap_content"-->
-                                <!--android:layout_margin="10dp"-->
-                                <!--android:background="@drawable/my_text_view_bg"-->
-                                <!--android:padding="5dp"-->
-                                <!--android:text="Dịch vụ tốt nhất"-->
-                                <!--android:textAllCaps="true"-->
-                                <!--android:textColor="@color/black"-->
-                                <!--android:textStyle="bold"-->
-
-                                <!--/>-->
-
-                            <!--<android.support.v7.widget.RecyclerView-->
-                                <!--android:id="@+id/recycler_view_best_salon"-->
-                                <!--android:layout_width="match_parent"-->
-                                <!--android:layout_height="wrap_content">-->
-
-                            <!--</android.support.v7.widget.RecyclerView>-->
                         </LinearLayout>
                     </ScrollView>
                 </LinearLayout>
