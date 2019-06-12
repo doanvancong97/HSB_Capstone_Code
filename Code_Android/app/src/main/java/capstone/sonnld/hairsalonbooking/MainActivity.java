@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     MaterialSpinner spinnerLocation;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         salonServiceList = new ArrayList<>();
         //init retro
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.1.4:8080/api/")
+                .baseUrl("http://192.168.1.173:8080/api/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
@@ -97,12 +98,12 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
                 salonServiceList = response.body();
-                RecyclerView recyclerViewNewest = findViewById(R.id.recycler_view_good_service);
+                RecyclerView recyclerViewBestService = findViewById(R.id.recycler_view_good_service);
                 RecyclerViewSalonByRatingAdapter viewNewestAdapter = new RecyclerViewSalonByRatingAdapter
                         (MainActivity.this, salonServiceList);
-                recyclerViewNewest.setLayoutManager(new GridLayoutManager
+                recyclerViewBestService.setLayoutManager(new GridLayoutManager
                         (MainActivity.this, 1));
-                recyclerViewNewest.setAdapter(viewNewestAdapter);
+                recyclerViewBestService.setAdapter(viewNewestAdapter);
             }
 
             @Override
@@ -152,4 +153,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+
 }

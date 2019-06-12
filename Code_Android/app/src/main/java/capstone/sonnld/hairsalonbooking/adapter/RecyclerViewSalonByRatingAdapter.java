@@ -35,7 +35,7 @@ public class RecyclerViewSalonByRatingAdapter extends RecyclerView.Adapter<Recyc
     public MyViewHolder onCreateViewHolder( ViewGroup parent, int viewType) {
         View view;
         LayoutInflater mInflater = LayoutInflater.from(mContext);
-        view = mInflater.inflate(R.layout.card_view_item_newest,parent,false);
+        view = mInflater.inflate(R.layout.card_view_item_best_service,parent,false);
 
         return new MyViewHolder(view);
     }
@@ -66,10 +66,10 @@ public class RecyclerViewSalonByRatingAdapter extends RecyclerView.Adapter<Recyc
                 "- Ưu đãi chưa bao gồm VAT \n" +
                 "- Khách hàng được phép đến sớm hoặc muộn hơn 15 phút so với giờ hẹn đến \n" +
                 "- Mã giảm giá không có giá trị quy đổi thành tiền mặt ";
-        holder.txtServiceName.setText(salonServices.get(position).getService().getServiceName());
+        holder.txtServiceName.setText(salonServices.get(position).getService().getServiceName().toUpperCase());
         holder.txtSalonName.setText(salonServices.get(position).getSalon().getName());
-        holder.txtSalonAddress.setText(salonServices.get(position).getSalon().getLocation().getCity());
-        holder.txtSaleValue.setText(" - " + salonServices.get(position).getDiscount().getDiscountValue());
+        holder.txtSalonAddress.setText(salonServices.get(position).getSalon().getLocation().getDistrict()+", "+salonServices.get(position).getSalon().getLocation().getCity());
+        holder.txtSaleValue.setText(" - " + salonServices.get(position).getDiscount().getDiscountValue()+"%");
         holder.txtRate.setText(salonServices.get(position).getReview().getRating());
         Picasso.with(mContext).
                 load(salonServices.get(position).getSalon().getUrl())

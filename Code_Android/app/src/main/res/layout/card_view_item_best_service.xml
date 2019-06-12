@@ -61,7 +61,7 @@
                     android:gravity="center"
                     android:text="Service name"
                     android:textSize="15dp"
-                    android:textColor="@color/black"
+                    android:textColor="@color/red"
                     android:textStyle="bold" />
                 <TextView
                     android:id="@+id/salon_rate"
@@ -83,9 +83,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:gravity="center"
-                android:text="Salon Name"
-                android:textSize="10dp"
+                android:paddingLeft="30dp"
+                android:text="Name"
+                android:textSize="20dp"
                 android:textColor="@color/black"
                 android:textStyle="bold" />
             <TextView
@@ -99,7 +99,7 @@
                 android:drawableLeft="@drawable/locaton_icon"
                 android:drawablePadding="10dp"
                 android:textColor="@color/black"
-                android:paddingLeft="20dp"
+                android:paddingLeft="30dp"
                 android:textStyle="bold" />
         </LinearLayout>
 

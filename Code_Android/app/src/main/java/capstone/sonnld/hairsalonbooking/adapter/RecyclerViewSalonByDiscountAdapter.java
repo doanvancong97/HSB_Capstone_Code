@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,6 +24,7 @@ public class RecyclerViewSalonByDiscountAdapter extends RecyclerView.Adapter<Rec
 
     private Context mContext;
     private List<SalonService> salonServices;
+
 
     public RecyclerViewSalonByDiscountAdapter(Context mContext, List<SalonService> salonServices) {
         this.mContext = mContext;
@@ -66,13 +68,14 @@ public class RecyclerViewSalonByDiscountAdapter extends RecyclerView.Adapter<Rec
                 "- Khách hàng được phép đến sớm hoặc muộn hơn 15 phút so với giờ hẹn đến \n" +
                 "- Mã giảm giá không có giá trị quy đổi thành tiền mặt ";
 
-        holder.txtSalonName.setText(salonServices.get(position).getService().getServiceName());
+        holder.txtSalonName.setText(salonServices.get(position).getService().getServiceName().toUpperCase());
 //        holder.imgSalonThumb.setImageResource(salonServices.get(position).getThumbnail());
-        holder.txtSalonAddress.setText(salonServices.get(position).getSalon().getLocation().getCity());
-        holder.txtSaleValue.setText(" - " + salonServices.get(position).getDiscount().getDiscountValue());
+        holder.txtSalonAddress.setText(salonServices.get(position).getSalon().getLocation().getDistrict()+", "+salonServices.get(position).getSalon().getLocation().getCity());
+        holder.txtSaleValue.setText(" - " + salonServices.get(position).getDiscount().getDiscountValue()+"%");
         Picasso.with(mContext).
                 load(salonServices.get(position).getSalon().getUrl())
                 .into(holder.imgSalonThumb);
+
 
         // event when tap on a item
         holder.cardView.setOnClickListener(new View.OnClickListener() {
@@ -91,6 +94,8 @@ public class RecyclerViewSalonByDiscountAdapter extends RecyclerView.Adapter<Rec
 
             }
         });
+
+
     }
 
     @Override

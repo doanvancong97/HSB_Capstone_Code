@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_view_time_slot"
+    android:layout_width="100dp"
+    android:layout_height="60dp"
+    android:layout_margin="10dp"
+
+    >
+
+
+            <TextView
+                android:id="@+id/txtSlot"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="9:00"
+                android:textSize="25dp"
+                android:gravity="center"
+                android:background="@drawable/button_time"
+                android:textColor="#DB1507"
+
+                />
+
+
+</android.support.v7.widget.CardView>
