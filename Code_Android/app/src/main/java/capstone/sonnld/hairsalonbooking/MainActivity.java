@@ -41,6 +41,10 @@ public class MainActivity extends AppCompatActivity {
 
 
     MaterialSpinner spinnerLocation;
+    private DrawerLayout mDrawerLayout;
+    private ActionBarDrawerToggle mActionBarDrawerToggle;
+
+    private Toolbar mToolbar;
 
 
 
@@ -54,10 +58,26 @@ public class MainActivity extends AppCompatActivity {
         spinnerLocation.setItems("HỒ CHÍ MINH", "HÀ NỘI", "ĐÀ NẴNG");
 
 
+        //setup tool bar
+        mToolbar = findViewById(R.id.nav_action_bar);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        //setup sideBar
+        mDrawerLayout  = findViewById(R.id.drawerLayout);
+        mActionBarDrawerToggle = new ActionBarDrawerToggle(this,mDrawerLayout,R.string.open,R.string.close);
+        mDrawerLayout.addDrawerListener(mActionBarDrawerToggle);
+        mActionBarDrawerToggle.syncState();
+
+
+        //end setup sideBar
+
+
         salonServiceList = new ArrayList<>();
         //init retro
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.1.173:8080/api/")
+                .baseUrl("http://192.168.43.26:8080/api/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
@@ -116,6 +136,15 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(mActionBarDrawerToggle.onOptionsItemSelected(item)){
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
 
 
 
@@ -141,16 +170,9 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void clickToRedirectToUserDetail(View view) {
-
-        Intent intent = new Intent(MainActivity.this, UserDetailActivity.class);
+    public void clickToRedirectToLogin(View view){
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         startActivity(intent);
-    }
-
-
-
-    public void clickToRedirectToHome(View view) {
-
 
     }
 

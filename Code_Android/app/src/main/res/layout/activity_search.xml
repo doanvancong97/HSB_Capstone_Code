@@ -7,7 +7,7 @@
     tools:context=".SearchActivity">
 
     <include
-    layout="@layout/navigation_action_bar"
+    layout="@layout/search_bar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content" />
 
