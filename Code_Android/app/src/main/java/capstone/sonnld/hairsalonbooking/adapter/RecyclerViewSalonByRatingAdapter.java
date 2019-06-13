@@ -24,6 +24,13 @@ public class RecyclerViewSalonByRatingAdapter extends RecyclerView.Adapter<Recyc
     private Context mContext;
     private List<SalonService> salonServices;
     private String des;
+    private String serviceName;
+    private String salonName;
+    private String salonAddress;
+    private String saleValue;
+    private String rate;
+    private String imgUrl;
+
 
     public RecyclerViewSalonByRatingAdapter(Context mContext, List<SalonService> salonServices) {
         this.mContext = mContext;
@@ -66,13 +73,22 @@ public class RecyclerViewSalonByRatingAdapter extends RecyclerView.Adapter<Recyc
                 "- Ưu đãi chưa bao gồm VAT \n" +
                 "- Khách hàng được phép đến sớm hoặc muộn hơn 15 phút so với giờ hẹn đến \n" +
                 "- Mã giảm giá không có giá trị quy đổi thành tiền mặt ";
-        holder.txtServiceName.setText(salonServices.get(position).getService().getServiceName().toUpperCase());
-        holder.txtSalonName.setText(salonServices.get(position).getSalon().getName());
-        holder.txtSalonAddress.setText(salonServices.get(position).getSalon().getLocation().getDistrict()+", "+salonServices.get(position).getSalon().getLocation().getCity());
-        holder.txtSaleValue.setText(" - " + salonServices.get(position).getDiscount().getDiscountValue()+"%");
-        holder.txtRate.setText(salonServices.get(position).getReview().getRating());
+
+         serviceName = salonServices.get(position).getService().getServiceName();
+         salonName = salonServices.get(position).getSalon().getName();
+         salonAddress = salonServices.get(position).getSalon().getLocation().getDistrict()+", "
+                 +salonServices.get(position).getSalon().getLocation().getCity();
+         saleValue = " - " + salonServices.get(position).getDiscount().getDiscountValue()+"%";
+         rate = salonServices.get(position).getReview().getRating();
+         imgUrl = salonServices.get(position).getSalon().getUrl();
+
+        holder.txtServiceName.setText(uppercaseFirstLetter(serviceName));
+        holder.txtSalonName.setText(salonName);
+        holder.txtSalonAddress.setText(salonAddress);
+        holder.txtSaleValue.setText(saleValue);
+        holder.txtRate.setText(rate);
         Picasso.with(mContext).
-                load(salonServices.get(position).getSalon().getUrl())
+                load(imgUrl)
                 .into(holder.imgSalonThumb);
 
          //event when tap on a item
@@ -92,6 +108,10 @@ public class RecyclerViewSalonByRatingAdapter extends RecyclerView.Adapter<Recyc
 
             }
         });
+    }
+
+    public String uppercaseFirstLetter(String str){
+        return str.substring(0, 1).toUpperCase() + str.substring(1);
     }
 
     @Override

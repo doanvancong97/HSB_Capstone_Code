@@ -50,7 +50,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/my_text_view_bg"
                 android:text="Đặt ngay"
-                android:textSize="8dp"
+                android:textSize="10dp"
                 android:textColor="@color/red"
                 android:clickable="false"
                 />

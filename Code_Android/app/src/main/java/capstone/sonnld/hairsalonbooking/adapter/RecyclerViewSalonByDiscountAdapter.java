@@ -8,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,6 +23,13 @@ public class RecyclerViewSalonByDiscountAdapter extends RecyclerView.Adapter<Rec
 
     private Context mContext;
     private List<SalonService> salonServices;
+    private String des;
+    private String serviceName;
+    private String salonName;
+    private String salonAddress;
+    private String saleValue;
+    private String rate;
+    private String imgUrl;
 
 
     public RecyclerViewSalonByDiscountAdapter(Context mContext, List<SalonService> salonServices) {
@@ -36,7 +42,7 @@ public class RecyclerViewSalonByDiscountAdapter extends RecyclerView.Adapter<Rec
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         LayoutInflater mInflater = LayoutInflater.from(mContext);
-        view = mInflater.inflate(R.layout.card_view_item_salon_service,parent,false);
+        view = mInflater.inflate(R.layout.card_view_item_salon_service, parent, false);
 
         return new MyViewHolder(view);
     }
@@ -44,7 +50,7 @@ public class RecyclerViewSalonByDiscountAdapter extends RecyclerView.Adapter<Rec
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
         //show item
-        final String des = "ÁP DỤNG KHI DÙNG DỊCH VỤ TẠI CỬA HÀNG* \n" +
+        des = "ÁP DỤNG KHI DÙNG DỊCH VỤ TẠI CỬA HÀNG* \n" +
                 "\n" +
                 "- Giảm 20% tổng hóa đơn áp dụng cho tất cả các dịch vụ \n" +
                 "- Áp dụng cho khách hàng nữ \n" +
@@ -67,13 +73,17 @@ public class RecyclerViewSalonByDiscountAdapter extends RecyclerView.Adapter<Rec
                 "- Ưu đãi chưa bao gồm VAT \n" +
                 "- Khách hàng được phép đến sớm hoặc muộn hơn 15 phút so với giờ hẹn đến \n" +
                 "- Mã giảm giá không có giá trị quy đổi thành tiền mặt ";
+        salonName = salonServices.get(position).getSalon().getName();
+        salonAddress = salonServices.get(position).getSalon().getLocation().getDistrict() + ", "
+                + salonServices.get(position).getSalon().getLocation().getCity();
+        saleValue = " - " + salonServices.get(position).getDiscount().getDiscountValue() + "%";
+        imgUrl = salonServices.get(position).getSalon().getUrl();
 
-        holder.txtSalonName.setText(salonServices.get(position).getService().getServiceName().toUpperCase());
-//        holder.imgSalonThumb.setImageResource(salonServices.get(position).getThumbnail());
-        holder.txtSalonAddress.setText(salonServices.get(position).getSalon().getLocation().getDistrict()+", "+salonServices.get(position).getSalon().getLocation().getCity());
-        holder.txtSaleValue.setText(" - " + salonServices.get(position).getDiscount().getDiscountValue()+"%");
+        holder.txtSalonName.setText(uppercaseFirstLetter(salonName));
+        holder.txtSalonAddress.setText(salonAddress);
+        holder.txtSaleValue.setText(saleValue);
         Picasso.with(mContext).
-                load(salonServices.get(position).getSalon().getUrl())
+                load(imgUrl)
                 .into(holder.imgSalonThumb);
 
 
@@ -98,12 +108,16 @@ public class RecyclerViewSalonByDiscountAdapter extends RecyclerView.Adapter<Rec
 
     }
 
+    public String uppercaseFirstLetter(String str) {
+        return str.substring(0, 1).toUpperCase() + str.substring(1);
+    }
+
     @Override
     public int getItemCount() {
         return salonServices.size();
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder{
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
 
         TextView txtSalonName;
         TextView txtSalonAddress;

@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
         salonServiceList = new ArrayList<>();
         //init retro
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.43.26:8080/api/")
+                .baseUrl("http://192.168.1.4:8080/api/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
@@ -145,10 +145,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
-
-
     public void checkLoginByUser() {
         Intent intent = this.getIntent();
 
@@ -160,7 +156,6 @@ public class MainActivity extends AppCompatActivity {
 
             txtTestLogin.setText("");
         }
-
 
     }
 
