@@ -40,12 +40,12 @@ public class MainActivity extends AppCompatActivity {
     private List<SalonService> salonServiceList;
 
 
-    MaterialSpinner spinnerLocation;
+    private MaterialSpinner spinnerLocation;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mActionBarDrawerToggle;
 
     private Toolbar mToolbar;
-
+    private final String BASE_URL = "http://192.168.1.4:8080/api/";
 
 
     @Override
@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
         salonServiceList = new ArrayList<>();
         //init retro
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.1.4:8080/api/")
+                .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
@@ -93,7 +93,8 @@ public class MainActivity extends AppCompatActivity {
                 }
                 salonServiceList = response.body();
                 RecyclerView recyclerView = findViewById(R.id.recycler_view_salon);
-                RecyclerViewSalonByDiscountAdapter viewAdapter = new RecyclerViewSalonByDiscountAdapter(MainActivity.this, salonServiceList);
+                RecyclerViewSalonByDiscountAdapter viewAdapter
+                        = new RecyclerViewSalonByDiscountAdapter(MainActivity.this, salonServiceList);
                 recyclerView.setLayoutManager(new GridLayoutManager(MainActivity.this, 2));
                 recyclerView.setAdapter(viewAdapter);
             }

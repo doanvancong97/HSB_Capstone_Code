@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -73,13 +74,13 @@ public class RecyclerViewSalonByDiscountAdapter extends RecyclerView.Adapter<Rec
                 "- Ưu đãi chưa bao gồm VAT \n" +
                 "- Khách hàng được phép đến sớm hoặc muộn hơn 15 phút so với giờ hẹn đến \n" +
                 "- Mã giảm giá không có giá trị quy đổi thành tiền mặt ";
-        salonName = salonServices.get(position).getSalon().getName();
+        serviceName = salonServices.get(position).getService().getServiceName();
         salonAddress = salonServices.get(position).getSalon().getLocation().getDistrict() + ", "
                 + salonServices.get(position).getSalon().getLocation().getCity();
         saleValue = " - " + salonServices.get(position).getDiscount().getDiscountValue() + "%";
         imgUrl = salonServices.get(position).getSalon().getUrl();
 
-        holder.txtSalonName.setText(uppercaseFirstLetter(salonName));
+        holder.txtSalonServiceName.setText(uppercaseFirstLetter(serviceName));
         holder.txtSalonAddress.setText(salonAddress);
         holder.txtSaleValue.setText(saleValue);
         Picasso.with(mContext).
@@ -105,6 +106,13 @@ public class RecyclerViewSalonByDiscountAdapter extends RecyclerView.Adapter<Rec
             }
         });
 
+        holder.txtSalonServiceName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(mContext,salonServices.get(position).getService().getServiceName(),Toast.LENGTH_LONG).show();
+            }
+        });
+
 
     }
 
@@ -119,7 +127,7 @@ public class RecyclerViewSalonByDiscountAdapter extends RecyclerView.Adapter<Rec
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView txtSalonName;
+        TextView txtSalonServiceName;
         TextView txtSalonAddress;
         TextView txtSaleValue;
         ImageView imgSalonThumb;
@@ -128,7 +136,7 @@ public class RecyclerViewSalonByDiscountAdapter extends RecyclerView.Adapter<Rec
         public MyViewHolder(View itemView) {
             super(itemView);
 
-            txtSalonName = itemView.findViewById(R.id.salon_service_name);
+            txtSalonServiceName = itemView.findViewById(R.id.salon_service_name);
             txtSalonAddress = itemView.findViewById(R.id.salon_address);
             txtSaleValue = itemView.findViewById(R.id.txt_sale_value);
             imgSalonThumb = itemView.findViewById(R.id.salon_img);

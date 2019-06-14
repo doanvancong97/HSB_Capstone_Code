@@ -67,7 +67,7 @@ public class DetailSalonActivity extends AppCompatActivity {
         spAddress.setAdapter(addressAdapter);
 
 
-        txtSalonService = findViewById(R.id.txt_promotion_name);
+        txtSalonService = findViewById(R.id.txt_salon_service_name);
         txtSalonName = findViewById(R.id.txtSalonName);
         txtDescription = findViewById(R.id.txt_description);
         imgThumb = findViewById(R.id.img_thumbnail);
@@ -104,13 +104,13 @@ public class DetailSalonActivity extends AppCompatActivity {
         //Receive data from view adapter
         Intent intent = getIntent();
         String salonName = intent.getExtras().getString("SalonName");
-        String promotionName = intent.getExtras().getString("SalonService");
+        String salonServiceName = intent.getExtras().getString("SalonService");
         String description = intent.getExtras().getString("Description");
         String imgUrl = intent.getExtras().getString("Thumbnail");
 
         //set new value for view
         txtSalonName.setText(salonName);
-        txtSalonService.setText(promotionName);
+        txtSalonService.setText(uppercaseFirstLetter(salonServiceName));
         txtDescription.setText(description);
         Picasso.with(this).load(imgUrl).into(imgThumb);
 
@@ -121,8 +121,12 @@ public class DetailSalonActivity extends AppCompatActivity {
 
     }
 
+    public String uppercaseFirstLetter(String str) {
+        return str.substring(0, 1).toUpperCase() + str.substring(1);
+    }
+
     public void clickToConfirm(View view) {
-        Intent intent = new Intent(this, BookingDetailActivity.class);
+        Intent intent = new Intent(DetailSalonActivity.this, BookingDetailActivity.class);
         intent.putExtra("des", txtDescription.getText());
         this.startActivity(intent);
     }

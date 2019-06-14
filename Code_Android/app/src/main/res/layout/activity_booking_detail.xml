@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
-
     tools:context=".BookingDetailActivity">
     <ScrollView
         android:layout_width="match_parent"
@@ -16,13 +15,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-
-
-
-
-
-
-
 
             <TextView
                 android:layout_width="match_parent"
@@ -203,18 +195,9 @@
                 app:trimLines="6" />
 
 
-
-
-
-
         </LinearLayout>
 
     </ScrollView>
-
-
-
-
-
 
     <Button
         android:id="@+id/btnCancle"
