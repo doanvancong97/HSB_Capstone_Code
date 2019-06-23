@@ -12,7 +12,7 @@ public class Category {
     private String categoryName;
     @SerializedName("status")
     @Expose
-    private Object status;
+    private String status;
 
     public Integer getCategoryId() {
         return categoryId;
@@ -30,11 +30,12 @@ public class Category {
         this.categoryName = categoryName;
     }
 
-    public Object getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Object status) {
+    public void setStatus(String status) {
         this.status = status;
     }
+
 }

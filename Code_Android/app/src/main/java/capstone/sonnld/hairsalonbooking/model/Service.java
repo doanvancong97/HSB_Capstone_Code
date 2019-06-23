@@ -1,31 +1,36 @@
 package capstone.sonnld.hairsalonbooking.model;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class Service {
-    @SerializedName("service_id")
-    @Expose
-    private Integer serviceId;
-    @SerializedName("service_name")
-    @Expose
-    private String serviceName;
-    @SerializedName("unit")
-    @Expose
     private String unit;
-    @SerializedName("status")
-    @Expose
-    private String status;
-    @SerializedName("category")
-    @Expose
+    @SerializedName("category_id")
+    private String categoryId;
+    @SerializedName("service_name")
+    private String serviceName;
+    @SerializedName("service_id")
+    private String serviceId;
+
     private Category category;
 
-    public Integer getServiceId() {
-        return serviceId;
+    private String status;
+
+    public String getUnit ()
+    {
+        return unit;
     }
 
-    public void setServiceId(Integer serviceId) {
-        this.serviceId = serviceId;
+    public void setUnit (String unit)
+    {
+        this.unit = unit;
+    }
+
+    public String getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
     }
 
     public String getServiceName() {
@@ -36,28 +41,31 @@ public class Service {
         this.serviceName = serviceName;
     }
 
-    public String getUnit() {
-        return unit;
+    public String getServiceId() {
+        return serviceId;
     }
 
-    public void setUnit(String unit) {
-        this.unit = unit;
+    public void setServiceId(String serviceId) {
+        this.serviceId = serviceId;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public Category getCategory() {
+    public Category getCategory ()
+    {
         return category;
     }
 
-    public void setCategory(Category category) {
+    public void setCategory (Category category)
+    {
         this.category = category;
     }
 
+    public String getStatus ()
+    {
+        return status;
+    }
+
+    public void setStatus (String status)
+    {
+        this.status = status;
+    }
 }

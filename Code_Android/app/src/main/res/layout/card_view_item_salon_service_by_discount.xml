@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:weightSum="6">
+        android:weightSum="7">
         >
         <RelativeLayout
             android:layout_width="match_parent"
@@ -64,14 +64,46 @@
                 android:paddingLeft="15dp"
                 android:text="Service name"
                 android:textSize="15dp"
-                android:textColor="@color/red"
+                android:textColor="@color/black"
                 android:textStyle="bold"
                 android:layout_gravity=""/>
 
 
 
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:weightSum="2"
+            >
 
+            <TextView
+                android:id="@+id/txt_service_sale_price"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="Sale price"
+                android:gravity="bottom|right"
+                android:paddingRight="10dp"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:textColor="@color/red"
+                />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:id="@+id/txt_service_price"
+                android:text="Price"
+                android:gravity="bottom|left"
+                android:paddingLeft="10dp"
+                android:textSize="15dp"
+                android:textColor="@color/fadeGray"
+
+                />
+
+        </LinearLayout>
 
 
 

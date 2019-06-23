@@ -20,11 +20,16 @@ import com.jaredrummler.materialspinner.MaterialSpinner;
 import java.util.ArrayList;
 import java.util.List;
 
-import capstone.sonnld.hairsalonbooking.API.HairSalonAPI;
+import capstone.sonnld.hairsalonbooking.api.HairSalonAPI;
 import capstone.sonnld.hairsalonbooking.adapter.RecyclerViewSalonByDiscountAdapter;
 import capstone.sonnld.hairsalonbooking.adapter.RecyclerViewSalonByRatingAdapter;
+import capstone.sonnld.hairsalonbooking.api.RetrofitClient;
+import capstone.sonnld.hairsalonbooking.model.BookingDetail;
 import capstone.sonnld.hairsalonbooking.model.SalonService;
-import capstone.sonnld.hairsalonbooking.model.Suggesttion;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -34,19 +39,17 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity {
 
 
-    TextView txtTestLogin;
+    private TextView txtTestLogin;
 
     private HairSalonAPI hairSalonAPI;
-    private List<SalonService> salonServiceList;
-
+    private RecyclerView recyclerView;
+    private RecyclerView recyclerViewBestService;
 
     private MaterialSpinner spinnerLocation;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mActionBarDrawerToggle;
 
     private Toolbar mToolbar;
-    private final String BASE_URL = "http://192.168.1.4:8080/api/";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,87 +67,98 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        //setup sideBar
+        //setup menu sideBar
         mDrawerLayout  = findViewById(R.id.drawerLayout);
         mActionBarDrawerToggle = new ActionBarDrawerToggle(this,mDrawerLayout,R.string.open,R.string.close);
         mDrawerLayout.addDrawerListener(mActionBarDrawerToggle);
         mActionBarDrawerToggle.syncState();
 
-
         //end setup sideBar
 
 
-        salonServiceList = new ArrayList<>();
         //init retro
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
+        Retrofit retrofit = RetrofitClient.getInstance();
         hairSalonAPI = retrofit.create(HairSalonAPI.class);
-        Call<List<SalonService>> callServiceByDV = hairSalonAPI.getAllServiceByDiscountValue();
-        callServiceByDV.enqueue(new Callback<List<SalonService>>() {
-            @Override
-            public void onResponse(Call<List<SalonService>> call, Response<List<SalonService>> response) {
-                if (!response.isSuccessful()) {
-                    Toast.makeText(MainActivity.this, "Code: " + response.code(),
-                            Toast.LENGTH_LONG).show();
-                    return;
-                }
-                salonServiceList = response.body();
-                RecyclerView recyclerView = findViewById(R.id.recycler_view_salon);
-                RecyclerViewSalonByDiscountAdapter viewAdapter
-                        = new RecyclerViewSalonByDiscountAdapter(MainActivity.this, salonServiceList);
-                recyclerView.setLayoutManager(new GridLayoutManager(MainActivity.this, 2));
-                recyclerView.setAdapter(viewAdapter);
-            }
 
-            @Override
-            public void onFailure(Call<List<SalonService>> call, Throwable t) {
-                Toast.makeText(MainActivity.this, "Code: " + t.getMessage(),
-                        Toast.LENGTH_LONG).show();
-            }
-        });
+        //recycler view for service by discount
+        recyclerView = findViewById(R.id.recycler_view_salon);
+        recyclerView.setLayoutManager(new GridLayoutManager(MainActivity.this, 2));
+        getAllSalonServiceByDiscount();
 
-
-        // recycler view for best service
-
-        Call<List<SalonService>> callServiceByRating = hairSalonAPI.getAllServiceByRating();
-        callServiceByRating.enqueue(new Callback<List<SalonService>>() {
-            @Override
-            public void onResponse(Call<List<SalonService>> call, Response<List<SalonService>> response) {
-                if (!response.isSuccessful()) {
-                    Toast.makeText(MainActivity.this, "Code: " + response.code(),
-                            Toast.LENGTH_LONG).show();
-                    return;
-                }
-                salonServiceList = response.body();
-                RecyclerView recyclerViewBestService = findViewById(R.id.recycler_view_good_service);
-                RecyclerViewSalonByRatingAdapter viewNewestAdapter = new RecyclerViewSalonByRatingAdapter
-                        (MainActivity.this, salonServiceList);
-                recyclerViewBestService.setLayoutManager(new GridLayoutManager
-                        (MainActivity.this, 1));
-                recyclerViewBestService.setAdapter(viewNewestAdapter);
-            }
-
-            @Override
-            public void onFailure(Call<List<SalonService>> call, Throwable t) {
-                Toast.makeText(MainActivity.this, "Code: " + t.getMessage(),
-                        Toast.LENGTH_LONG).show();
-            }
-        });
-
+        // recycler view for service by rating
+        recyclerViewBestService = findViewById(R.id.recycler_view_good_service);
+        recyclerViewBestService.setLayoutManager(new GridLayoutManager(MainActivity.this, 1));
+        getAllSalonServiceByRating();
 
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(mActionBarDrawerToggle.onOptionsItemSelected(item)){
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+    private void getAllSalonServiceByRating() {
+        hairSalonAPI.getAllServiceByRating()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<List<BookingDetail>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(List<BookingDetail> bookingDetails) {
+                        displayServiceByRating(bookingDetails);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
+    private void displayServiceByRating(List<BookingDetail> bookingDetails) {
+        RecyclerViewSalonByRatingAdapter viewNewestAdapter = new RecyclerViewSalonByRatingAdapter
+                (MainActivity.this, bookingDetails);
+        recyclerViewBestService.setAdapter(viewNewestAdapter);
+    }
+
+    private void getAllSalonServiceByDiscount() {
+
+        hairSalonAPI.getAllServiceByDiscountValue()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<List<SalonService>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(List<SalonService> salonServices) {
+                        displayServiceByDiscount(salonServices);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+
+    private void displayServiceByDiscount(List<SalonService> salonServices) {
+        RecyclerViewSalonByDiscountAdapter viewAdapter
+                = new RecyclerViewSalonByDiscountAdapter(MainActivity.this, salonServices);
+        recyclerView.setAdapter(viewAdapter);
+    }
 
     public void checkLoginByUser() {
         Intent intent = this.getIntent();
@@ -172,5 +186,12 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(mActionBarDrawerToggle.onOptionsItemSelected(item)){
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
 }

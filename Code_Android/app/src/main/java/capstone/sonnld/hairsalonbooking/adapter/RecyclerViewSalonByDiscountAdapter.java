@@ -2,6 +2,7 @@ package capstone.sonnld.hairsalonbooking.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -26,10 +27,10 @@ public class RecyclerViewSalonByDiscountAdapter extends RecyclerView.Adapter<Rec
     private List<SalonService> salonServices;
     private String des;
     private String serviceName;
-    private String salonName;
+    private String discountValue;
     private String salonAddress;
     private String saleValue;
-    private String rate;
+    private String price;
     private String imgUrl;
 
 
@@ -43,7 +44,7 @@ public class RecyclerViewSalonByDiscountAdapter extends RecyclerView.Adapter<Rec
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         LayoutInflater mInflater = LayoutInflater.from(mContext);
-        view = mInflater.inflate(R.layout.card_view_item_salon_service, parent, false);
+        view = mInflater.inflate(R.layout.card_view_item_salon_service_by_discount, parent, false);
 
         return new MyViewHolder(view);
     }
@@ -79,7 +80,11 @@ public class RecyclerViewSalonByDiscountAdapter extends RecyclerView.Adapter<Rec
                 + salonServices.get(position).getSalon().getLocation().getCity();
         saleValue = " - " + salonServices.get(position).getDiscount().getDiscountValue() + "%";
         imgUrl = salonServices.get(position).getSalon().getUrl();
+        price = salonServices.get(position).getPrice();
+        discountValue = salonServices.get(position).getDiscount().getDiscountValue();
 
+        holder.txtServicePrice.setText(price);
+        holder.txtServiceSalePrice.setText(getSalePrice(price,discountValue));
         holder.txtSalonServiceName.setText(uppercaseFirstLetter(serviceName));
         holder.txtSalonAddress.setText(salonAddress);
         holder.txtSaleValue.setText(saleValue);
@@ -94,12 +99,14 @@ public class RecyclerViewSalonByDiscountAdapter extends RecyclerView.Adapter<Rec
             public void onClick(View v) {
                 //pass data to Detail salon activity
                 Intent intent = new Intent(mContext, DetailSalonActivity.class);
+                intent.putExtra("SalonID",salonServices.get(position).getSalon().getSalonId());
                 intent.putExtra("SalonService", salonServices.get(position).getService().getServiceName());
+                intent.putExtra("SalonServicePrice", salonServices.get(position).getPrice());
+                intent.putExtra("DiscountValue", salonServices.get(position).getDiscount().getDiscountValue());
                 intent.putExtra("SalonName", salonServices.get(position).getSalon().getName());
                 intent.putExtra("Description", des);
                 intent.putExtra("Thumbnail", salonServices.get(position).getSalon().getUrl());
                 intent.putExtra("Address", salonServices.get(position).getSalon().getLocation().getCity());
-//                intent.putExtra("ServiceListName",salonServices.get(position).getSalonServiceListName());
                 // data need to be received in DetailSalonA
                 mContext.startActivity(intent);
 
@@ -116,6 +123,16 @@ public class RecyclerViewSalonByDiscountAdapter extends RecyclerView.Adapter<Rec
 
     }
 
+    public String getSalePrice(String price,String discountValue){
+
+        String sSalePrice = price.substring(0, price.length() - 1);
+        int nSalePrice = Integer.parseInt(sSalePrice);
+        int nDiscountValue = Integer.parseInt(discountValue);
+        nSalePrice = nSalePrice - (nSalePrice * nDiscountValue / 100);
+
+        return "" + nSalePrice + "k";
+    }
+
     public String uppercaseFirstLetter(String str) {
         return str.substring(0, 1).toUpperCase() + str.substring(1);
     }
@@ -130,6 +147,8 @@ public class RecyclerViewSalonByDiscountAdapter extends RecyclerView.Adapter<Rec
         TextView txtSalonServiceName;
         TextView txtSalonAddress;
         TextView txtSaleValue;
+        TextView txtServicePrice;
+        TextView txtServiceSalePrice;
         ImageView imgSalonThumb;
         CardView cardView;
 
@@ -137,10 +156,14 @@ public class RecyclerViewSalonByDiscountAdapter extends RecyclerView.Adapter<Rec
             super(itemView);
 
             txtSalonServiceName = itemView.findViewById(R.id.salon_service_name);
+            txtServicePrice = itemView.findViewById(R.id.txt_service_price);
+            txtServiceSalePrice = itemView.findViewById(R.id.txt_service_sale_price);
             txtSalonAddress = itemView.findViewById(R.id.salon_address);
             txtSaleValue = itemView.findViewById(R.id.txt_sale_value);
             imgSalonThumb = itemView.findViewById(R.id.salon_img);
             cardView = itemView.findViewById(R.id.card_view_salon_service);
+
+            txtServicePrice.setPaintFlags(txtServicePrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         }
     }
 }

@@ -1,7 +1,10 @@
 package capstone.sonnld.hairsalonbooking.model;
 
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
 
 public class Salon {
     @SerializedName("salon_id")
@@ -18,7 +21,7 @@ public class Salon {
     private String email;
     @SerializedName("status")
     @Expose
-    private Object status;
+    private String status;
     @SerializedName("manager_id")
     @Expose
     private Integer managerId;
@@ -28,6 +31,9 @@ public class Salon {
     @SerializedName("location")
     @Expose
     private Location location;
+    @SerializedName("services")
+    @Expose
+    private List<Service> services = null;
 
     public Integer getSalonId() {
         return salonId;
@@ -61,11 +67,11 @@ public class Salon {
         this.email = email;
     }
 
-    public Object getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Object status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
@@ -91,5 +97,13 @@ public class Salon {
 
     public void setLocation(Location location) {
         this.location = location;
+    }
+
+    public List<Service> getServices() {
+        return services;
+    }
+
+    public void setServices(List<Service> services) {
+        this.services = services;
     }
 }

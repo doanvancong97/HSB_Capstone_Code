@@ -3,6 +3,7 @@ package capstone.sonnld.hairsalonbooking;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 
 import com.borjabravo.readmoretextview.ReadMoreTextView;
 
@@ -41,5 +42,9 @@ public class BookingDetailActivity extends AppCompatActivity {
                 "- Mã giảm giá không có giá trị quy đổi thành tiền mặt ";
         txt_description.setText(des1);
 
+    }
+
+    public void unBooking(View view) {
+        finish();
     }
 }

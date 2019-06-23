@@ -1,37 +1,33 @@
 package capstone.sonnld.hairsalonbooking.model;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class SalonService {
-    @SerializedName("id")
-    @Expose
-    private Integer id;
+
+    @SerializedName("salon_service_id")
+    private Integer salonServiceId;
     @SerializedName("salon")
-    @Expose
+
     private Salon salon;
     @SerializedName("service")
-    @Expose
+
     private Service service;
     @SerializedName("discount")
-    @Expose
+
     private Discount discount;
-    @SerializedName("review")
-    @Expose
-    private Review review;
     @SerializedName("price")
-    @Expose
+
     private String price;
     @SerializedName("status")
-    @Expose
+
     private Object status;
 
-    public Integer getId() {
-        return id;
+    public Integer getSalonServiceId() {
+        return salonServiceId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setSalonServiceId(Integer salonServiceId) {
+        this.salonServiceId = salonServiceId;
     }
 
     public Salon getSalon() {
@@ -56,14 +52,6 @@ public class SalonService {
 
     public void setDiscount(Discount discount) {
         this.discount = discount;
-    }
-
-    public Review getReview() {
-        return review;
-    }
-
-    public void setReview(Review review) {
-        this.review = review;
     }
 
     public String getPrice() {

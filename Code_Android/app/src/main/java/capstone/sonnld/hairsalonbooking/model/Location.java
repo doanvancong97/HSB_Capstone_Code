@@ -1,26 +1,25 @@
 package capstone.sonnld.hairsalonbooking.model;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class Location {
     @SerializedName("location_id")
-    @Expose
+
     private Integer locationId;
     @SerializedName("street_address")
-    @Expose
+
     private String streetAddress;
     @SerializedName("district")
-    @Expose
+
     private String district;
     @SerializedName("city")
-    @Expose
+
     private String city;
     @SerializedName("country")
-    @Expose
+
     private String country;
     @SerializedName("zip")
-    @Expose
+
     private Object zip;
 
     public Integer getLocationId() {
