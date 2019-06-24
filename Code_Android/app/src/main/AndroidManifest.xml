@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+
     package="capstone.sonnld.hairsalonbooking">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        tools:replace="android:label"
         android:allowBackup="true"
         android:icon="@drawable/logo"
-        android:label="Hair Salon Booking"
+        android:label="HairSalonBooking"
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -24,6 +27,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".DetailSalonActivity" />
+
     </application>
+
+
 
 </manifest>
