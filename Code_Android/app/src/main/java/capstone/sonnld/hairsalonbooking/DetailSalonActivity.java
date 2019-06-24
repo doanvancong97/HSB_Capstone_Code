@@ -20,7 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.badoualy.datepicker.DatePickerTimeline;
-import com.github.badoualy.datepicker.MonthView;
+
 import com.github.jhonnyx2012.horizontalpicker.DatePickerListener;
 import com.github.jhonnyx2012.horizontalpicker.HorizontalPicker;
 
@@ -28,10 +28,8 @@ import com.squareup.picasso.Picasso;
 
 import org.joda.time.DateTime;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
+
 
 import capstone.sonnld.hairsalonbooking.adapter.RecyclerViewExtraServiceAdapter;
 import capstone.sonnld.hairsalonbooking.api.HairSalonAPI;
@@ -110,11 +108,6 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
                        .setDays(20)
                 .setOffset(0)
                 .showTodayButton(false)
-
-
-
-
-
                 .init();
 
         picker.setDate(new DateTime());
@@ -192,6 +185,7 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
                 startActivity(sendDataToBooking);
             }
         });
+        
     }
 
     @Override
