@@ -8,12 +8,12 @@ public class BookingDTO {
     Integer customerId; // 1
     String customerName;
     String customerPhone;
-    Date bookingDate;
+    String bookingDate;
     String bookingTime;
     String status;///process
     List<BookingDetailsDTO> bookingDetailsList;
 
-    public BookingDTO(Integer customerId, String customerName, String customerPhone, Date bookingDate, String bookingTime, String status, List<BookingDetailsDTO> bookingDetailsList) {
+    public BookingDTO(Integer customerId, String customerName, String customerPhone, String bookingDate, String bookingTime, String status, List<BookingDetailsDTO> bookingDetailsList) {
         this.customerId = customerId;
         this.customerName = customerName;
         this.customerPhone = customerPhone;
@@ -58,11 +58,11 @@ public class BookingDTO {
     }
 
 
-    public Date getBookingDate() {
+    public String getBookingDate() {
         return bookingDate;
     }
 
-    public void setBookingDate(Date bookingDate) {
+    public void setBookingDate(String bookingDate) {
         this.bookingDate = bookingDate;
     }
 

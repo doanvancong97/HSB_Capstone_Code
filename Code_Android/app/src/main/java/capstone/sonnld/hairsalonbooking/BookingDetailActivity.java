@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.borjabravo.readmoretextview.ReadMoreTextView;
 
@@ -110,18 +111,19 @@ public class BookingDetailActivity extends AppCompatActivity {
     }
 
     public void submitBooking(ArrayList<BookingDetailsDTO> dtoList) {
-        Call<BookingDTO> call =
-                hairSalonAPI.postBooking(1, "Son", "0978233231", "20:59", "2010-12-19", dtoList);
+        BookingDTO bookingDTO = new BookingDTO(1,"Sonnnnnn","09999999","2019-12-19","12:12","process",dtoList);
+
+        Call<BookingDTO> call = hairSalonAPI.postBooking(bookingDTO);
 
         call.enqueue(new Callback<BookingDTO>() {
             @Override
             public void onResponse(Call<BookingDTO> call, Response<BookingDTO> response) {
-                if(response.isSuccessful())
+                Toast.makeText(BookingDetailActivity.this,response.code() + "",Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onFailure(Call<BookingDTO> call, Throwable t) {
-
+                Toast.makeText(BookingDetailActivity.this,t.getMessage() + "",Toast.LENGTH_LONG).show();
             }
         });
     }
