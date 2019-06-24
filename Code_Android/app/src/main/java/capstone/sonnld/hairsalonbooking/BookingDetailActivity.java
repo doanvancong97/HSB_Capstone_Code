@@ -3,12 +3,23 @@ package capstone.sonnld.hairsalonbooking;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.TextView;
 
 import com.borjabravo.readmoretextview.ReadMoreTextView;
 
+import java.util.ArrayList;
+
+import capstone.sonnld.hairsalonbooking.adapter.RecyclerViewSelectedServiceAdapter;
+import capstone.sonnld.hairsalonbooking.model.SalonService;
+
 public class BookingDetailActivity extends AppCompatActivity {
-    ReadMoreTextView txt_description;
+    private ReadMoreTextView txt_description;
+    private RecyclerView recyclerView;
+
+    private TextView txtTotalPrice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,6 +27,7 @@ public class BookingDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_booking_detail);
 
         txt_description = findViewById(R.id.txt_description2);
+        txtTotalPrice = findViewById(R.id.txt_total_price);
 
         String des1 = "ÁP DỤNG KHI DÙNG DỊCH VỤ TẠI CỬA HÀNG* \n" +
                 "\n" +
@@ -42,6 +54,24 @@ public class BookingDetailActivity extends AppCompatActivity {
                 "- Mã giảm giá không có giá trị quy đổi thành tiền mặt ";
         txt_description.setText(des1);
 
+        Intent intent = getIntent();
+        ArrayList<SalonService> salonServices =
+                (ArrayList<SalonService>) intent.getSerializableExtra("chkService");
+
+        recyclerView = findViewById(R.id.recycler_selected_service);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
+        RecyclerViewSelectedServiceAdapter serviceAdapter =
+                new RecyclerViewSelectedServiceAdapter(this,salonServices);
+        recyclerView.setAdapter(serviceAdapter);
+
+        int totalPrice = 0;
+        for(int i = 0; i < salonServices.size(); i++){
+            String price = salonServices.get(i).getPrice();
+            String sSalePrice = price.substring(0, price.length() - 1);
+            int nSalePrice = Integer.parseInt(sSalePrice);
+            totalPrice += nSalePrice;
+        }
+        txtTotalPrice.setText(totalPrice);
     }
 
     public void unBooking(View view) {

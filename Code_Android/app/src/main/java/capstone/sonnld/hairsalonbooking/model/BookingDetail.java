@@ -3,7 +3,9 @@ package capstone.sonnld.hairsalonbooking.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class BookingDetail {
+import java.io.Serializable;
+
+public class BookingDetail implements Serializable {
     @SerializedName("booking_details_id")
     @Expose
     private Integer bookingDetailsId;

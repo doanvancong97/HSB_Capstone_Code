@@ -19,22 +19,21 @@ import capstone.sonnld.hairsalonbooking.model.SalonService;
 public class RecyclerViewExtraServiceAdapter extends RecyclerView.Adapter<RecyclerViewExtraServiceAdapter.MyViewHolder> {
 
     private Context mContext;
-    private List<SalonService> salonServices;
-    private List<SalonService> checkedSalonServices = new ArrayList<>();
+    private ArrayList<SalonService> salonServices;
+    private ArrayList<SalonService> checkedSalonServices = new ArrayList<>();
     private String serviceName;
-
 
     private String saleValue;
 
 
     private String price;
 
-    public RecyclerViewExtraServiceAdapter(Context mContext, List<SalonService> salonServices) {
+    public RecyclerViewExtraServiceAdapter(Context mContext, ArrayList<SalonService> salonServices) {
         this.mContext = mContext;
         this.salonServices = salonServices;
     }
 
-    public List<SalonService> getCheckedSalonServices() {
+    public ArrayList<SalonService> getCheckedSalonServices() {
         return checkedSalonServices;
     }
 
@@ -48,7 +47,7 @@ public class RecyclerViewExtraServiceAdapter extends RecyclerView.Adapter<Recycl
     }
 
     @Override
-    public void onBindViewHolder( MyViewHolder holder, final int position) {
+    public void onBindViewHolder( MyViewHolder holder, int position) {
         //show item
 
         serviceName = salonServices.get(position).getService().getServiceName();
@@ -74,23 +73,8 @@ public class RecyclerViewExtraServiceAdapter extends RecyclerView.Adapter<Recycl
 //                load(imgUrl)
 //                .into(holder.imgServiceIcon);
 
-         //event when tap on a item
-//        holder.cardView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                //pass data to Detail salon activity
-//                Intent intent = new Intent(mContext, DetailSalonActivity.class);
-//                intent.putExtra("SalonService", salonServices.get(position).getService().getServiceName());
-//                intent.putExtra("SalonName", salonServices.get(position).getSalon().getName());
-//                intent.putExtra("Description", des);
-//                intent.putExtra("Thumbnail", salonServices.get(position).getSalon().getUrl());
-//                intent.putExtra("Address", salonServices.get(position).getSalon().getLocation().getCity());
-////                intent.putExtra("ServiceListName",salonServices.get(position).getSalonServiceListName());
-//                // data need to be received in DetailSalonA
-//                mContext.startActivity(intent);
+         //event when click on checkbox
 //
-//            }
-//        });
     }
 
     public String uppercaseFirstLetter(String str) {
@@ -101,7 +85,7 @@ public class RecyclerViewExtraServiceAdapter extends RecyclerView.Adapter<Recycl
         return salonServices.size();
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
 
         TextView txtSalonServiceName;

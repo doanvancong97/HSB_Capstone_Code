@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import capstone.sonnld.hairsalonbooking.DetailSalonActivity;
@@ -23,7 +24,7 @@ import capstone.sonnld.hairsalonbooking.model.BookingDetail;
 public class RecyclerViewSalonByRatingAdapter extends RecyclerView.Adapter<RecyclerViewSalonByRatingAdapter.MyViewHolder> {
 
     private Context mContext;
-    private List<BookingDetail> bookingDetailList;
+    private ArrayList<BookingDetail> bookingDetailList;
     private String des;
     private String serviceName;
     private String salonName;
@@ -34,7 +35,7 @@ public class RecyclerViewSalonByRatingAdapter extends RecyclerView.Adapter<Recyc
     private String discountValue;
     private String price;
 
-    public RecyclerViewSalonByRatingAdapter(Context mContext, List<BookingDetail> bookingDetailList) {
+    public RecyclerViewSalonByRatingAdapter(Context mContext, ArrayList<BookingDetail> bookingDetailList) {
         this.mContext = mContext;
         this.bookingDetailList = bookingDetailList;
     }
@@ -78,8 +79,8 @@ public class RecyclerViewSalonByRatingAdapter extends RecyclerView.Adapter<Recyc
 
          serviceName = bookingDetailList.get(position).getSalonService().getService().getServiceName();
          salonName = bookingDetailList.get(position).getSalonService().getSalon().getName();
-         salonAddress = bookingDetailList.get(position).getSalonService().getSalon().getLocation().getDistrict()+", "
-                 +bookingDetailList.get(position).getSalonService().getSalon().getLocation().getCity();
+         salonAddress = bookingDetailList.get(position).getSalonService().getSalon().getAddress().getStreetNumber()+", "
+                 +bookingDetailList.get(position).getSalonService().getSalon().getAddress().getStreet();
          saleValue = " - " + bookingDetailList.get(position).getSalonService().getDiscount().getDiscountValue()+"%";
          rate = bookingDetailList.get(position).getReview().getRating();
          imgUrl = bookingDetailList.get(position).getSalonService().getSalon().getUrl();
@@ -109,7 +110,7 @@ public class RecyclerViewSalonByRatingAdapter extends RecyclerView.Adapter<Recyc
                 intent.putExtra("SalonName", bookingDetailList.get(position).getSalonService().getSalon().getName());
                 intent.putExtra("Description", des);
                 intent.putExtra("Thumbnail", bookingDetailList.get(position).getSalonService().getSalon().getUrl());
-                intent.putExtra("Address", bookingDetailList.get(position).getSalonService().getSalon().getLocation().getCity());
+                intent.putExtra("Address", bookingDetailList.get(position).getSalonService().getSalon().getAddress().getStreet());
                 // data need to be received in DetailSalonA
                 mContext.startActivity(intent);
 

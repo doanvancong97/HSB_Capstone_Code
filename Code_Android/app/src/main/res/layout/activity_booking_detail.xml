@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     tools:context=".BookingDetailActivity">
     <ScrollView
         android:layout_width="match_parent"
@@ -90,60 +89,6 @@
 
                     android:layout_weight="1"
                     android:paddingLeft="20dp"
-                    android:text="Thời gian đến" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="fill_parent"
-
-
-                    android:layout_weight="1"
-
-                    android:paddingLeft="40dp"
-                    android:text="9:00 03/06/2019"
-                    android:textColor="@color/red2" />
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="40dp">
-
-                <TextView
-                    android:layout_width="0dp"
-
-                    android:layout_height="fill_parent"
-
-                    android:layout_weight="1"
-                    android:paddingLeft="20dp"
-                    android:text="Ưu đãi" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="fill_parent"
-
-
-                    android:layout_weight="1"
-
-                    android:paddingLeft="40dp"
-                    android:text="Giảm 30% dịch vụ "
-                    android:textColor="@color/red2" />
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="40dp">
-
-                <TextView
-                    android:layout_width="0dp"
-
-                    android:layout_height="fill_parent"
-
-                    android:layout_weight="1"
-                    android:paddingLeft="20dp"
                     android:text="Tên khách hàng" />
 
                 <TextView
@@ -157,31 +102,51 @@
 
 
             </LinearLayout>
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="40dp">
 
                 <TextView
                     android:layout_width="0dp"
-
                     android:layout_height="fill_parent"
-
                     android:layout_weight="1"
                     android:paddingLeft="20dp"
-                    android:text="Số điện thoại liên hệ" />
+                    android:text="Ngày đến" />
 
                 <TextView
+                    android:id="@+id/booked_date"
                     android:layout_width="0dp"
-
                     android:layout_height="fill_parent"
-
                     android:layout_weight="1"
                     android:paddingLeft="40dp"
-                    android:text="0329427417" />
+                    android:text="9:00 03/06/2019"
+                    android:textColor="@color/red2" />
 
 
             </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:paddingLeft="20dp"
+                    android:text="Thời gian đến" />
+
+                <TextView
+                    android:id="@+id/booked_time"
+                    android:layout_width="0dp"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:paddingLeft="40dp"
+                    android:text="9:00 03/06/2019"
+                    android:textColor="@color/red2" />
+
+
+            </LinearLayout>
+
 
             <com.borjabravo.readmoretextview.ReadMoreTextView
 
@@ -194,6 +159,39 @@
                 app:colorClickableText="#2644EB"
                 app:trimLines="6" />
 
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/my_text_view_bg"
+                android:padding="5dp"
+                android:text="Dịch vụ đã chọn"
+                android:textAllCaps="true"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+
+                />
+
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/recycler_selected_service"
+                />
+
+            <TextView
+                android:id="@+id/txt_total_price"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/my_text_view_bg"
+                android:padding="5dp"
+                android:text="Tổng tiền:"
+                android:textAllCaps="true"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+
+                />
 
         </LinearLayout>
 

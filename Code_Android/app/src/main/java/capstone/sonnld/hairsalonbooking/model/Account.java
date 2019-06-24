@@ -1,6 +1,8 @@
 package capstone.sonnld.hairsalonbooking.model;
 
-public class Account {
+import java.io.Serializable;
+
+public class Account implements Serializable {
     private String password;
 
     private String birthdate;

@@ -1,8 +1,9 @@
 package capstone.sonnld.hairsalonbooking.model;
 
 
+import java.io.Serializable;
 
-public class Booking {
+public class Booking implements Serializable {
     private String booking_id;
 
     private String booking_date;

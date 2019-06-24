@@ -20,6 +20,8 @@ import com.github.badoualy.datepicker.DatePickerTimeline;
 import com.github.badoualy.datepicker.MonthView;
 import com.squareup.picasso.Picasso;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -59,7 +61,8 @@ public class DetailSalonActivity extends AppCompatActivity {
     private RecyclerView.Adapter mAdapter;
 
     private HairSalonAPI hairSalonAPI;
-
+    private RecyclerViewExtraServiceAdapter extraServiceAdapter;
+    StringBuffer sb = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -145,20 +148,40 @@ public class DetailSalonActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new GridLayoutManager(DetailSalonActivity.this, 1));
         getAllExtraService(salonId);
 
+        btnConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sb = new StringBuffer();
+                ArrayList<SalonService> chkService = extraServiceAdapter.getCheckedSalonServices();
+                for(int i = 0; i < chkService.size(); i++){
+                    sb.append(chkService.get(i).getService().getServiceName() + "\n");
+                }
+                if(chkService.size() >0){
+                    Toast.makeText(DetailSalonActivity.this,sb.toString(),Toast.LENGTH_LONG).show();
+                }else{
+                    Toast.makeText(DetailSalonActivity.this,"Check smth",Toast.LENGTH_LONG).show();
+                }
+
+                Intent sendDataToBooking = new Intent(DetailSalonActivity.this,BookingDetailActivity.class);
+                sendDataToBooking.putExtra("chkService",chkService);
+
+                startActivity(sendDataToBooking);
+            }
+        });
     }
 
     private void getAllExtraService(int salonId) {
         hairSalonAPI.getSalonServiceBySalonId(salonId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<List<SalonService>>() {
+                .subscribe(new Observer<ArrayList<SalonService>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
 
                     }
 
                     @Override
-                    public void onNext(List<SalonService> salonServices) {
+                    public void onNext(ArrayList<SalonService> salonServices) {
                         displayExtraService(salonServices);
                     }
 
@@ -174,10 +197,9 @@ public class DetailSalonActivity extends AppCompatActivity {
                 });
     }
 
-    private void displayExtraService(List<SalonService> salonServices) {
-        RecyclerViewExtraServiceAdapter viewAdapter
-                = new RecyclerViewExtraServiceAdapter(DetailSalonActivity.this, salonServices);
-        recyclerView.setAdapter(viewAdapter);
+    private void displayExtraService(ArrayList<SalonService> salonServices) {
+        extraServiceAdapter = new RecyclerViewExtraServiceAdapter(DetailSalonActivity.this, salonServices);
+        recyclerView.setAdapter(extraServiceAdapter);
     }
 
     public String getSalePrice(String price, String discountValue) {

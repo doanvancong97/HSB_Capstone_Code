@@ -1,6 +1,8 @@
 package capstone.sonnld.hairsalonbooking.model;
 
-public class Discount {
+import java.io.Serializable;
+
+public class Discount implements Serializable {
     private String user_id;
 
     private String discountUnit;

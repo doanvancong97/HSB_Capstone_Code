@@ -22,7 +22,7 @@ import capstone.sonnld.hairsalonbooking.DetailSalonActivity;
 import capstone.sonnld.hairsalonbooking.R;
 import capstone.sonnld.hairsalonbooking.model.SalonService;
 
-public class RecyclerViewSalonByDiscountAdapter extends RecyclerView.Adapter<RecyclerViewSalonByDiscountAdapter.MyViewHolder> {
+public class RecyclerViewSelectedServiceAdapter extends RecyclerView.Adapter<RecyclerViewSelectedServiceAdapter.MyViewHolder> {
 
     private Context mContext;
     private ArrayList<SalonService> salonServices;
@@ -35,7 +35,7 @@ public class RecyclerViewSalonByDiscountAdapter extends RecyclerView.Adapter<Rec
     private String imgUrl;
 
 
-    public RecyclerViewSalonByDiscountAdapter(Context mContext, ArrayList<SalonService> salonServices) {
+    public RecyclerViewSelectedServiceAdapter(Context mContext, ArrayList<SalonService> salonServices) {
         this.mContext = mContext;
         this.salonServices = salonServices;
     }
@@ -45,7 +45,7 @@ public class RecyclerViewSalonByDiscountAdapter extends RecyclerView.Adapter<Rec
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         LayoutInflater mInflater = LayoutInflater.from(mContext);
-        view = mInflater.inflate(R.layout.card_view_item_salon_service_by_discount, parent, false);
+        view = mInflater.inflate(R.layout.card_view_item_selected_service, parent, false);
 
         return new MyViewHolder(view);
     }
@@ -84,42 +84,19 @@ public class RecyclerViewSalonByDiscountAdapter extends RecyclerView.Adapter<Rec
         price = salonServices.get(position).getPrice();
         discountValue = salonServices.get(position).getDiscount().getDiscountValue();
 
-        holder.txtServicePrice.setText(price);
-        holder.txtServiceSalePrice.setText(getSalePrice(price,discountValue));
         holder.txtSalonServiceName.setText(uppercaseFirstLetter(serviceName));
-        holder.txtSalonAddress.setText(salonAddress);
-        holder.txtSaleValue.setText(saleValue);
-        Picasso.with(mContext).
-                load(imgUrl)
-                .into(holder.imgSalonThumb);
+        holder.txtServicePrice.setText(price);
+
+//        holder.txtServiceSalePrice.setText(getSalePrice(price,discountValue));
+
+        holder.imgIcon.setImageResource(R.drawable.kid);
+//        Picasso.with(mContext).
+//                load(imgUrl)
+//                .into(holder.imgSalonThumb);
 
 
         // event when tap on a item
-        holder.cardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //pass data to Detail salon activity
-                Intent intent = new Intent(mContext, DetailSalonActivity.class);
-                intent.putExtra("SalonID",salonServices.get(position).getSalon().getSalonId());
-                intent.putExtra("SalonService", salonServices.get(position).getService().getServiceName());
-                intent.putExtra("SalonServicePrice", salonServices.get(position).getPrice());
-                intent.putExtra("DiscountValue", salonServices.get(position).getDiscount().getDiscountValue());
-                intent.putExtra("SalonName", salonServices.get(position).getSalon().getName());
-                intent.putExtra("Description", des);
-                intent.putExtra("Thumbnail", salonServices.get(position).getSalon().getUrl());
-                intent.putExtra("Address", salonServices.get(position).getSalon().getAddress().getStreet());
-                // data need to be received in DetailSalonA
-                mContext.startActivity(intent);
 
-            }
-        });
-
-        holder.txtSalonServiceName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(mContext,salonServices.get(position).getService().getServiceName(),Toast.LENGTH_LONG).show();
-            }
-        });
 
 
     }
@@ -150,21 +127,24 @@ public class RecyclerViewSalonByDiscountAdapter extends RecyclerView.Adapter<Rec
         TextView txtSaleValue;
         TextView txtServicePrice;
         TextView txtServiceSalePrice;
-        ImageView imgSalonThumb;
+        ImageView imgIcon;
         CardView cardView;
 
         public MyViewHolder(View itemView) {
             super(itemView);
 
-            txtSalonServiceName = itemView.findViewById(R.id.salon_service_name);
-            txtServicePrice = itemView.findViewById(R.id.txt_service_price);
-            txtServiceSalePrice = itemView.findViewById(R.id.txt_service_sale_price);
-            txtSalonAddress = itemView.findViewById(R.id.salon_address);
-            txtSaleValue = itemView.findViewById(R.id.txt_sale_value);
-            imgSalonThumb = itemView.findViewById(R.id.salon_img);
-            cardView = itemView.findViewById(R.id.card_view_salon_service);
+            imgIcon = itemView.findViewById(R.id.service_icon);
+            txtSalonServiceName = itemView.findViewById(R.id.service_name);
+            txtServicePrice = itemView.findViewById(R.id.service_price);
+            cardView = itemView.findViewById(R.id.card_view_selected_service);
 
-            txtServicePrice.setPaintFlags(txtServicePrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+//            txtServiceSalePrice = itemView.findViewById(R.id.txt_service_sale_price);
+//            txtSalonAddress = itemView.findViewById(R.id.salon_address);
+//            txtSaleValue = itemView.findViewById(R.id.txt_sale_value);
+
+
+
+//            txtServicePrice.setPaintFlags(txtServicePrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         }
     }
 }

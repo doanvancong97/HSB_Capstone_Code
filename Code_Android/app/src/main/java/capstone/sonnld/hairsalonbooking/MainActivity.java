@@ -96,14 +96,14 @@ public class MainActivity extends AppCompatActivity {
         hairSalonAPI.getAllServiceByRating()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<List<BookingDetail>>() {
+                .subscribe(new Observer<ArrayList<BookingDetail>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
 
                     }
 
                     @Override
-                    public void onNext(List<BookingDetail> bookingDetails) {
+                    public void onNext(ArrayList<BookingDetail> bookingDetails) {
                         displayServiceByRating(bookingDetails);
                     }
 
@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-    private void displayServiceByRating(List<BookingDetail> bookingDetails) {
+    private void displayServiceByRating(ArrayList<BookingDetail> bookingDetails) {
         RecyclerViewSalonByRatingAdapter viewNewestAdapter = new RecyclerViewSalonByRatingAdapter
                 (MainActivity.this, bookingDetails);
         recyclerViewBestService.setAdapter(viewNewestAdapter);
@@ -130,14 +130,14 @@ public class MainActivity extends AppCompatActivity {
         hairSalonAPI.getAllServiceByDiscountValue()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<List<SalonService>>() {
+                .subscribe(new Observer<ArrayList<SalonService>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
 
                     }
 
                     @Override
-                    public void onNext(List<SalonService> salonServices) {
+                    public void onNext(ArrayList<SalonService> salonServices) {
                         displayServiceByDiscount(salonServices);
                     }
 
@@ -154,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void displayServiceByDiscount(List<SalonService> salonServices) {
+    private void displayServiceByDiscount(ArrayList<SalonService> salonServices) {
         RecyclerViewSalonByDiscountAdapter viewAdapter
                 = new RecyclerViewSalonByDiscountAdapter(MainActivity.this, salonServices);
         recyclerView.setAdapter(viewAdapter);
