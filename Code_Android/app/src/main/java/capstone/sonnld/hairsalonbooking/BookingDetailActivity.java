@@ -6,22 +6,36 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.borjabravo.readmoretextview.ReadMoreTextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import capstone.sonnld.hairsalonbooking.adapter.RecyclerViewSelectedServiceAdapter;
+import capstone.sonnld.hairsalonbooking.api.HairSalonAPI;
+import capstone.sonnld.hairsalonbooking.api.RetrofitClient;
+import capstone.sonnld.hairsalonbooking.dto.BookingDTO;
+import capstone.sonnld.hairsalonbooking.dto.BookingDetailsDTO;
+import capstone.sonnld.hairsalonbooking.model.Booking;
 import capstone.sonnld.hairsalonbooking.model.SalonService;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import retrofit2.Retrofit;
 
 public class BookingDetailActivity extends AppCompatActivity {
 
     private ReadMoreTextView txt_description;
     private RecyclerView recyclerView;
+    private Button btnAccept;
+
 
     private TextView txtTotalPrice;
-
+    private HairSalonAPI hairSalonAPI;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +43,7 @@ public class BookingDetailActivity extends AppCompatActivity {
 
         txt_description = findViewById(R.id.txt_description2);
         txtTotalPrice = findViewById(R.id.txt_total);
+        btnAccept = findViewById(R.id.btn_accept);
 
         String des1 = "ÁP DỤNG KHI DÙNG DỊCH VỤ TẠI CỬA HÀNG* \n" +
                 "\n" +
@@ -63,8 +78,6 @@ public class BookingDetailActivity extends AppCompatActivity {
             String price = salonServices.get(i).getPrice();
             String discount = salonServices.get(i).getDiscount().getDiscountValue();
             int salePrice = getSalePrice(price,discount);
-//            String sSalePrice = price.substring(0, price.length() - 1);
-//            int nSalePrice = Integer.parseInt(sSalePrice);
             totalPrice += salePrice;
         }
         txtTotalPrice.setText("Tổng tiền là: " + totalPrice + "k");
@@ -75,7 +88,55 @@ public class BookingDetailActivity extends AppCompatActivity {
                 new RecyclerViewSelectedServiceAdapter(this,salonServices);
         recyclerView.setAdapter(serviceAdapter);
 
+        Retrofit retrofit = RetrofitClient.getInstance();
+        hairSalonAPI = retrofit.create(HairSalonAPI.class);
 
+        final ArrayList<BookingDetailsDTO> bookingDetailsDTOList = new ArrayList<>();
+        for(int i = 0; i < salonServices.size(); i++){
+            int salonServiceID = salonServices.get(i).getSalonServiceId();
+            int reviewId = 6;
+            String serviceName = salonServices.get(i).getService().getServiceName();
+            String status = "process";
+            BookingDetailsDTO bookingDetailsDTO = new BookingDetailsDTO(salonServiceID,reviewId,serviceName,status);
+            bookingDetailsDTOList.add(bookingDetailsDTO);
+        }
+
+        btnAccept.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                submitBooking(bookingDetailsDTOList);
+            }
+        });
+
+
+
+    }
+
+    public void submitBooking(ArrayList<BookingDetailsDTO> dtoList){
+        hairSalonAPI.postBooking(1,"Son","098787",dtoList)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<BookingDTO>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(BookingDTO bookingDTO) {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
     public int getSalePrice(String price,String discountValue){

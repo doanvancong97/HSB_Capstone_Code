@@ -4,14 +4,24 @@ import java.sql.Date;
 import java.util.List;
 
 public class BookingDTO {
-    Integer id;
-    Integer customerId;
+    Integer id;//
+    Integer customerId; // 1
     String customerName;
     String customerPhone;
     Date bookingDate;
     String bookingTime;
-    String status;
+    String status;///process
     List<BookingDetailsDTO> bookingDetailsList;
+
+    public BookingDTO(Integer customerId, String customerName, String customerPhone, Date bookingDate, String bookingTime, String status, List<BookingDetailsDTO> bookingDetailsList) {
+        this.customerId = customerId;
+        this.customerName = customerName;
+        this.customerPhone = customerPhone;
+        this.bookingDate = bookingDate;
+        this.bookingTime = bookingTime;
+        this.status = status;
+        this.bookingDetailsList = bookingDetailsList;
+    }
 
     public String getBookingTime() {
         return bookingTime;

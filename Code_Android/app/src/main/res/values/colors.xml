@@ -13,5 +13,6 @@
     <color name="black">#2d3436</color>
     <color name="gray">#F0EFEF</color>
     <color name="fadeGray">#b2bec3</color>
+    <color name="green">#2ecc71</color>
 
 </resources>

@@ -5,7 +5,14 @@ public class BookingDetailsDTO {
     Integer salon_service_id;
     Integer review_id;
     String serviceName;
-    String status;
+    String status;// process
+
+    public BookingDetailsDTO(Integer salon_service_id, Integer review_id, String serviceName, String status) {
+        this.salon_service_id = salon_service_id;
+        this.review_id = review_id;
+        this.serviceName = serviceName;
+        this.status = status;
+    }
 
     public Integer getId() {
         return id;

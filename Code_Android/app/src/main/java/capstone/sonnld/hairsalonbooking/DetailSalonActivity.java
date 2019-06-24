@@ -62,7 +62,7 @@ public class DetailSalonActivity extends AppCompatActivity {
 
     private HairSalonAPI hairSalonAPI;
     private RecyclerViewExtraServiceAdapter extraServiceAdapter;
-    StringBuffer sb = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -151,20 +151,11 @@ public class DetailSalonActivity extends AppCompatActivity {
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sb = new StringBuffer();
+
                 ArrayList<SalonService> chkService = extraServiceAdapter.getCheckedSalonServices();
-                for(int i = 0; i < chkService.size(); i++){
-                    sb.append(chkService.get(i).getService().getServiceName() + "\n");
-                }
-                if(chkService.size() >0){
-                    Toast.makeText(DetailSalonActivity.this,sb.toString(),Toast.LENGTH_LONG).show();
-                }else{
-                    Toast.makeText(DetailSalonActivity.this,"Check smth",Toast.LENGTH_LONG).show();
-                }
-
-                Intent sendDataToBooking = new Intent(DetailSalonActivity.this,BookingDetailActivity.class);
+                Intent sendDataToBooking =
+                        new Intent(DetailSalonActivity.this,BookingDetailActivity.class);
                 sendDataToBooking.putExtra("chkService",chkService);
-
                 startActivity(sendDataToBooking);
             }
         });
