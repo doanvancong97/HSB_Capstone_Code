@@ -2,12 +2,15 @@
 package capstone.sonnld.hairsalonbooking;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -18,7 +21,12 @@ import android.widget.Toast;
 
 import com.github.badoualy.datepicker.DatePickerTimeline;
 import com.github.badoualy.datepicker.MonthView;
+import com.github.jhonnyx2012.horizontalpicker.DatePickerListener;
+import com.github.jhonnyx2012.horizontalpicker.HorizontalPicker;
+
 import com.squareup.picasso.Picasso;
+
+import org.joda.time.DateTime;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -29,13 +37,15 @@ import capstone.sonnld.hairsalonbooking.adapter.RecyclerViewExtraServiceAdapter;
 import capstone.sonnld.hairsalonbooking.api.HairSalonAPI;
 import capstone.sonnld.hairsalonbooking.api.RetrofitClient;
 import capstone.sonnld.hairsalonbooking.model.SalonService;
+
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
 
-public class DetailSalonActivity extends AppCompatActivity {
+
+public class DetailSalonActivity extends AppCompatActivity implements DatePickerListener {
 
 
     private Toolbar mToolbar;
@@ -50,6 +60,7 @@ public class DetailSalonActivity extends AppCompatActivity {
     private ImageView imgThumb;
     private ImageView imgLogo;
     DatePickerTimeline timeline;
+
 
     private Spinner spAddress, spService;
     private static final String[] listAddress =
@@ -88,31 +99,53 @@ public class DetailSalonActivity extends AppCompatActivity {
         btnConfirm = findViewById(R.id.btn_confirm);
 
         imgLogo = findViewById(R.id.img_logo);
-        timeline = findViewById(R.id.timeline);
+        HorizontalPicker picker = (HorizontalPicker) findViewById(R.id.datePicker);
 
-        int year = Calendar.getInstance().get(Calendar.YEAR);
-        int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
-        int month = Calendar.getInstance().get(Calendar.MONTH);
+        // initialize it and attach a listener
+
+        // at init time
+        picker
+                .setListener(this)
+                .setTodayDateTextColor(R.color.red2)
+                       .setDays(20)
+                .setOffset(0)
+                .showTodayButton(false)
 
 
-        timeline.setFirstVisibleDate(year, month, day);
-        timeline.setLastVisibleDate(year, month, day + 10);
 
 
-        timeline.setDateLabelAdapter(new MonthView.DateLabelAdapter() {
-            @Override
-            public CharSequence getLabel(Calendar calendar, int index) {
-                return Integer.toString(calendar.get(Calendar.MONTH) + 1) + "/" + (calendar.get(Calendar.YEAR) % 2000);
-            }
-        });
 
-        timeline.setOnDateSelectedListener(new DatePickerTimeline.OnDateSelectedListener() {
-            @Override
-            public void onDateSelected(int year, int month, int day, int index) {
-                Toast.makeText(DetailSalonActivity.this, day + "/" + (month + 1) + "/" + year, Toast.LENGTH_SHORT).show();
+                .init();
 
-            }
-        });
+        picker.setDate(new DateTime());
+
+
+        // or on the View directly after init was completed
+
+
+
+//        timeline = findViewById(R.id.timeline);
+//
+//        int year = Calendar.getInstance().get(Calendar.YEAR);
+//        int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+//        int month = Calendar.getInstance().get(Calendar.MONTH);
+//
+//
+//        timeline.setFirstVisibleDate(year, month, day);
+//        timeline.setLastVisibleDate(year, month, day + 10);
+//        timeline.centerOnSelection();
+//
+//
+//
+//
+//
+//        timeline.setOnDateSelectedListener(new DatePickerTimeline.OnDateSelectedListener() {
+//            @Override
+//            public void onDateSelected(int year, int month, int day, int index) {
+//                Toast.makeText(DetailSalonActivity.this, day + "/" + (month + 1) + "/" + year, Toast.LENGTH_SHORT).show();
+//
+//            }
+//        });
 
 
         //Receive data from view adapter
@@ -168,6 +201,12 @@ public class DetailSalonActivity extends AppCompatActivity {
                 startActivity(sendDataToBooking);
             }
         });
+    }
+
+    @Override
+    public void onDateSelected(@NonNull final DateTime dateSelected) {
+        // log it for demo
+        Toast.makeText(this, dateSelected.getDayOfMonth()+"/"+dateSelected.getMonthOfYear()+"/"+dateSelected.getYear(), Toast.LENGTH_SHORT).show();
     }
 
     private void getAllExtraService(int salonId) {
