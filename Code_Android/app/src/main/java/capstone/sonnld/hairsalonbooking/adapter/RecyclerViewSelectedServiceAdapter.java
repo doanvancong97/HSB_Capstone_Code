@@ -33,6 +33,7 @@ public class RecyclerViewSelectedServiceAdapter extends RecyclerView.Adapter<Rec
     private String saleValue;
     private String price;
     private String imgUrl;
+    private String salePrice;
 
 
     public RecyclerViewSelectedServiceAdapter(Context mContext, ArrayList<SalonService> salonServices) {
@@ -77,17 +78,13 @@ public class RecyclerViewSelectedServiceAdapter extends RecyclerView.Adapter<Rec
                 "- Khách hàng được phép đến sớm hoặc muộn hơn 15 phút so với giờ hẹn đến \n" +
                 "- Mã giảm giá không có giá trị quy đổi thành tiền mặt ";
         serviceName = salonServices.get(position).getService().getServiceName();
-        salonAddress = salonServices.get(position).getSalon().getAddress().getStreetNumber() + ", "
-                + salonServices.get(position).getSalon().getAddress().getStreet();
         saleValue = " - " + salonServices.get(position).getDiscount().getDiscountValue() + "%";
-        imgUrl = salonServices.get(position).getSalon().getUrl();
         price = salonServices.get(position).getPrice();
         discountValue = salonServices.get(position).getDiscount().getDiscountValue();
+        salePrice = getSalePrice(price,discountValue);
 
         holder.txtSalonServiceName.setText(uppercaseFirstLetter(serviceName));
-        holder.txtServicePrice.setText(price);
-
-//        holder.txtServiceSalePrice.setText(getSalePrice(price,discountValue));
+        holder.txtServicePrice.setText(salePrice);
 
         holder.imgIcon.setImageResource(R.drawable.kid);
 //        Picasso.with(mContext).
@@ -123,10 +120,7 @@ public class RecyclerViewSelectedServiceAdapter extends RecyclerView.Adapter<Rec
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
         TextView txtSalonServiceName;
-        TextView txtSalonAddress;
-        TextView txtSaleValue;
         TextView txtServicePrice;
-        TextView txtServiceSalePrice;
         ImageView imgIcon;
         CardView cardView;
 
@@ -138,13 +132,6 @@ public class RecyclerViewSelectedServiceAdapter extends RecyclerView.Adapter<Rec
             txtServicePrice = itemView.findViewById(R.id.service_price);
             cardView = itemView.findViewById(R.id.card_view_selected_service);
 
-//            txtServiceSalePrice = itemView.findViewById(R.id.txt_service_sale_price);
-//            txtSalonAddress = itemView.findViewById(R.id.salon_address);
-//            txtSaleValue = itemView.findViewById(R.id.txt_sale_value);
-
-
-
-//            txtServicePrice.setPaintFlags(txtServicePrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         }
     }
 }

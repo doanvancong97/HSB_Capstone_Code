@@ -1,6 +1,7 @@
 package capstone.sonnld.hairsalonbooking.adapter;
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -23,7 +24,8 @@ public class RecyclerViewExtraServiceAdapter extends RecyclerView.Adapter<Recycl
     private ArrayList<SalonService> checkedSalonServices = new ArrayList<>();
     private String serviceName;
 
-    private String saleValue;
+    private String discountValue;
+    private String serviceSalePrice;
 
 
     private String price;
@@ -51,12 +53,13 @@ public class RecyclerViewExtraServiceAdapter extends RecyclerView.Adapter<Recycl
         //show item
 
         serviceName = salonServices.get(position).getService().getServiceName();
-        saleValue = " - " + salonServices.get(position).getDiscount().getDiscountValue() + "%";
+        discountValue = salonServices.get(position).getDiscount().getDiscountValue();
         price = salonServices.get(position).getPrice();
+        serviceSalePrice = getSalePrice(price,discountValue);
 
-
-        holder.txtSalonServiceName.setText(uppercaseFirstLetter(serviceName));
+        holder.txtSalonServiceName.setText(uppercaseFirstLetter(serviceName) + " ( -" + discountValue + "% )" );
         holder.txtPrice.setText(price);
+        holder.txtSalePrice.setText(serviceSalePrice);
         holder.imgServiceIcon.setImageResource(R.drawable.kid);
         holder.setItemClickListener(new ItemClickListener() {
             @Override
@@ -76,6 +79,15 @@ public class RecyclerViewExtraServiceAdapter extends RecyclerView.Adapter<Recycl
          //event when click on checkbox
 //
     }
+    public String getSalePrice(String price,String discountValue){
+
+        String sSalePrice = price.substring(0, price.length() - 1);
+        int nSalePrice = Integer.parseInt(sSalePrice);
+        int nDiscountValue = Integer.parseInt(discountValue);
+        nSalePrice = nSalePrice - (nSalePrice * nDiscountValue / 100);
+
+        return "" + nSalePrice + "k";
+    }
 
     public String uppercaseFirstLetter(String str) {
         return str.substring(0, 1).toUpperCase() + str.substring(1);
@@ -90,7 +102,7 @@ public class RecyclerViewExtraServiceAdapter extends RecyclerView.Adapter<Recycl
 
         TextView txtSalonServiceName;
         TextView txtPrice;
-        TextView txtSaleValue;
+        TextView txtSalePrice;
         CheckBox chkBox;
         ImageView imgServiceIcon;
         CardView cardView;
@@ -101,10 +113,13 @@ public class RecyclerViewExtraServiceAdapter extends RecyclerView.Adapter<Recycl
             super(itemView);
 
             txtSalonServiceName = itemView.findViewById(R.id.service_name);
-            txtPrice = itemView.findViewById(R.id.service_price);
+            txtPrice = itemView.findViewById(R.id.txt_salon_service_price);
+            txtSalePrice = itemView.findViewById(R.id.txt_service_sale_price);
             chkBox = itemView.findViewById(R.id.chkBox);
             imgServiceIcon = itemView.findViewById(R.id.service_icon);
             cardView = itemView.findViewById(R.id.card_view_service);
+
+            txtPrice.setPaintFlags(txtPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
             chkBox.setOnClickListener(this);
         }

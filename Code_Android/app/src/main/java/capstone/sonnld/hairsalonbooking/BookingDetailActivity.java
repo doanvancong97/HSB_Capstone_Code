@@ -16,6 +16,7 @@ import capstone.sonnld.hairsalonbooking.adapter.RecyclerViewSelectedServiceAdapt
 import capstone.sonnld.hairsalonbooking.model.SalonService;
 
 public class BookingDetailActivity extends AppCompatActivity {
+
     private ReadMoreTextView txt_description;
     private RecyclerView recyclerView;
 
@@ -27,7 +28,7 @@ public class BookingDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_booking_detail);
 
         txt_description = findViewById(R.id.txt_description2);
-        txtTotalPrice = findViewById(R.id.txt_total_price);
+        txtTotalPrice = findViewById(R.id.txt_total);
 
         String des1 = "ÁP DỤNG KHI DÙNG DỊCH VỤ TẠI CỬA HÀNG* \n" +
                 "\n" +
@@ -53,10 +54,20 @@ public class BookingDetailActivity extends AppCompatActivity {
                 "- Khách hàng được phép đến sớm hoặc muộn hơn 15 phút so với giờ hẹn đến \n" +
                 "- Mã giảm giá không có giá trị quy đổi thành tiền mặt ";
         txt_description.setText(des1);
-
         Intent intent = getIntent();
         ArrayList<SalonService> salonServices =
                 (ArrayList<SalonService>) intent.getSerializableExtra("chkService");
+
+        int totalPrice = 0;
+        for(int i = 0; i < salonServices.size(); i++){
+            String price = salonServices.get(i).getPrice();
+            String discount = salonServices.get(i).getDiscount().getDiscountValue();
+            int salePrice = getSalePrice(price,discount);
+//            String sSalePrice = price.substring(0, price.length() - 1);
+//            int nSalePrice = Integer.parseInt(sSalePrice);
+            totalPrice += salePrice;
+        }
+        txtTotalPrice.setText("Tổng tiền là: " + totalPrice + "k");
 
         recyclerView = findViewById(R.id.recycler_selected_service);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
@@ -64,14 +75,17 @@ public class BookingDetailActivity extends AppCompatActivity {
                 new RecyclerViewSelectedServiceAdapter(this,salonServices);
         recyclerView.setAdapter(serviceAdapter);
 
-        int totalPrice = 0;
-        for(int i = 0; i < salonServices.size(); i++){
-            String price = salonServices.get(i).getPrice();
-            String sSalePrice = price.substring(0, price.length() - 1);
-            int nSalePrice = Integer.parseInt(sSalePrice);
-            totalPrice += nSalePrice;
-        }
-        txtTotalPrice.setText(totalPrice);
+
+    }
+
+    public int getSalePrice(String price,String discountValue){
+
+        String sSalePrice = price.substring(0, price.length() - 1);
+        int nSalePrice = Integer.parseInt(sSalePrice);
+        int nDiscountValue = Integer.parseInt(discountValue);
+        nSalePrice = nSalePrice - (nSalePrice * nDiscountValue / 100);
+
+        return nSalePrice ;
     }
 
     public void unBooking(View view) {
