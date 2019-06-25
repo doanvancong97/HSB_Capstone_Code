@@ -12,9 +12,11 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,6 +24,7 @@ import android.widget.Toast;
 import com.github.badoualy.datepicker.DatePickerTimeline;
 
 import com.github.jhonnyx2012.horizontalpicker.DatePickerListener;
+import com.github.jhonnyx2012.horizontalpicker.Day;
 import com.github.jhonnyx2012.horizontalpicker.HorizontalPicker;
 
 import com.squareup.picasso.Picasso;
@@ -29,6 +32,9 @@ import com.squareup.picasso.Picasso;
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 
 import capstone.sonnld.hairsalonbooking.adapter.RecyclerViewExtraServiceAdapter;
@@ -41,6 +47,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
+
+import static capstone.sonnld.hairsalonbooking.R.drawable.button_time;
 
 
 public class DetailSalonActivity extends AppCompatActivity implements DatePickerListener {
@@ -58,6 +66,13 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
     private ImageView imgThumb;
     private ImageView imgLogo;
     DatePickerTimeline timeline;
+    LinearLayout linearTimePiker;
+
+    //Button time
+    boolean isChoose =false;
+    int slotIDisChoose =0;
+    int slotID =0;
+
 
 
     private Spinner spAddress, spService;
@@ -105,40 +120,84 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
         picker
                 .setListener(this)
                 .setTodayDateTextColor(R.color.red2)
-                       .setDays(20)
+                .setDays(20)
                 .setOffset(0)
                 .showTodayButton(false)
                 .init();
 
         picker.setDate(new DateTime());
 
+        linearTimePiker=findViewById(R.id.linearTimePicker);
+//        Date date = new Date();   // given date
+//        Calendar calendar = GregorianCalendar.getInstance(); // creates a new calendar instance
+//        calendar.setTime(date);   // assigns calendar to given date
+//        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int maxHour=23,minHour=8;
+        int hour = minHour;
 
-        // or on the View directly after init was completed
 
 
 
-//        timeline = findViewById(R.id.timeline);
-//
-//        int year = Calendar.getInstance().get(Calendar.YEAR);
-//        int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
-//        int month = Calendar.getInstance().get(Calendar.MONTH);
-//
-//
-//        timeline.setFirstVisibleDate(year, month, day);
-//        timeline.setLastVisibleDate(year, month, day + 10);
-//        timeline.centerOnSelection();
-//
-//
-//
-//
-//
-//        timeline.setOnDateSelectedListener(new DatePickerTimeline.OnDateSelectedListener() {
-//            @Override
-//            public void onDateSelected(int year, int month, int day, int index) {
-//                Toast.makeText(DetailSalonActivity.this, day + "/" + (month + 1) + "/" + year, Toast.LENGTH_SHORT).show();
-//
-//            }
-//        });
+        for (int i = 0; hour<=maxHour ; i++) {
+            slotID++;
+            final Button slot = new Button(this);
+            slot.setId(slotID);
+
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+            params.setMargins(10,10,10,10);
+            slot.setLayoutParams(params);
+            slot.setBackgroundResource(button_time);
+            slot.setTextColor(Color.parseColor("#DB1507"));
+            slot.setText(""+hour+"H");
+            linearTimePiker.addView(slot);
+            hour++;
+            slot.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                   Toast.makeText(DetailSalonActivity.this, slot.getText(), Toast.LENGTH_SHORT).show();
+
+                    if(isChoose==false){
+                        slot.setBackgroundResource(R.drawable.button_time_choose);
+                        slot.setTextColor(Color.WHITE);
+                        isChoose=true;
+                        slotIDisChoose = slot.getId();
+
+
+                    }else {
+
+                        Button b = findViewById(slotIDisChoose);
+                        b.setBackgroundResource(button_time);
+                        b.setTextColor(Color.parseColor("#DB1507"));
+
+
+
+
+                        slot.setBackgroundResource(R.drawable.button_time_choose);
+                        slot.setTextColor(Color.WHITE);
+                        isChoose=true;
+                        slotIDisChoose = slot.getId();
+
+
+                    }
+
+
+
+
+
+
+                }
+            });
+
+        }
+
+
+
+
+
+
+
+
+
 
 
         //Receive data from view adapter
@@ -154,7 +213,7 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
 
         //set new value for view
         txtSalonName.setText(salonName);
-        txtSalonService.setText(uppercaseFirstLetter(salonServiceName) + "( -" + discountValue + "% )");
+        txtSalonService.setText(uppercaseFirstLetter(salonServiceName) + " (-" + discountValue + "%) ");
         txtServicePrice.setText(salonServicePrice);
         txtServicePrice.setPaintFlags(txtServicePrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         txtServiceSalePrice.setText(getSalePrice(salonServicePrice, discountValue));
@@ -180,18 +239,18 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
 
                 ArrayList<SalonService> chkService = extraServiceAdapter.getCheckedSalonServices();
                 Intent sendDataToBooking =
-                        new Intent(DetailSalonActivity.this,BookingDetailActivity.class);
-                sendDataToBooking.putExtra("chkService",chkService);
+                        new Intent(DetailSalonActivity.this, BookingDetailActivity.class);
+                sendDataToBooking.putExtra("chkService", chkService);
                 startActivity(sendDataToBooking);
             }
         });
-        
+
     }
 
     @Override
     public void onDateSelected(@NonNull final DateTime dateSelected) {
         // log it for demo
-        Toast.makeText(this, dateSelected.getDayOfMonth()+"/"+dateSelected.getMonthOfYear()+"/"+dateSelected.getYear(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, dateSelected.getDayOfMonth() + "/" + dateSelected.getMonthOfYear() + "/" + dateSelected.getYear(), Toast.LENGTH_SHORT).show();
     }
 
     private void getAllExtraService(int salonId) {
@@ -233,7 +292,7 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
         int nDiscountValue = Integer.parseInt(discountValue);
         nSalePrice = nSalePrice - (nSalePrice * nDiscountValue / 100);
 
-        return "" + nSalePrice + "k";
+        return "" + nSalePrice + "K";
     }
 
     public String uppercaseFirstLetter(String str) {
