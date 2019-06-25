@@ -118,12 +118,12 @@
                     android:text="Ngày đến" />
 
                 <TextView
-                    android:id="@+id/booked_date"
+                    android:id="@+id/txt_booked_date"
                     android:layout_width="0dp"
                     android:layout_height="fill_parent"
                     android:layout_weight="1"
                     android:paddingLeft="40dp"
-                    android:text="9:00 03/06/2019"
+                    android:text="03/06/2019"
                     android:textColor="@color/red2" />
 
 
@@ -146,7 +146,7 @@
                     android:layout_height="fill_parent"
                     android:layout_weight="1"
                     android:paddingLeft="40dp"
-                    android:text="9:00 03/06/2019"
+                    android:text="9:00"
                     android:textColor="@color/red2" />
 
 

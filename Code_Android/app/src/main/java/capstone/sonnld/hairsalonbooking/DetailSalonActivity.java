@@ -71,6 +71,7 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
 
     private HairSalonAPI hairSalonAPI;
     private RecyclerViewExtraServiceAdapter extraServiceAdapter;
+    private String bookedDate = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -182,16 +183,22 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
                 Intent sendDataToBooking =
                         new Intent(DetailSalonActivity.this,BookingDetailActivity.class);
                 sendDataToBooking.putExtra("chkService",chkService);
+                sendDataToBooking.putExtra("bookedDate",bookedDate);
                 startActivity(sendDataToBooking);
             }
         });
-        
+
     }
 
     @Override
     public void onDateSelected(@NonNull final DateTime dateSelected) {
         // log it for demo
-        Toast.makeText(this, dateSelected.getDayOfMonth()+"/"+dateSelected.getMonthOfYear()+"/"+dateSelected.getYear(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, dateSelected.getDayOfMonth()
+                +"/"+dateSelected.getMonthOfYear()
+                +"/"+dateSelected.getYear(), Toast.LENGTH_SHORT).show();
+        bookedDate = dateSelected.getDayOfMonth()
+                +"/"+dateSelected.getMonthOfYear()
+                +"/"+dateSelected.getYear();
     }
 
     private void getAllExtraService(int salonId) {

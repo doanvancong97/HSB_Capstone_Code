@@ -31,7 +31,7 @@ public class BookingDetailActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private Button btnAccept;
 
-
+    private TextView txtBookedDate;
     private TextView txtTotalPrice;
     private HairSalonAPI hairSalonAPI;
 
@@ -43,6 +43,7 @@ public class BookingDetailActivity extends AppCompatActivity {
         txt_description = findViewById(R.id.txt_description2);
         txtTotalPrice = findViewById(R.id.txt_total);
         btnAccept = findViewById(R.id.btn_accept);
+        txtBookedDate = findViewById(R.id.txt_booked_date);
 
         String des1 = "ÁP DỤNG KHI DÙNG DỊCH VỤ TẠI CỬA HÀNG* \n" +
                 "\n" +
@@ -68,10 +69,12 @@ public class BookingDetailActivity extends AppCompatActivity {
                 "- Khách hàng được phép đến sớm hoặc muộn hơn 15 phút so với giờ hẹn đến \n" +
                 "- Mã giảm giá không có giá trị quy đổi thành tiền mặt ";
         txt_description.setText(des1);
+
+        // get data from intent put extra
         Intent intent = getIntent();
         ArrayList<SalonService> salonServices =
                 (ArrayList<SalonService>) intent.getSerializableExtra("chkService");
-
+        String bookedDate = intent.getExtras().getString("bookedDate");
         int totalPrice = 0;
         for (int i = 0; i < salonServices.size(); i++) {
             String price = salonServices.get(i).getPrice();
@@ -80,6 +83,7 @@ public class BookingDetailActivity extends AppCompatActivity {
             totalPrice += salePrice;
         }
         txtTotalPrice.setText("Tổng tiền là: " + totalPrice + "k");
+        txtBookedDate.setText(bookedDate);
 
         recyclerView = findViewById(R.id.recycler_selected_service);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
@@ -118,7 +122,10 @@ public class BookingDetailActivity extends AppCompatActivity {
         call.enqueue(new Callback<BookingDTO>() {
             @Override
             public void onResponse(Call<BookingDTO> call, Response<BookingDTO> response) {
-                Toast.makeText(BookingDetailActivity.this,response.code() + "",Toast.LENGTH_LONG).show();
+                Toast.makeText(BookingDetailActivity.this,"Cảm ơn quý khách đã sử dụng dịch vụ.",Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(BookingDetailActivity.this,MainActivity.class);
+                startActivity(intent);
+                finish();
             }
 
             @Override
