@@ -131,7 +131,7 @@ public class RecyclerViewSalonByDiscountAdapter extends RecyclerView.Adapter<Rec
         int nDiscountValue = Integer.parseInt(discountValue);
         nSalePrice = nSalePrice - (nSalePrice * nDiscountValue / 100);
 
-        return "" + nSalePrice + "k";
+        return "" + nSalePrice + "K";
     }
 
     public String uppercaseFirstLetter(String str) {

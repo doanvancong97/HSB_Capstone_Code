@@ -57,7 +57,7 @@ public class RecyclerViewExtraServiceAdapter extends RecyclerView.Adapter<Recycl
         price = salonServices.get(position).getPrice();
         serviceSalePrice = getSalePrice(price,discountValue);
 
-        holder.txtSalonServiceName.setText(uppercaseFirstLetter(serviceName) + " ( -" + discountValue + "% )" );
+        holder.txtSalonServiceName.setText(uppercaseFirstLetter(serviceName) + " (-" + discountValue + "%)" );
         holder.txtPrice.setText(price);
         holder.txtSalePrice.setText(serviceSalePrice);
         holder.imgServiceIcon.setImageResource(R.drawable.kid);
@@ -86,7 +86,7 @@ public class RecyclerViewExtraServiceAdapter extends RecyclerView.Adapter<Recycl
         int nDiscountValue = Integer.parseInt(discountValue);
         nSalePrice = nSalePrice - (nSalePrice * nDiscountValue / 100);
 
-        return "" + nSalePrice + "k";
+        return "" + nSalePrice + "K";
     }
 
     public String uppercaseFirstLetter(String str) {

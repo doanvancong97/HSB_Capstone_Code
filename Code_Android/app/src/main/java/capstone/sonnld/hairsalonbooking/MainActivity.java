@@ -35,13 +35,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity {
 
 
-    private TextView txtTestLogin;
+
 
     private HairSalonAPI hairSalonAPI;
     private RecyclerView recyclerView;
     private RecyclerView recyclerViewBestService;
 
-    private MaterialSpinner spinnerLocation;
+
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mActionBarDrawerToggle;
 
@@ -51,10 +51,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        txtTestLogin = findViewById(R.id.txtTestLogin);
-        checkLoginByUser();
-        spinnerLocation = findViewById(R.id.spinnerLocation);
-        spinnerLocation.setItems("HỒ CHÍ MINH", "HÀ NỘI", "ĐÀ NẴNG");
+
 
 
         //setup tool bar
@@ -156,19 +153,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(viewAdapter);
     }
 
-    public void checkLoginByUser() {
-        Intent intent = this.getIntent();
 
-
-        if (intent.getStringExtra("username") != null) {
-            txtTestLogin.setText("Welcome: " + intent.getStringExtra("username"));
-        } else {
-
-
-            txtTestLogin.setText("");
-        }
-
-    }
 
 
     public void clickToRedirectToSearch(View view) {

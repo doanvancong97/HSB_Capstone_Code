@@ -12,8 +12,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/btn_confirm"
-        >
+        android:layout_above="@+id/btn_confirm">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -31,8 +30,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:orientation="vertical"
-                    >
+                    android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -45,8 +43,8 @@
                             android:layout_width="0dp"
                             android:layout_height="fill_parent"
                             android:layout_weight="1.5"
-                            android:src="@drawable/logo_tran"
                             android:paddingLeft="10dp"
+                            android:src="@drawable/logo_tran"
 
                             />
 
@@ -133,33 +131,34 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        >
-                        <TextView
-                            android:id="@+id/txt_service_sale_price"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:paddingRight="10dp"
-                            android:gravity="center|right"
-                            android:text="sale price"
-                            android:textSize="20dp"
-                            android:textColor="@color/red"
-                            android:textStyle="bold" />
+                        android:orientation="horizontal">
+
                         <TextView
                             android:id="@+id/txt_salon_service_price"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
+                            android:gravity="center|right"
                             android:paddingRight="15dp"
-                            android:gravity="center|left"
                             android:text="Price"
-                            android:textSize="15dp"
                             android:textColor="@color/fadeGray"
-                             />
+                            android:textSize="15dp" />
+
+                        <TextView
+                            android:id="@+id/txt_service_sale_price"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center|left"
+                            android:paddingRight="10dp"
+                            android:text="sale price"
+                            android:textColor="@color/red"
+                            android:textSize="20dp"
+                            android:textStyle="bold" />
 
 
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="fill_parent"
                         android:layout_height="70dp"
@@ -187,27 +186,28 @@
 
 
                     </LinearLayout>
+
                     <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:background="@drawable/my_text_view_bg"
-                    android:padding="5dp"
-                    android:text="Các dịch vụ khác của cửa hàng:"
-                    android:textAllCaps="true"
-                    android:textColor="@color/black"
-                    android:textSize="15dp"
-                    android:textStyle="bold" />
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:background="@drawable/my_text_view_bg"
+                        android:padding="5dp"
+                        android:text="Các dịch vụ khác của cửa hàng:"
+                        android:textAllCaps="true"
+                        android:textColor="@color/black"
+                        android:textSize="15dp"
+                        android:textStyle="bold" />
 
 
-                   <android.support.v7.widget.RecyclerView
-                       android:layout_width="match_parent"
-                       android:layout_height="wrap_content"
-                       android:id="@+id/recycler_view_more_service"
-                       >
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/recycler_view_more_service"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
 
-                   </android.support.v7.widget.RecyclerView>
+                    </android.support.v7.widget.RecyclerView>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
@@ -215,31 +215,31 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:background="@drawable/my_text_view_bg"
                             android:gravity="center"
 
                             android:text="Chọn ngày và giờ"
 
-
-
-                            android:textSize="14dp" />
+                            android:textSize="17dp"
+                            android:textStyle="bold" />
 
 
                     </LinearLayout>
 
                     <!--<com.github.badoualy.datepicker.DatePickerTimeline-->
-                        <!--android:id="@+id/timeline"-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--app:mti_primaryColor="@color/red2"-->
+                    <!--android:id="@+id/timeline"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--app:mti_primaryColor="@color/red2"-->
 
 
-
-                        <!--/>-->
+                    <!--/>-->
 
                     <com.github.jhonnyx2012.horizontalpicker.HorizontalPicker
                         android:id="@+id/datePicker"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content" />
 
                     <HorizontalScrollView
                         android:layout_width="match_parent"
@@ -248,76 +248,18 @@
                         android:scrollbars="none">
 
 
-
                         <LinearLayout
+                            android:id="@+id/linearTimePicker"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
 
-                            >
-
-                            <Button
-                                android:id="@+id/btn1"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="10dp"
-                                android:background="@drawable/button_time"
-                                android:text="9:00"
-                                android:textColor="#DB1507"
+                            android:orientation="horizontal">
 
 
-                                />
-
-                            <Button
-                                android:id="@+id/btn2"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="10dp"
-                                android:background="@drawable/button_time"
-                                android:text="10:00"
-                                android:textColor="#DB1507"
-
-                                />
-
-                            <Button
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="10dp"
-                                android:background="@drawable/button_time"
-                                android:text="11:00"
-                                android:textColor="#DB1507"
 
 
-                                />
-
-                            <Button
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="10dp"
-                                android:background="@drawable/button_time"
-                                android:text="12:00"
-                                android:textColor="#DB1507"
 
 
-                                />
-
-                            <Button
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="10dp"
-                                android:background="@drawable/button_time"
-                                android:text="13:00"
-                                android:textColor="#DB1507"
-
-
-                                />
-
-                            <Button
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="10dp"
-                                android:background="@drawable/button_time"
-                                android:text="14:00"
-                                android:textColor="#DB1507" />
                         </LinearLayout>
 
                     </HorizontalScrollView>
@@ -346,14 +288,11 @@
                         android:id="@+id/txt_description"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="20dp"
                         app:colorClickableText="#2644EB"
-                        app:trimLines="6"
-                        android:layout_margin="5dp"
-                        />
-
-
+                        app:trimLines="6" />
 
 
                 </LinearLayout>
@@ -362,11 +301,7 @@
         </LinearLayout>
 
 
-
-
     </ScrollView>
-
-
 
 
     <Button
@@ -382,7 +317,6 @@
         android:text="XÁC NHẬN"
         android:textColor="#FFFFFF"
         android:textSize="18sp" />
-
 
 
 </RelativeLayout>
