@@ -32,6 +32,7 @@ public class BookingDetailActivity extends AppCompatActivity {
     private Button btnAccept;
 
     private TextView txtBookedDate;
+    private TextView txtBookedTime;
     private TextView txtTotalPrice;
     private HairSalonAPI hairSalonAPI;
 
@@ -44,6 +45,7 @@ public class BookingDetailActivity extends AppCompatActivity {
         txtTotalPrice = findViewById(R.id.txt_total);
         btnAccept = findViewById(R.id.btn_accept);
         txtBookedDate = findViewById(R.id.txt_booked_date);
+        txtBookedTime = findViewById(R.id.txt_booked_time);
 
         String des1 = "ÁP DỤNG KHI DÙNG DỊCH VỤ TẠI CỬA HÀNG* \n" +
                 "\n" +
@@ -75,6 +77,8 @@ public class BookingDetailActivity extends AppCompatActivity {
         ArrayList<SalonService> salonServices =
                 (ArrayList<SalonService>) intent.getSerializableExtra("chkService");
         String bookedDate = intent.getExtras().getString("bookedDate");
+        String bookedTime = intent.getExtras().getString("bookedTime");
+
         int totalPrice = 0;
         for (int i = 0; i < salonServices.size(); i++) {
             String price = salonServices.get(i).getPrice();
@@ -84,6 +88,7 @@ public class BookingDetailActivity extends AppCompatActivity {
         }
         txtTotalPrice.setText("Tổng tiền là: " + totalPrice + "k");
         txtBookedDate.setText(bookedDate);
+        txtBookedTime.setText(bookedTime);
 
         recyclerView = findViewById(R.id.recycler_selected_service);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
@@ -94,20 +99,24 @@ public class BookingDetailActivity extends AppCompatActivity {
         Retrofit retrofit = RetrofitClient.getInstance();
         hairSalonAPI = retrofit.create(HairSalonAPI.class);
 
-        final ArrayList<BookingDetailsDTO> bookingDetailsDTOList = new ArrayList<>();
-        for (int i = 0; i < salonServices.size(); i++) {
-            int salonServiceID = salonServices.get(i).getSalonServiceId();
-            int reviewId = 6;
-            String serviceName = salonServices.get(i).getService().getServiceName();
-            String status = "process";
-            BookingDetailsDTO bookingDetailsDTO = new BookingDetailsDTO(salonServiceID, reviewId, serviceName, status);
-            bookingDetailsDTOList.add(bookingDetailsDTO);
-        }
+
+        //
+//        final ArrayList<BookingDetailsDTO> bookingDetailsDTOList = new ArrayList<>();
+//        for (int i = 0; i < salonServices.size(); i++) {
+//            int salonServiceID = salonServices.get(i).getSalonServiceId();
+//            int reviewId = 6;
+//            String serviceName = salonServices.get(i).getService().getServiceName();
+//            String status = "process";
+//            BookingDetailsDTO bookingDetailsDTO = new BookingDetailsDTO(salonServiceID, reviewId, serviceName, status);
+//            bookingDetailsDTOList.add(bookingDetailsDTO);
+//        }
 
         btnAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                submitBooking(bookingDetailsDTOList);
+                Intent intent = new Intent(BookingDetailActivity.this,MainActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
 

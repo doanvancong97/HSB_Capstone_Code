@@ -42,14 +42,7 @@
             app:floatingSearch_leftActionMode="showSearch"
             android:layout_weight="15"
 
-
-
-
-
-
             >
-
-
         </com.arlib.floatingsearchview.FloatingSearchView>
 
 

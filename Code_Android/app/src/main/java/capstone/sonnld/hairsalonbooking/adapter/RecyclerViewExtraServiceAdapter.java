@@ -39,6 +39,8 @@ public class RecyclerViewExtraServiceAdapter extends RecyclerView.Adapter<Recycl
         return checkedSalonServices;
     }
 
+
+
     @Override
     public MyViewHolder onCreateViewHolder( ViewGroup parent, int viewType) {
         View view;

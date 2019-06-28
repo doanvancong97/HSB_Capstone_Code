@@ -32,11 +32,17 @@ import java.util.ArrayList;
 import capstone.sonnld.hairsalonbooking.adapter.RecyclerViewExtraServiceAdapter;
 import capstone.sonnld.hairsalonbooking.api.HairSalonAPI;
 import capstone.sonnld.hairsalonbooking.api.RetrofitClient;
+import capstone.sonnld.hairsalonbooking.dto.BookingDTO;
+import capstone.sonnld.hairsalonbooking.dto.BookingDetailsDTO;
+import capstone.sonnld.hairsalonbooking.model.BookingDetail;
 import capstone.sonnld.hairsalonbooking.model.SalonService;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 
 import static capstone.sonnld.hairsalonbooking.R.drawable.button_time;
@@ -60,23 +66,23 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
     LinearLayout linearTimePiker;
 
     //Button time
-    boolean isChoose = false;
-    int slotIDisChoose = 0;
-    int slotID = 0;
+    private boolean isChoose = false;
+    private int slotIDisChoose = 0;
+    private int slotID = 0;
+    private String bookedTime="";
 
 
     private Spinner spAddress, spService;
     private static final String[] listAddress =
             {"1084 Quang Trung, F.12, Quận Gò Vấp, TP. HCM", "18 Nguyễn Ảnh Thủ, F. Trung Mỹ Tây, Quận 12, TP. HCM", "30 Nguyễn Trãi, F.10,  Quận 10"};
 
-    private static final String[] listSlots = {"8:00", "9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00"};
-
     private RecyclerView recyclerViewTimeSlot;
-    private RecyclerView.Adapter mAdapter;
 
     private HairSalonAPI hairSalonAPI;
     private RecyclerViewExtraServiceAdapter extraServiceAdapter;
     private String bookedDate = "";
+    private ArrayList<SalonService> chkService = new ArrayList<>();
+    private ArrayList<BookingDetailsDTO> bookingDetailsDTOList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,13 +150,12 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
                 @Override
                 public void onClick(View view) {
                     Toast.makeText(DetailSalonActivity.this, slot.getText(), Toast.LENGTH_SHORT).show();
-
+                    bookedTime=slot.getText().toString();
                     if (isChoose == false) {
                         slot.setBackgroundResource(R.drawable.button_time_choose);
                         slot.setTextColor(Color.WHITE);
                         isChoose = true;
                         slotIDisChoose = slot.getId();
-
 
                     } else {
 
@@ -163,11 +168,7 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
                         slot.setTextColor(Color.WHITE);
                         isChoose = true;
                         slotIDisChoose = slot.getId();
-
-
                     }
-
-
                 }
             });
 
@@ -207,18 +208,26 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
         recyclerView.setLayoutManager(new GridLayoutManager(DetailSalonActivity.this, 1));
         getAllExtraService(salonId);
 
+
+
+
+
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // setup data for booking
+                chkService = extraServiceAdapter.getCheckedSalonServices();
+                for (int i = 0; i < chkService.size(); i++) {
+                    int salonServiceID = chkService.get(i).getSalonServiceId();
+                    int reviewId = 6;
+                    String serviceName = chkService.get(i).getService().getServiceName();
+                    String status = "process";
+                    BookingDetailsDTO bookingDetailsDTO = new BookingDetailsDTO(salonServiceID, reviewId, serviceName, status);
+                    bookingDetailsDTOList.add(bookingDetailsDTO);
+                }
 
-                ArrayList<SalonService> chkService = extraServiceAdapter.getCheckedSalonServices();
-                Intent sendDataToBooking =
 
-                        new Intent(DetailSalonActivity.this, BookingDetailActivity.class);
-                sendDataToBooking.putExtra("chkService", chkService);
-                sendDataToBooking.putExtra("bookedDate", bookedDate);
-
-                startActivity(sendDataToBooking);
+                submitBooking(bookingDetailsDTOList);
             }
         });
 
@@ -264,6 +273,31 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
                 });
     }
 
+    public void submitBooking(ArrayList<BookingDetailsDTO> dtoList) {
+        BookingDTO bookingDTO = new BookingDTO(1,"Sonnnnnn","09999999","2019-12-19","12:12","process",dtoList);
+
+        Call<BookingDTO> call = hairSalonAPI.postBooking(bookingDTO);
+
+        call.enqueue(new Callback<BookingDTO>() {
+            @Override
+            public void onResponse(Call<BookingDTO> call, Response<BookingDTO> response) {
+                Toast.makeText(DetailSalonActivity.this,"Cảm ơn quý khách đã sử dụng dịch vụ.",Toast.LENGTH_LONG).show();
+                Intent sendDataToBooking =
+                        new Intent(DetailSalonActivity.this, BookingDetailActivity.class);
+                sendDataToBooking.putExtra("chkService", chkService);
+                sendDataToBooking.putExtra("bookedDate", bookedDate);
+                sendDataToBooking.putExtra("bookedTime",bookedTime);
+                startActivity(sendDataToBooking);
+                finish();
+            }
+
+            @Override
+            public void onFailure(Call<BookingDTO> call, Throwable t) {
+                Toast.makeText(DetailSalonActivity.this,t.getMessage() + "",Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
     private void displayExtraService(ArrayList<SalonService> salonServices) {
         extraServiceAdapter = new RecyclerViewExtraServiceAdapter(DetailSalonActivity.this, salonServices);
         recyclerView.setAdapter(extraServiceAdapter);
@@ -283,13 +317,6 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
         return str.substring(0, 1).toUpperCase() + str.substring(1);
     }
 
-    public void clickToConfirm(View view) {
-//        Intent intent = new Intent(DetailSalonActivity.this, BookingDetailActivity.class);
-//        intent.putExtra("des", txtDescription.getText());
-//        this.startActivity(intent);
-
-
-    }
 
 
 }

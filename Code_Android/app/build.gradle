@@ -34,11 +34,7 @@ dependencies {
     implementation 'com.github.badoualy:datepicker-timeline:c6dcd05737'
 
 
-
     implementation 'com.github.jhonnyx2012:horizontal-picker:1.0.6'
-
-
-
 
     //retro impl
     implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
