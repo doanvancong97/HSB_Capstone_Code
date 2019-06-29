@@ -13,25 +13,6 @@
         android:layout_height="match_parent"
         android:weightSum="16">
 
-
-        <!--<SearchView-->
-
-        <!--android:id="@+id/searchView1"-->
-
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="35dp"-->
-        <!--android:layout_weight="4"-->
-        <!--android:background="@drawable/search_bg"-->
-        <!--android:iconifiedByDefault="false"-->
-        <!--android:paddingLeft="10dp"-->
-        <!--android:queryBackground="@color/transparent"-->
-
-        <!--android:queryHint="Tìm kiếm"-->
-        <!--android:searchIcon="@drawable/icon_search"-->
-
-
-        <!--/>-->
-
         <com.arlib.floatingsearchview.FloatingSearchView
             android:id="@+id/floating_search_view"
             android:layout_width="0dp"

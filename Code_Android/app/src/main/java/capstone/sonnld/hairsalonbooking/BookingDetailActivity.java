@@ -100,17 +100,6 @@ public class BookingDetailActivity extends AppCompatActivity {
         hairSalonAPI = retrofit.create(HairSalonAPI.class);
 
 
-        //
-//        final ArrayList<BookingDetailsDTO> bookingDetailsDTOList = new ArrayList<>();
-//        for (int i = 0; i < salonServices.size(); i++) {
-//            int salonServiceID = salonServices.get(i).getSalonServiceId();
-//            int reviewId = 6;
-//            String serviceName = salonServices.get(i).getService().getServiceName();
-//            String status = "process";
-//            BookingDetailsDTO bookingDetailsDTO = new BookingDetailsDTO(salonServiceID, reviewId, serviceName, status);
-//            bookingDetailsDTOList.add(bookingDetailsDTO);
-//        }
-
         btnAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
