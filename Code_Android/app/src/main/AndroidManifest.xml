@@ -1,20 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-
     package="capstone.sonnld.hairsalonbooking">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
-        tools:replace="android:label"
         android:allowBackup="true"
         android:icon="@drawable/logo"
         android:label="HairSalonBooking"
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".UserDetailActivity"></activity>
+        android:theme="@style/AppTheme"
+        tools:replace="android:label">
+
+        <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBCEs8pBUl9xMbvtsxRGqt_kE7Qt6175DA"/>
+
+
+        <activity
+            android:name=".MapsActivity"
+            android:label="@string/title_activity_maps"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".UserDetailActivity" />
         <activity android:name=".SearchActivity" />
         <activity android:name=".BookingDetailActivity" />
         <activity android:name=".RegisterActivity" />
@@ -27,9 +37,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".DetailSalonActivity" />
-
     </application>
-
-
 
 </manifest>

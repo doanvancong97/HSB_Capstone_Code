@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".MapsActivity"
+    tools:showIn="@layout/activity_maps">
+
+    <fragment
+        android:id="@+id/map"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        />
+
+    <com.skyfishjy.library.RippleBackground
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/rp_bg"
+        app:rb_color="#0099CC"
+        app:rb_radius="32dp"
+        app:rb_rippleAmount="4"
+        app:rb_duration="3000"
+        app:rb_scale="6">
+
+    <ImageView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:translationY="-20dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/location" />
+    </com.skyfishjy.library.RippleBackground>
+
+</RelativeLayout>

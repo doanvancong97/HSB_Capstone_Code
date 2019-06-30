@@ -27,7 +27,11 @@ import com.squareup.picasso.Picasso;
 
 import org.joda.time.DateTime;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import capstone.sonnld.hairsalonbooking.adapter.RecyclerViewExtraServiceAdapter;
 import capstone.sonnld.hairsalonbooking.api.HairSalonAPI;
@@ -50,7 +54,7 @@ import static capstone.sonnld.hairsalonbooking.R.drawable.button_time;
 
 public class DetailSalonActivity extends AppCompatActivity implements DatePickerListener {
 
-
+    int im=0;
     private Toolbar mToolbar;
 
     private TextView txtSalonName;
@@ -129,50 +133,80 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
 //        Calendar calendar = GregorianCalendar.getInstance(); // creates a new calendar instance
 //        calendar.setTime(date);   // assigns calendar to given date
 //        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        int maxHour = 23, minHour = 8;
-        int hour = minHour;
+        String maxHour = "23:00";
+        String minHour = "08:00";
+        int step=15;
+
+        Calendar calendar = Calendar.getInstance();
+        Calendar calendar2 = Calendar.getInstance();
+
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+        try {
+
+            Date start = format.parse(minHour);
+            Date end = format.parse(maxHour);
 
 
-        for (int i = 0; hour <= maxHour; i++) {
-            slotID++;
-            final Button slot = new Button(this);
-            slot.setId(slotID);
 
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            params.setMargins(10, 10, 10, 10);
-            slot.setLayoutParams(params);
-            slot.setBackgroundResource(button_time);
-            slot.setTextColor(Color.parseColor("#DB1507"));
-            slot.setText("" + hour + "H");
-            linearTimePiker.addView(slot);
-            hour += 2;
-            slot.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Toast.makeText(DetailSalonActivity.this, slot.getText(), Toast.LENGTH_SHORT).show();
-                    bookedTime=slot.getText().toString();
-                    if (isChoose == false) {
-                        slot.setBackgroundResource(R.drawable.button_time_choose);
-                        slot.setTextColor(Color.WHITE);
-                        isChoose = true;
-                        slotIDisChoose = slot.getId();
-
-                    } else {
-
-                        Button b = findViewById(slotIDisChoose);
-                        b.setBackgroundResource(button_time);
-                        b.setTextColor(Color.parseColor("#DB1507"));
+            calendar.setTime(start);
+            calendar2.setTime(end);
+            int workingTime= calendar2.get(Calendar.HOUR_OF_DAY)-start.getHours();
+            double c = step/60;
 
 
-                        slot.setBackgroundResource(R.drawable.button_time_choose);
-                        slot.setTextColor(Color.WHITE);
-                        isChoose = true;
-                        slotIDisChoose = slot.getId();
+
+            for (int i = 0; c<=workingTime; i++) {
+                slotID++;
+                final Button slot = new Button(this);
+                slot.setId(slotID);
+
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params.setMargins(10, 10, 10, 10);
+                slot.setLayoutParams(params);
+                slot.setBackgroundResource(button_time);
+                slot.setTextColor(Color.parseColor("#DB1507"));
+                slot.setText(calendar.getTime().getHours() + ":"+calendar.getTime().getMinutes());
+                c=c+(step/workingTime);
+
+                linearTimePiker.addView(slot);
+                calendar.add(Calendar.MINUTE,step);
+                slot.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Toast.makeText(DetailSalonActivity.this, slot.getText(), Toast.LENGTH_SHORT).show();
+                        bookedTime=slot.getText().toString();
+                        if (isChoose == false) {
+                            slot.setBackgroundResource(R.drawable.button_time_choose);
+                            slot.setTextColor(Color.WHITE);
+                            isChoose = true;
+                            slotIDisChoose = slot.getId();
+
+                        } else {
+
+                            Button b = findViewById(slotIDisChoose);
+                            b.setBackgroundResource(button_time);
+                            b.setTextColor(Color.parseColor("#DB1507"));
+
+
+                            slot.setBackgroundResource(R.drawable.button_time_choose);
+                            slot.setTextColor(Color.WHITE);
+                            isChoose = true;
+                            slotIDisChoose = slot.getId();
+                        }
                     }
-                }
-            });
+                });
 
+            }
+
+
+
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
+
+
+
+
 
 
         //Receive data from view adapter
@@ -224,6 +258,7 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
                 sendDataToBooking.putExtra("chkService", chkService);
                 sendDataToBooking.putExtra("bookedDate", bookedDate);
                 sendDataToBooking.putExtra("bookedTime",bookedTime);
+
                 startActivity(sendDataToBooking);
 //                submitBooking(bookingDetailsDTOList);
             }
