@@ -307,8 +307,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginBottom="1dp"
         android:background="@drawable/button_shape"
-        android:onClick="clickToConfirm"
-        android:text="XÁC NHẬN"
+        android:text="Tiếp tục"
         android:textColor="#FFFFFF"
         android:textSize="18sp" />
 

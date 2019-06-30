@@ -35,6 +35,7 @@ public class BookingDetailActivity extends AppCompatActivity {
     private TextView txtBookedTime;
     private TextView txtTotalPrice;
     private HairSalonAPI hairSalonAPI;
+    private ArrayList<BookingDetailsDTO> bookingDetailsDTOList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,36 +100,42 @@ public class BookingDetailActivity extends AppCompatActivity {
         Retrofit retrofit = RetrofitClient.getInstance();
         hairSalonAPI = retrofit.create(HairSalonAPI.class);
 
+        for (int i = 0; i < salonServices.size(); i++) {
+            int salonServiceID = salonServices.get(i).getSalonServiceId();
+            int reviewId = 6;
+            String serviceName = salonServices.get(i).getService().getServiceName();
+            String status = "process";
+            BookingDetailsDTO bookingDetailsDTO = new BookingDetailsDTO(salonServiceID, reviewId, serviceName, status);
+            bookingDetailsDTOList.add(bookingDetailsDTO);
+        }
 
         btnAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(BookingDetailActivity.this,MainActivity.class);
-                startActivity(intent);
-                finish();
+                submitBooking();
             }
         });
 
 
     }
 
-    public void submitBooking(ArrayList<BookingDetailsDTO> dtoList) {
-        BookingDTO bookingDTO = new BookingDTO(1,"Sonnnnnn","09999999","2019-12-19","12:12","process",dtoList);
+    public void submitBooking() {
+        BookingDTO bookingDTO = new BookingDTO(1, "Sonnnnnn", "09999999", "2019-12-19", "12:12", "process", bookingDetailsDTOList);
 
         Call<BookingDTO> call = hairSalonAPI.postBooking(bookingDTO);
 
         call.enqueue(new Callback<BookingDTO>() {
             @Override
             public void onResponse(Call<BookingDTO> call, Response<BookingDTO> response) {
-                Toast.makeText(BookingDetailActivity.this,"Cảm ơn quý khách đã sử dụng dịch vụ.",Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(BookingDetailActivity.this,MainActivity.class);
+                Toast.makeText(BookingDetailActivity.this, "Cảm ơn quý khách đã sử dụng dịch vụ.", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(BookingDetailActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
             }
 
             @Override
             public void onFailure(Call<BookingDTO> call, Throwable t) {
-                Toast.makeText(BookingDetailActivity.this,t.getMessage() + "",Toast.LENGTH_LONG).show();
+                Toast.makeText(BookingDetailActivity.this, t.getMessage() + "", Toast.LENGTH_LONG).show();
             }
         });
     }

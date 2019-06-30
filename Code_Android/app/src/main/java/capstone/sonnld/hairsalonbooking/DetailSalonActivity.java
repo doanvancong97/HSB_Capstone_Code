@@ -216,18 +216,16 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
             @Override
             public void onClick(View v) {
                 // setup data for booking
+
+//
                 chkService = extraServiceAdapter.getCheckedSalonServices();
-                for (int i = 0; i < chkService.size(); i++) {
-                    int salonServiceID = chkService.get(i).getSalonServiceId();
-                    int reviewId = 6;
-                    String serviceName = chkService.get(i).getService().getServiceName();
-                    String status = "process";
-                    BookingDetailsDTO bookingDetailsDTO = new BookingDetailsDTO(salonServiceID, reviewId, serviceName, status);
-                    bookingDetailsDTOList.add(bookingDetailsDTO);
-                }
-
-
-                submitBooking(bookingDetailsDTOList);
+                Intent sendDataToBooking =
+                        new Intent(DetailSalonActivity.this, BookingDetailActivity.class);
+                sendDataToBooking.putExtra("chkService", chkService);
+                sendDataToBooking.putExtra("bookedDate", bookedDate);
+                sendDataToBooking.putExtra("bookedTime",bookedTime);
+                startActivity(sendDataToBooking);
+//                submitBooking(bookingDetailsDTOList);
             }
         });
 
@@ -271,31 +269,6 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
 
                     }
                 });
-    }
-
-    public void submitBooking(ArrayList<BookingDetailsDTO> dtoList) {
-        BookingDTO bookingDTO = new BookingDTO(1,"Sonnnnnn","09999999","2019-12-19","12:12","process",dtoList);
-
-        Call<BookingDTO> call = hairSalonAPI.postBooking(bookingDTO);
-
-        call.enqueue(new Callback<BookingDTO>() {
-            @Override
-            public void onResponse(Call<BookingDTO> call, Response<BookingDTO> response) {
-                Toast.makeText(DetailSalonActivity.this,"Cảm ơn quý khách đã sử dụng dịch vụ.",Toast.LENGTH_LONG).show();
-                Intent sendDataToBooking =
-                        new Intent(DetailSalonActivity.this, BookingDetailActivity.class);
-                sendDataToBooking.putExtra("chkService", chkService);
-                sendDataToBooking.putExtra("bookedDate", bookedDate);
-                sendDataToBooking.putExtra("bookedTime",bookedTime);
-                startActivity(sendDataToBooking);
-                finish();
-            }
-
-            @Override
-            public void onFailure(Call<BookingDTO> call, Throwable t) {
-                Toast.makeText(DetailSalonActivity.this,t.getMessage() + "",Toast.LENGTH_LONG).show();
-            }
-        });
     }
 
     private void displayExtraService(ArrayList<SalonService> salonServices) {
