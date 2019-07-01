@@ -74,7 +74,7 @@
                     android:paddingRight="8dp"
                     android:text="Price"
                     android:textColor="@color/fadeGray"
-                    android:textSize="15dp"
+                    android:textSize="10dp"
 
                     />
 
@@ -86,7 +86,7 @@
                     android:gravity="center|left"
                     android:text="Sale price"
                     android:textColor="@color/red"
-                    android:textSize="13dp"
+                    android:textSize="15dp"
                     android:textStyle="bold" />
 
                 <TextView
