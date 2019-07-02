@@ -133,9 +133,15 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
 //        Calendar calendar = GregorianCalendar.getInstance(); // creates a new calendar instance
 //        calendar.setTime(date);   // assigns calendar to given date
 //        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        String maxHour = "23:00";
-        String minHour = "08:00";
-        int step=15;
+        String maxHour = "23:15";
+        String[] splitMaxHour = maxHour.split(":");
+        int maxH = Integer.parseInt(splitMaxHour[0]);
+        String minHour = "8:15";
+        String[] splitMinHour = minHour.split(":");
+        int minH = Integer.parseInt(splitMinHour[0]);
+        double step=15;
+
+        double run = (maxH-minH)/(step/60) + Integer.parseInt(splitMaxHour[1])/step- Integer.parseInt(splitMinHour[1])/step;
 
         Calendar calendar = Calendar.getInstance();
         Calendar calendar2 = Calendar.getInstance();
@@ -150,12 +156,11 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
 
             calendar.setTime(start);
             calendar2.setTime(end);
-            int workingTime= calendar2.get(Calendar.HOUR_OF_DAY)-start.getHours();
-            double c = step/60;
 
 
 
-            for (int i = 0; c<=workingTime; i++) {
+
+            for (int i = 0;i<=run; i++) {
                 slotID++;
                 final Button slot = new Button(this);
                 slot.setId(slotID);
@@ -166,10 +171,10 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
                 slot.setBackgroundResource(button_time);
                 slot.setTextColor(Color.parseColor("#DB1507"));
                 slot.setText(calendar.getTime().getHours() + ":"+calendar.getTime().getMinutes());
-                c=c+(step/workingTime);
+
 
                 linearTimePiker.addView(slot);
-                calendar.add(Calendar.MINUTE,step);
+                calendar.add(Calendar.MINUTE,(int)step);
                 slot.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
