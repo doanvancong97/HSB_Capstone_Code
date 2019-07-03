@@ -2,6 +2,7 @@ package capstone.sonnld.hairsalonbooking;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -31,7 +32,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.skyfishjy.library.RippleBackground;
-
+import capstone.sonnld.hairsalonbooking.api.HairSalonAPI;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +40,12 @@ import java.util.Locale;
 
 import capstone.sonnld.hairsalonbooking.model.GeoPoint;
 import capstone.sonnld.hairsalonbooking.model.Salon;
+import capstone.sonnld.hairsalonbooking.model.SalonService;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import retrofit2.Retrofit;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
     GoogleMap mMap;
@@ -49,12 +56,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     View mapView;
     final float DEFAULT_ZOOM = 15;
     RippleBackground rp_bg;
+    private HairSalonAPI hairSalonAPI;
+    List<String> listAddress = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         rp_bg = findViewById(R.id.rp_bg);
+        Retrofit retrofit = capstone.sonnld.hairsalonbooking.api.RetrofitClient.getInstance();
+        hairSalonAPI = retrofit.create(HairSalonAPI.class);
 
 
         SupportMapFragment  mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -71,11 +82,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
         Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
-        List<String> listAddress = new ArrayList<>();
-        listAddress.add("21 trần thị hè");
-        listAddress.add("103 tô ký");
-        listAddress.add("1024 Quang Trung, Gò Vấp ");
-        listAddress.add("đại học fpt, quận 12");
+        getAllSalonServiceByDiscount();
+
+
+//        listAddress.add("21 trần thị hè");
+//        listAddress.add("103 tô ký");
+//        listAddress.add("1024 Quang Trung, Gò Vấp ");
+//        listAddress.add("đại học fpt, quận 12");
+
         GeoPoint loc = null;
         LatLng point = null;
 
@@ -109,16 +123,18 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 //            mMap.addMarker(markerOptions2);
 //            mMap.addMarker(markerOptions3);
 
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(you,13));
+
 
             for (int i = 0; i <listAddress.size() ; i++) {
 
                 loc = getLocationFromAddress(listAddress.get(i));
                 point = new LatLng(loc.getLat(),loc.getLng());
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(you,13));
+
                 MarkerOptions markerOptions = new MarkerOptions();
                 markerOptions.position(point);
                 markerOptions.snippet(listAddress.get(i));
-                markerOptions.title("30 Shine");
+                markerOptions.title("30Shine");
 
                 int height = 150;
                 int width = 150;
@@ -135,6 +151,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     @Override
                     public boolean onMarkerClick(Marker marker) {
                         Toast.makeText(MapsActivity.this, "Đang chuyển tới trang chủ của "+marker.getTitle()+"...", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(MapsActivity.this,DetailSalonActivity.class);
+                        intent.putExtra("SalonName",marker.getTitle());
 
                         return false;
                     }
@@ -172,6 +190,67 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .strokeColor(Color.RED));
 
 
+    }
+
+    private void getAllSalonServiceByDiscount() {
+
+        hairSalonAPI.getAllServiceByDiscountValue()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<ArrayList<SalonService>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(ArrayList<SalonService> salonServices) {
+                        for(int i = 0; i < salonServices.size(); i++){
+                            String addr = salonServices.get(i).getSalon().getAddress().getStreet();
+                            listAddress.add(addr);
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+
+
+
+    private void getSalon(String salonName) {
+        hairSalonAPI.getSalon(salonName)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Salon>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(Salon salon) {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
     public GeoPoint getLocationFromAddress(String strAddress) {

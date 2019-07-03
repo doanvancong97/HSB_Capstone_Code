@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import capstone.sonnld.hairsalonbooking.dto.BookingDTO;
 import capstone.sonnld.hairsalonbooking.model.BookingDetail;
+import capstone.sonnld.hairsalonbooking.model.Salon;
 import capstone.sonnld.hairsalonbooking.model.SalonService;
 import io.reactivex.Observable;
 import retrofit2.Call;
@@ -21,6 +22,9 @@ public interface HairSalonAPI {
 
     @GET("salonservice/{id}")
     Observable<ArrayList<SalonService>> getSalonServiceBySalonId(@Path("id") int id);
+
+    @GET("salon/search/{salonName}")
+    Observable<Salon> getSalon(@Path("salonName") String salonName);
 
     @POST("booking")
     Call<BookingDTO> postBooking(@Body BookingDTO bookingDTO);
