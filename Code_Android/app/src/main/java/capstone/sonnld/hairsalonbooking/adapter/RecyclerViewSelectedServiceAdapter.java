@@ -1,8 +1,6 @@
 package capstone.sonnld.hairsalonbooking.adapter;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Paint;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -11,14 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import capstone.sonnld.hairsalonbooking.DetailSalonActivity;
 import capstone.sonnld.hairsalonbooking.R;
 import capstone.sonnld.hairsalonbooking.model.SalonService;
 
@@ -26,13 +19,9 @@ public class RecyclerViewSelectedServiceAdapter extends RecyclerView.Adapter<Rec
 
     private Context mContext;
     private ArrayList<SalonService> salonServices;
-    private String des;
     private String serviceName;
     private String discountValue;
-    private String salonAddress;
-    private String saleValue;
     private String price;
-    private String imgUrl;
     private String salePrice;
 
 
@@ -54,31 +43,7 @@ public class RecyclerViewSelectedServiceAdapter extends RecyclerView.Adapter<Rec
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
         //show item
-        des = "ÁP DỤNG KHI DÙNG DỊCH VỤ TẠI CỬA HÀNG* \n" +
-                "\n" +
-                "- Giảm 20% tổng hóa đơn áp dụng cho tất cả các dịch vụ \n" +
-                "- Áp dụng cho khách hàng nữ \n" +
-                "- Mỗi mã ưu đãi đổi được nhiều suất trong suốt chương trình \n" +
-                "- Khách hàng có thể lấy nhiều mã trong suốt chương trình \n" +
-                "\n" +
-                "THỜI GIAN ÁP DỤNG \n" +
-                "- Khung giờ: 9h30 - 19h00\t\n" +
-                "- Áp dụng tất cả các ngày trong tuần \n" +
-                "- Không áp dụng các ngày lễ, Tết: 30/4, 1/5 \n" +
-                "\n" +
-                "Chi tiết địa điểm xem tại \"Điểm áp dụng\" \n" +
-                "\n" +
-                "Vui lòng bấm XÁC NHẬN ĐẶT CHỖ để nhận mã giảm giá \n" +
-                "\n" +
-                "LƯU Ý \n" +
-                "- Chương trình chỉ áp dụng với khách dùng dịch vụ tại cửa hàng \n" +
-                "- Không áp dụng đồng thời với các chương trình khác của MIA.Nails & Cafe \n" +
-                "- Không áp dụng phụ thu \n" +
-                "- Ưu đãi chưa bao gồm VAT \n" +
-                "- Khách hàng được phép đến sớm hoặc muộn hơn 15 phút so với giờ hẹn đến \n" +
-                "- Mã giảm giá không có giá trị quy đổi thành tiền mặt ";
         serviceName = salonServices.get(position).getService().getServiceName();
-        saleValue = " - " + salonServices.get(position).getDiscount().getDiscountValue() + "%";
         price = salonServices.get(position).getPrice();
         discountValue = salonServices.get(position).getDiscount().getDiscountValue();
         salePrice = getSalePrice(price,discountValue);

@@ -15,15 +15,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:label">
+        <activity android:name=".DetailSalonActivity"></activity>
 
-        <meta-data android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBCEs8pBUl9xMbvtsxRGqt_kE7Qt6175DA"/>
-
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBCEs8pBUl9xMbvtsxRGqt_kE7Qt6175DA" />
 
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".UserDetailActivity" />
         <activity android:name=".SearchActivity" />
         <activity android:name=".BookingDetailActivity" />
@@ -36,7 +37,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".DetailSalonActivity" />
+        <activity android:name=".DetailServiceActivity" />
     </application>
 
 </manifest>

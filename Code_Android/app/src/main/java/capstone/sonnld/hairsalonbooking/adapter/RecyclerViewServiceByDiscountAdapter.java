@@ -16,13 +16,12 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import capstone.sonnld.hairsalonbooking.DetailSalonActivity;
+import capstone.sonnld.hairsalonbooking.DetailServiceActivity;
 import capstone.sonnld.hairsalonbooking.R;
 import capstone.sonnld.hairsalonbooking.model.SalonService;
 
-public class RecyclerViewSalonByDiscountAdapter extends RecyclerView.Adapter<RecyclerViewSalonByDiscountAdapter.MyViewHolder> {
+public class RecyclerViewServiceByDiscountAdapter extends RecyclerView.Adapter<RecyclerViewServiceByDiscountAdapter.MyViewHolder> {
 
     private Context mContext;
     private ArrayList<SalonService> salonServices;
@@ -35,7 +34,7 @@ public class RecyclerViewSalonByDiscountAdapter extends RecyclerView.Adapter<Rec
     private String imgUrl;
 
 
-    public RecyclerViewSalonByDiscountAdapter(Context mContext, ArrayList<SalonService> salonServices) {
+    public RecyclerViewServiceByDiscountAdapter(Context mContext, ArrayList<SalonService> salonServices) {
         this.mContext = mContext;
         this.salonServices = salonServices;
     }
@@ -99,7 +98,7 @@ public class RecyclerViewSalonByDiscountAdapter extends RecyclerView.Adapter<Rec
             @Override
             public void onClick(View v) {
                 //pass data to Detail salon activity
-                Intent intent = new Intent(mContext, DetailSalonActivity.class);
+                Intent intent = new Intent(mContext, DetailServiceActivity.class);
                 intent.putExtra("SalonID",salonServices.get(position).getSalon().getSalonId());
                 intent.putExtra("SalonService", salonServices.get(position).getService().getServiceName());
                 intent.putExtra("SalonServicePrice", salonServices.get(position).getPrice());

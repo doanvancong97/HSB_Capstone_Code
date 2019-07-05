@@ -19,10 +19,9 @@ import com.squareup.picasso.Picasso;
 
 import java.text.Normalizer;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Pattern;
 
-import capstone.sonnld.hairsalonbooking.DetailSalonActivity;
+import capstone.sonnld.hairsalonbooking.DetailServiceActivity;
 import capstone.sonnld.hairsalonbooking.R;
 import capstone.sonnld.hairsalonbooking.model.SalonService;
 
@@ -105,7 +104,7 @@ public class RecyclerViewFilterServiceAdapter extends RecyclerView.Adapter<Recyc
             @Override
             public void onClick(View v) {
                 //pass data to Detail salon activity
-                Intent intent = new Intent(mContext, DetailSalonActivity.class);
+                Intent intent = new Intent(mContext, DetailServiceActivity.class);
                 intent.putExtra("SalonID",salonServices.get(position).getSalon().getSalonId());
                 intent.putExtra("SalonService", salonServices.get(position).getService().getServiceName());
                 intent.putExtra("SalonServicePrice", salonServices.get(position).getPrice());

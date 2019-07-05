@@ -26,8 +26,6 @@ public class RecyclerViewExtraServiceAdapter extends RecyclerView.Adapter<Recycl
 
     private String discountValue;
     private String serviceSalePrice;
-
-
     private String price;
 
     public RecyclerViewExtraServiceAdapter(Context mContext, ArrayList<SalonService> salonServices) {
