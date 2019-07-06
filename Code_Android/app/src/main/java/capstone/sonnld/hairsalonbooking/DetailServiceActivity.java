@@ -27,6 +27,7 @@ import com.squareup.picasso.Picasso;
 
 import org.joda.time.DateTime;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -49,7 +50,7 @@ import static capstone.sonnld.hairsalonbooking.R.drawable.button_time;
 
 public class DetailServiceActivity extends AppCompatActivity implements DatePickerListener {
 
-    int im=0;
+    int im = 0;
     private Toolbar mToolbar;
 
     private TextView txtSalonName;
@@ -68,7 +69,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
     private boolean isChoose = false;
     private int slotIDisChoose = 0;
     private int slotID = 0;
-    private String bookedTime="";
+    private String bookedTime = "";
 
 
     private Spinner spAddress, spService;
@@ -106,6 +107,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
         txtDescription = findViewById(R.id.txt_description);
         imgThumb = findViewById(R.id.img_thumbnail);
         btnConfirm = findViewById(R.id.btn_confirm);
+        linearTimePiker = findViewById(R.id.linearTimePicker);
 
         imgLogo = findViewById(R.id.img_logo);
         HorizontalPicker picker = (HorizontalPicker) findViewById(R.id.datePicker);
@@ -123,86 +125,82 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
 
         picker.setDate(new DateTime());
 
-        linearTimePiker = findViewById(R.id.linearTimePicker);
-//        Date date = new Date();   // given date
-//        Calendar calendar = GregorianCalendar.getInstance(); // creates a new calendar instance
-//        calendar.setTime(date);   // assigns calendar to given date
-//        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        String maxHour = "23:15";
-        String[] splitMaxHour = maxHour.split(":");
-        int maxH = Integer.parseInt(splitMaxHour[0]);
-        String minHour = "8:15";
-        String[] splitMinHour = minHour.split(":");
-        int minH = Integer.parseInt(splitMinHour[0]);
-        double step=15;
-
-        double run = (maxH-minH)/(step/60) + Integer.parseInt(splitMaxHour[1])/step- Integer.parseInt(splitMinHour[1])/step;
-
-        Calendar calendar = Calendar.getInstance();
-        Calendar calendar2 = Calendar.getInstance();
-
-        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
-        try {
-
-            Date start = format.parse(minHour);
-            Date end = format.parse(maxHour);
-
-
-
-            calendar.setTime(start);
-            calendar2.setTime(end);
-
-
-
-
-            for (int i = 0;i<=run; i++) {
-                slotID++;
-                final Button slot = new Button(this);
-                slot.setId(slotID);
-
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                params.setMargins(10, 10, 10, 10);
-                slot.setLayoutParams(params);
-                slot.setBackgroundResource(button_time);
-                slot.setTextColor(Color.parseColor("#DB1507"));
-                slot.setText(calendar.getTime().getHours() + ":"+calendar.getTime().getMinutes());
-
-
-                linearTimePiker.addView(slot);
-                calendar.add(Calendar.MINUTE,(int)step);
-                slot.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Toast.makeText(DetailServiceActivity.this, slot.getText(), Toast.LENGTH_SHORT).show();
-                        bookedTime=slot.getText().toString();
-                        if (isChoose == false) {
-                            slot.setBackgroundResource(R.drawable.button_time_choose);
-                            slot.setTextColor(Color.WHITE);
-                            isChoose = true;
-                            slotIDisChoose = slot.getId();
-
-                        } else {
-
-                            Button b = findViewById(slotIDisChoose);
-                            b.setBackgroundResource(button_time);
-                            b.setTextColor(Color.parseColor("#DB1507"));
-
-
-                            slot.setBackgroundResource(R.drawable.button_time_choose);
-                            slot.setTextColor(Color.WHITE);
-                            isChoose = true;
-                            slotIDisChoose = slot.getId();
-                        }
-                    }
-                });
-
-            }
-
-
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+//        linearTimePiker = findViewById(R.id.linearTimePicker);
+////        Date date = new Date();   // given date
+////        Calendar calendar = GregorianCalendar.getInstance(); // creates a new calendar instance
+////        calendar.setTime(date);   // assigns calendar to given date
+////        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+//        String maxHour = "23:00";
+//        String[] splitMaxHour = maxHour.split(":");
+//        int maxH = Integer.parseInt(splitMaxHour[0]);
+//        String minHour = "08:00";
+//        String[] splitMinHour = minHour.split(":");
+//        int minH = Integer.parseInt(splitMinHour[0]);
+//        double step = 30;
+//
+//        double run = (maxH - minH) / (step / 60) + Integer.parseInt(splitMaxHour[1]) / step - Integer.parseInt(splitMinHour[1]) / step;
+//
+//        Calendar calendar = Calendar.getInstance();
+//        Calendar calendar2 = Calendar.getInstance();
+//
+//        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+//        try {
+//
+//            Date start = format.parse(minHour);
+//            Date end = format.parse(maxHour);
+//
+//
+//            calendar.setTime(start);
+//            calendar2.setTime(end);
+//
+//
+//            for (int i = 0; i <= run; i++) {
+//                slotID++;
+//                final Button slot = new Button(this);
+//                slot.setId(slotID);
+//
+//                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//                params.setMargins(10, 10, 10, 10);
+//                slot.setLayoutParams(params);
+//                slot.setBackgroundResource(button_time);
+//                slot.setTextColor(Color.parseColor("#DB1507"));
+//                slot.setText(calendar.getTime().getHours() + ":" + calendar.getTime().getMinutes());
+//
+//
+//                linearTimePiker.addView(slot);
+//                calendar.add(Calendar.MINUTE, (int) step);
+//                slot.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        Toast.makeText(DetailServiceActivity.this, slot.getText(), Toast.LENGTH_SHORT).show();
+//                        bookedTime = slot.getText().toString();
+//                        if (isChoose == false) {
+//                            slot.setBackgroundResource(R.drawable.button_time_choose);
+//                            slot.setTextColor(Color.WHITE);
+//                            isChoose = true;
+//                            slotIDisChoose = slot.getId();
+//
+//                        } else {
+//
+//                            Button b = findViewById(slotIDisChoose);
+//                            b.setBackgroundResource(button_time);
+//                            b.setTextColor(Color.parseColor("#DB1507"));
+//
+//
+//                            slot.setBackgroundResource(R.drawable.button_time_choose);
+//                            slot.setTextColor(Color.WHITE);
+//                            isChoose = true;
+//                            slotIDisChoose = slot.getId();
+//                        }
+//                    }
+//                });
+//
+//            }
+//
+//
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
 
 
         //Receive data from view adapter
@@ -239,9 +237,6 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
         getAllExtraService(salonId);
 
 
-
-
-
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -252,7 +247,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
                         new Intent(DetailServiceActivity.this, BookingDetailActivity.class);
                 sendDataToBooking.putExtra("chkService", chkService);
                 sendDataToBooking.putExtra("bookedDate", bookedDate);
-                sendDataToBooking.putExtra("bookedTime",bookedTime);
+                sendDataToBooking.putExtra("bookedTime", bookedTime);
 
                 startActivity(sendDataToBooking);
             }
@@ -264,14 +259,44 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
     public void onDateSelected(@NonNull final DateTime dateSelected) {
         // log it for demo
 
-        Toast.makeText(this, dateSelected.getDayOfMonth()
-                + "/" + dateSelected.getMonthOfYear()
-                + "/" + dateSelected.getYear(), Toast.LENGTH_SHORT).show();
-        bookedDate = dateSelected.getDayOfMonth()
-                + "/" + dateSelected.getMonthOfYear()
-                + "/" + dateSelected.getYear();
+//        Toast.makeText(this, dateSelected.getDayOfMonth()
+//                + "/" + dateSelected.getMonthOfYear()
+//                + "/" + dateSelected.getYear(), Toast.LENGTH_SHORT).show();
+
+        String dayOfMonth = dateSelected.getDayOfMonth() + "";
+        String monthOfYear = dateSelected.getMonthOfYear() + "";
+        String year = dateSelected.getYear() + "";
+
+        if (Integer.parseInt(dayOfMonth) < 10) dayOfMonth = "0" + dayOfMonth;
+        if (Integer.parseInt(monthOfYear) < 10) monthOfYear = "0" + monthOfYear;
+
+
+        bookedDate = dayOfMonth
+                + "/" + monthOfYear
+                + "/" + year;
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyy");
+        Date today = Calendar.getInstance().getTime();
+
+        if (bookedDate.equals(dateFormat.format(today))) {
+            Toast.makeText(this, "Today", Toast.LENGTH_SHORT).show();
+            linearTimePiker.removeAllViews();
+            isChoose=false;
+            generateSlotToday();
+
+
+        } else {
+            Toast.makeText(this, bookedDate, Toast.LENGTH_SHORT).show();
+            linearTimePiker.removeAllViews();
+            isChoose=false;
+
+            generateSlot();
+        }
+
+
 
     }
+
+
 
     private void getAllExtraService(int salonId) {
         hairSalonAPI.getSalonServiceBySalonId(salonId)
@@ -317,6 +342,193 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
 
     public String uppercaseFirstLetter(String str) {
         return str.substring(0, 1).toUpperCase() + str.substring(1);
+    }
+
+    public void generateSlot(){
+
+//        Date date = new Date();   // given date
+//        Calendar calendar = GregorianCalendar.getInstance(); // creates a new calendar instance
+//        calendar.setTime(date);   // assigns calendar to given date
+//        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        String maxHour = "23:00";
+        String[] splitMaxHour = maxHour.split(":");
+        int maxH = Integer.parseInt(splitMaxHour[0]);
+        String minHour = "08:00";
+        String[] splitMinHour = minHour.split(":");
+        int minH = Integer.parseInt(splitMinHour[0]);
+        double step = 30;
+
+        double run = (maxH - minH) / (step / 60) + Integer.parseInt(splitMaxHour[1]) / step - Integer.parseInt(splitMinHour[1]) / step;
+
+        Calendar calendar = Calendar.getInstance();
+        Calendar calendar2 = Calendar.getInstance();
+
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+        try {
+
+            Date start = format.parse(minHour);
+            Date end = format.parse(maxHour);
+
+
+            calendar.setTime(start);
+            calendar2.setTime(end);
+            String minute = "";
+
+
+            for (int i = 0; i <= run; i++) {
+                slotID++;
+                final Button slot = new Button(this);
+                slot.setId(slotID);
+
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params.setMargins(10, 10, 10, 10);
+                slot.setLayoutParams(params);
+                slot.setBackgroundResource(button_time);
+                slot.setTextColor(Color.parseColor("#DB1507"));
+                if(calendar.getTime().getMinutes()<10)
+
+                    minute = "0"+calendar.getTime().getMinutes();
+                else minute = calendar.getTime().getMinutes()+"";
+                slot.setText(calendar.getTime().getHours() + ":" + minute);
+
+
+                linearTimePiker.addView(slot);
+                calendar.add(Calendar.MINUTE, (int) step);
+                slot.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Toast.makeText(DetailServiceActivity.this, slot.getText(), Toast.LENGTH_SHORT).show();
+                        bookedTime = slot.getText().toString();
+                        if (isChoose == false) {
+                            slot.setBackgroundResource(R.drawable.button_time_choose);
+                            slot.setTextColor(Color.WHITE);
+                            isChoose = true;
+                            slotIDisChoose = slot.getId();
+
+                        } else {
+
+                            Button b = findViewById(slotIDisChoose);
+                            b.setBackgroundResource(button_time);
+                            b.setTextColor(Color.parseColor("#DB1507"));
+
+
+                            slot.setBackgroundResource(R.drawable.button_time_choose);
+                            slot.setTextColor(Color.WHITE);
+                            isChoose = true;
+                            slotIDisChoose = slot.getId();
+                        }
+                    }
+                });
+
+            }
+
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void generateSlotToday(){
+
+//        Date date = new Date();   // given date
+//        Calendar calendar = GregorianCalendar.getInstance(); // creates a new calendar instance
+//        calendar.setTime(date);   // assigns calendar to given date
+//        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        double step = 30;
+        DateFormat dateFormat = new SimpleDateFormat("HH:mm");
+        Date date = new Date();
+        String currentHour = dateFormat.format(date);
+        String[] currentHourArr = currentHour.split(":");
+
+
+
+        String maxHour = "23:00";
+        String minHour = "";
+        String[] splitMaxHour = maxHour.split(":");
+        int maxH = Integer.parseInt(splitMaxHour[0]);
+
+        if(Integer.parseInt(currentHourArr[1])+step>=60){
+             minHour = (Integer.parseInt(currentHourArr[0])+1)+":00";
+
+        }
+        else {
+             minHour = (Integer.parseInt(currentHourArr[0])+":"+(int)step);
+
+        }
+
+        String[] splitMinHour = minHour.split(":");
+        int minH = Integer.parseInt(splitMinHour[0]);
+
+
+        double run = (maxH - minH) / (step / 60) + Integer.parseInt(splitMaxHour[1]) / step - Integer.parseInt(splitMinHour[1]) / step;
+
+        Calendar calendar = Calendar.getInstance();
+        Calendar calendar2 = Calendar.getInstance();
+
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+        try {
+
+            Date start = format.parse(minHour);
+            Date end = format.parse(maxHour);
+
+
+            calendar.setTime(start);
+            calendar2.setTime(end);
+            String minute = "";
+
+
+            for (int i = 0; i <= run; i++) {
+                slotID++;
+                final Button slot = new Button(this);
+                slot.setId(slotID);
+
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params.setMargins(10, 10, 10, 10);
+                slot.setLayoutParams(params);
+                slot.setBackgroundResource(button_time);
+                slot.setTextColor(Color.parseColor("#DB1507"));
+                if(calendar.getTime().getMinutes()<10)
+
+                 minute = "0"+calendar.getTime().getMinutes();
+                else minute = calendar.getTime().getMinutes()+"";
+                slot.setText(calendar.getTime().getHours() + ":" + minute);
+
+
+                linearTimePiker.addView(slot);
+                calendar.add(Calendar.MINUTE, (int) step);
+                slot.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Toast.makeText(DetailServiceActivity.this, slot.getText(), Toast.LENGTH_SHORT).show();
+                        bookedTime = slot.getText().toString();
+                        if (isChoose == false) {
+                            slot.setBackgroundResource(R.drawable.button_time_choose);
+                            slot.setTextColor(Color.WHITE);
+                            isChoose = true;
+                            slotIDisChoose = slot.getId();
+
+                        } else {
+
+                            Button b = findViewById(slotIDisChoose);
+                            b.setBackgroundResource(button_time);
+                            b.setTextColor(Color.parseColor("#DB1507"));
+
+
+                            slot.setBackgroundResource(R.drawable.button_time_choose);
+                            slot.setTextColor(Color.WHITE);
+                            isChoose = true;
+                            slotIDisChoose = slot.getId();
+                        }
+                    }
+                });
+
+            }
+
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
 

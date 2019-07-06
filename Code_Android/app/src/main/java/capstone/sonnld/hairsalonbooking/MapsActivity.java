@@ -123,7 +123,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             for (int i = 0; i < salonServices.size(); i++) {
 
-                String address = salonServices.get(i).getSalon().getAddress().getStreet();
+                final String address = salonServices.get(i).getSalon().getAddress().getStreet();
                 final String salonName = salonServices.get(i).getSalon().getName();
                 final int salonId = salonServices.get(i).getSalon().getSalonId();
                 loc = getLocationFromAddress(address);
@@ -153,9 +153,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         Intent intent = new Intent(MapsActivity.this, DetailSalonActivity.class);
                         intent.putExtra("SalonId", Integer.parseInt(marker.getSnippet()));
                         intent.putExtra("SalonName", marker.getTitle());
-                        marker.setSnippet(null);
+                        marker.setSnippet(address);
                         startActivity(intent);
-                        return false;
+                        return true;
+
                     }
                 });
 
