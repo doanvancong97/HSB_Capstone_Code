@@ -51,10 +51,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     RippleBackground rp_bg;
     private HairSalonAPI hairSalonAPI;
     //
-//    ArrayList<String> listAddress = new ArrayList<>();
-//    private ArrayList<String> salonNameList = new ArrayList<>();
     private ArrayList<SalonService> salonServices = new ArrayList<>();
 
+    String address;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,8 +66,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         // get data from main activity
         Intent intent = getIntent();
-//        listAddress = intent.getStringArrayListExtra("list address");
-//        salonNameList = intent.getStringArrayListExtra("list salon name");
         salonServices = (ArrayList<SalonService>) intent.getSerializableExtra("salonServiceList");
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -96,11 +93,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 //            GeoPoint loc1 = getLocationFromAddress("65 trần thị hè");
 //            GeoPoint loc2 = getLocationFromAddress("103 tô ký");
 //            GeoPoint loc3= getLocationFromAddress("đại học fpt, quận 12");
-//
-//
-//
-//
-//
+
 //            LatLng point1 = new LatLng(loc1.getLat(),loc1.getLng());
 //            LatLng point2 = new LatLng(loc2.getLat(),loc2.getLng());
 //            LatLng point3 = new LatLng(loc3.getLat(),loc3.getLng());
@@ -122,8 +115,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
             for (int i = 0; i < salonServices.size(); i++) {
-
-                final String address = salonServices.get(i).getSalon().getAddress().getStreet();
+                address = salonServices.get(i).getSalon().getAddress().getStreetNumber() + ", "
+                        + salonServices.get(i).getSalon().getAddress().getStreet();;
                 final String salonName = salonServices.get(i).getSalon().getName();
                 final int salonId = salonServices.get(i).getSalon().getSalonId();
                 loc = getLocationFromAddress(address);
@@ -155,6 +148,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         intent.putExtra("SalonName", marker.getTitle());
                         marker.setSnippet(address);
                         startActivity(intent);
+                        finish();
                         return true;
 
                     }
@@ -182,10 +176,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         }
 
-        mMap.addCircle(new CircleOptions()
-                .center(you)
-                .radius(5000)
-                .strokeColor(Color.RED));
+//        mMap.addCircle(new CircleOptions()
+//                .center(you)
+//                .radius(5000)
+//                .strokeColor(Color.RED));
 
 
     }

@@ -12,7 +12,7 @@
                     android:icon="@drawable/sale2"
                     android:title="Giảm giá sốc" />
                 <item
-                    android:icon="@drawable/location"
+                    android:icon="@drawable/location_icon"
                     android:title="Gần đây" />
             </menu>
         </item>
@@ -43,7 +43,7 @@
                     android:title="Đánh giá HSB" />
                 <item
 
-                    android:icon="@drawable/favorites"
+                    android:icon="@drawable/accept"
 
                     android:title="Điều khoản" />
                 <item

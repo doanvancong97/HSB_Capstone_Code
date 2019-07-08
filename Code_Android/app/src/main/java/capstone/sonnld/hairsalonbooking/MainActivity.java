@@ -158,11 +158,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                     Intent intent = new Intent(MainActivity.this, MapsActivity.class);
-//                    intent.putStringArrayListExtra("list address", addressList);
-//                    intent.putStringArrayListExtra("list salon name", salonNameList);
                     intent.putExtra("salonServiceList",salonServiceArrayList);
                     startActivity(intent);
-//                    finish();
+
                     return;
                 }
 
@@ -171,8 +169,6 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onPermissionGranted(PermissionGrantedResponse response) {
                         Intent intent = new Intent(MainActivity.this, MapsActivity.class);
-//                        intent.putStringArrayListExtra("list address", addressList);
-//                        intent.putStringArrayListExtra("list salon name", salonNameList);
                         intent.putExtra("salonServiceList",salonServiceArrayList);
                         startActivity(intent);
 

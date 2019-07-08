@@ -197,13 +197,17 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
                 // setup data for booking
 
                 chkService = extraServiceAdapter.getCheckedSalonServices();
-                Intent sendDataToBooking =
-                        new Intent(DetailSalonActivity.this, BookingDetailActivity.class);
-                sendDataToBooking.putExtra("chkService", chkService);
-                sendDataToBooking.putExtra("bookedDate", bookedDate);
-                sendDataToBooking.putExtra("bookedTime",bookedTime);
+                if(chkService.size() == 0){
+                    Toast.makeText(DetailSalonActivity.this,"Bạn chưa chọn dịch vụ",Toast.LENGTH_LONG).show();
+                }else{
+                    Intent sendDataToBooking =
+                            new Intent(DetailSalonActivity.this, BookingDetailActivity.class);
+                    sendDataToBooking.putExtra("chkService", chkService);
+                    sendDataToBooking.putExtra("bookedDate", bookedDate);
+                    sendDataToBooking.putExtra("bookedTime",bookedTime);
+                    startActivity(sendDataToBooking);
+                }
 
-                startActivity(sendDataToBooking);
             }
         });
     }
