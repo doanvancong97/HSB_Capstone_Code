@@ -26,6 +26,14 @@ public class SessionManager {
 
     }
 
+    public Context getContext() {
+        return context;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
+
     public void createSession(String username){
         editor.putBoolean(LOGIN,true);
         editor.putString(USERNAME,username);
@@ -40,8 +48,8 @@ public class SessionManager {
 
     public void checkLogin(){
         if (!isLogin()){
-            Intent i = new Intent(context, LoginActivity.class);
-            context.startActivity(i);
+            Intent i = new Intent(getContext(),LoginActivity.class);
+            getContext().startActivity(i);
 
         }
     }
@@ -62,7 +70,7 @@ public class SessionManager {
 
 
 
-        context.startActivity(new Intent(context,LoginActivity.class));
+
 
 
     }

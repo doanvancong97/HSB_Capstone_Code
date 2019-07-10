@@ -176,7 +176,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
                 sendDataToBooking.putExtra("chkService", chkService);
                 sendDataToBooking.putExtra("bookedDate", bookedDate);
                 sendDataToBooking.putExtra("bookedTime", bookedTime);
-
+                sendDataToBooking.putExtra("salonAddress",txtAddress.getText());
                 startActivity(sendDataToBooking);
             }
         });

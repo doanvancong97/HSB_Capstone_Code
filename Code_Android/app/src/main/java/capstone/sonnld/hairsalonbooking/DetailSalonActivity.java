@@ -45,6 +45,7 @@ import static capstone.sonnld.hairsalonbooking.R.drawable.button_time;
 
 public class DetailSalonActivity extends AppCompatActivity implements DatePickerListener {
     private TextView txtSalonName;
+    private TextView txtAddress;
     private TextView txtDescription;
     private HairSalonAPI hairSalonAPI;
     private Button btnConfirm;
@@ -76,14 +77,15 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_salon);
 
-        // setup spinner address
-        ArrayAdapter<String> addressAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, listAddress);
+//        // setup spinner address
+//        ArrayAdapter<String> addressAdapter = new ArrayAdapter<String>(this,
+//                android.R.layout.simple_spinner_item, listAddress);
+//
+//        spAddress = findViewById(R.id.spAddress);
+//        addressAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        spAddress.setAdapter(addressAdapter);
 
-        spAddress = findViewById(R.id.spAddress);
-        addressAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spAddress.setAdapter(addressAdapter);
-
+        txtAddress = findViewById(R.id.txt_address);
         txtSalonName = findViewById(R.id.txtSalonName);
         txtDescription = findViewById(R.id.txt_description);
         imgThumb = findViewById(R.id.img_thumbnail);
@@ -170,8 +172,6 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
 
             }
 
-
-
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -192,6 +192,32 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
         recyclerView = findViewById(R.id.recycler_view_salon_service);
         recyclerView.setLayoutManager(new GridLayoutManager(DetailSalonActivity.this, 1));
         setupSalonDetail(salonId);
+        String des = "ÁP DỤNG KHI DÙNG DỊCH VỤ TẠI CỬA HÀNG* \n" +
+                "\n" +
+                "- Giảm 20% tổng hóa đơn áp dụng cho tất cả các dịch vụ \n" +
+                "- Áp dụng cho khách hàng nữ \n" +
+                "- Mỗi mã ưu đãi đổi được nhiều suất trong suốt chương trình \n" +
+                "- Khách hàng có thể lấy nhiều mã trong suốt chương trình \n" +
+                "\n" +
+                "THỜI GIAN ÁP DỤNG \n" +
+                "- Khung giờ: 9h30 - 19h00\t\n" +
+                "- Áp dụng tất cả các ngày trong tuần \n" +
+                "- Không áp dụng các ngày lễ, Tết: 30/4, 1/5 \n" +
+                "\n" +
+                "Chi tiết địa điểm xem tại \"Điểm áp dụng\" \n" +
+                "\n" +
+                "Vui lòng bấm XÁC NHẬN ĐẶT CHỖ để nhận mã giảm giá \n" +
+                "\n" +
+                "LƯU Ý \n" +
+                "- Chương trình chỉ áp dụng với khách dùng dịch vụ tại cửa hàng \n" +
+                "- Không áp dụng đồng thời với các chương trình khác của MIA.Nails & Cafe \n" +
+                "- Không áp dụng phụ thu \n" +
+                "- Ưu đãi chưa bao gồm VAT \n" +
+                "- Khách hàng được phép đến sớm hoặc muộn hơn 15 phút so với giờ hẹn đến \n" +
+                "- Mã giảm giá không có giá trị quy đổi thành tiền mặt ";
+        txtDescription.setText(des);
+
+
 
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -202,11 +228,14 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
                 if(chkService.size() == 0){
                     Toast.makeText(DetailSalonActivity.this,"Bạn chưa chọn dịch vụ",Toast.LENGTH_LONG).show();
                 }else{
+
+                    // send data to booking detail activity
                     Intent sendDataToBooking =
                             new Intent(DetailSalonActivity.this, BookingDetailActivity.class);
                     sendDataToBooking.putExtra("chkService", chkService);
                     sendDataToBooking.putExtra("bookedDate", bookedDate);
                     sendDataToBooking.putExtra("bookedTime",bookedTime);
+                    sendDataToBooking.putExtra("salonAddress",txtAddress.getText());
                     startActivity(sendDataToBooking);
                 }
 
@@ -227,6 +256,9 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
                     @Override
                     public void onNext(ArrayList<SalonService> services) {
                         String imgUrl = services.get(0).getSalon().getUrl();
+                        String address = services.get(0).getSalon().getAddress().getStreetNumber() + ", "
+                                + services.get(0).getSalon().getAddress().getStreet();
+                        txtAddress.setText(address);
                         Picasso.with(DetailSalonActivity.this).
                                 load(imgUrl)
                                 .into(imgThumb);

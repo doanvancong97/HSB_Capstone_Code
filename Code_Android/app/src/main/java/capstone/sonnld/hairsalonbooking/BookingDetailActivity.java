@@ -34,6 +34,7 @@ public class BookingDetailActivity extends AppCompatActivity {
     private TextView txtBookedDate;
     private TextView txtBookedTime;
     private TextView txtTotalPrice;
+    private TextView txtAddress;
     private HairSalonAPI hairSalonAPI;
     private ArrayList<BookingDetailsDTO> bookingDetailsDTOList = new ArrayList<>();
 
@@ -47,6 +48,7 @@ public class BookingDetailActivity extends AppCompatActivity {
         btnAccept = findViewById(R.id.btn_accept);
         txtBookedDate = findViewById(R.id.txt_booked_date);
         txtBookedTime = findViewById(R.id.txt_booked_time);
+        txtAddress = findViewById(R.id.txt_address);
 
         String des1 = "ÁP DỤNG KHI DÙNG DỊCH VỤ TẠI CỬA HÀNG* \n" +
                 "\n" +
@@ -73,12 +75,14 @@ public class BookingDetailActivity extends AppCompatActivity {
                 "- Mã giảm giá không có giá trị quy đổi thành tiền mặt ";
         txt_description.setText(des1);
 
-        // get data from intent put extra
+        // get data from detail salon/ detail service activity
         Intent intent = getIntent();
         ArrayList<SalonService> salonServices =
                 (ArrayList<SalonService>) intent.getSerializableExtra("chkService");
         String bookedDate = intent.getExtras().getString("bookedDate");
         String bookedTime = intent.getExtras().getString("bookedTime");
+
+        String address = intent.getExtras().getString("salonAddress");
 
         int totalPrice = 0;
         for (int i = 0; i < salonServices.size(); i++) {
@@ -90,6 +94,8 @@ public class BookingDetailActivity extends AppCompatActivity {
         txtTotalPrice.setText("Tổng tiền là: " + totalPrice + "k");
         txtBookedDate.setText(bookedDate);
         txtBookedTime.setText(bookedTime);
+        txtAddress.setText(address);
+
 
         recyclerView = findViewById(R.id.recycler_selected_service);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 1));

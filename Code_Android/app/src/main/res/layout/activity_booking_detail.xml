@@ -12,7 +12,6 @@
         android:layout_height="match_parent"
 
         >
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -25,12 +24,6 @@
                 android:text="THÔNG TIN ĐẶT CHỖ"
                 android:textColor="@color/red2"
                 android:textStyle="bold" />
-
-
-
-
-
-
 
             <TextView
                 android:layout_width="match_parent"
@@ -132,7 +125,7 @@
                     android:text="Địa chỉ" />
 
                 <TextView
-                    android:id="@+id/txt_addr"
+                    android:id="@+id/txt_address"
                     android:layout_width="0dp"
                     android:layout_height="fill_parent"
                     android:layout_weight="1"
@@ -144,6 +137,17 @@
             </LinearLayout>
 
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/my_text_view_bg"
+                android:padding="5dp"
+                android:text="Điều kiện áp dụng:"
+                android:textAllCaps="true"
+                android:textColor="@color/black"
+                android:textSize="15dp"
+                android:textStyle="bold" />
             <com.borjabravo.readmoretextview.ReadMoreTextView
 
                 android:id="@+id/txt_description2"

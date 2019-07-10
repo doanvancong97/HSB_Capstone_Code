@@ -56,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
 
     // api
     private HairSalonAPI hairSalonAPI;
+
+
     Button btn_ReLogin;
     TextView txtWelcome;
     NavigationView navigationview;
@@ -71,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar mToolbar;
 
     // search
+    private TextView txtService;
     private SearchView mSearchView;
 
     MenuItem logoutMenu;
@@ -113,15 +116,10 @@ public class MainActivity extends AppCompatActivity {
 
         //end setup sideBar
 
-
-
-
         navigationview = findViewById(R.id.navigationview);
         View header = navigationview.getHeaderView(0);
 
         btn_ReLogin = header.findViewById(R.id.btn_ReLogin);
-
-
         txtWelcome = header.findViewById(R.id.txtWelcome);
 
         //Logout menu
@@ -142,50 +140,21 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-
         btn_ReLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 sessionManager = new SessionManager(getApplicationContext());
-                finish();
-                sessionManager.checkLogin();
-                HashMap<String,String > user = sessionManager.getUserDetail();
-                String mName = user.get(sessionManager.USERNAME);
-                txtWelcome.setText("Xin chào, "+mName+"!");
+                if(!sessionManager.isLogin()){
+                    Intent i = new Intent(MainActivity.this,LoginActivity.class);
+                    startActivity(i);
+                    HashMap<String,String > user = sessionManager.getUserDetail();
+                    String mName = user.get(sessionManager.USERNAME);
+                    txtWelcome.setText("Xin chào, "+mName+"!");
+                }
+
             }
         });
 
-
-
-
-
-
-
-
-
-
-//
-//        Intent intentLogin = getIntent();
-//        intentLogin.getStringExtra("username");
-//
-//        if (intentLogin.getStringExtra("username")!=null){
-//            btn_ReLogin.setVisibility(View.GONE);
-//            txtWelcome.setText("Xin chào, "+intentLogin.getStringExtra("username")+"!");
-//            txtWelcome.setVisibility(View.VISIBLE);
-//
-//        }
-//        else {
-//            btn_ReLogin.setVisibility(View.VISIBLE);
-//            txtWelcome.setVisibility(View.GONE);
-//        }
-
-
-
-
-
-
-        // init button
-        btnLocation = findViewById(R.id.btn_location);
 
         //init retro
         Retrofit retrofit = RetrofitClient.getInstance();
@@ -201,14 +170,17 @@ public class MainActivity extends AppCompatActivity {
         recyclerViewBestService.setLayoutManager(new GridLayoutManager(MainActivity.this, 1));
         getAllSalonServiceByRating();
 
-        // setup filter
+        // setup search filter
         recyclerViewFilterService = findViewById(R.id.recycler_view_filter_service);
         recyclerViewFilterService.setLayoutManager(new GridLayoutManager(MainActivity.this, 1));
-
         getSearchItems();
+
+
+        // setup search view
 
         mSearchView = findViewById(R.id.search_view);
         homeLayout = findViewById(R.id.home_layout);
+        homeLayout.requestFocus();
         searchResultLayout = findViewById(R.id.show_search_result_layout);
 
 
@@ -238,6 +210,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+        // setup location
+        btnLocation = findViewById(R.id.btn_location);
         btnLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -382,7 +356,6 @@ public class MainActivity extends AppCompatActivity {
                         displayServiceByDiscount(salonServices);
                         getAllAddress(salonServices);
                         salonServiceArrayList = new ArrayList<>(salonServices);
-//                        getAllSalonName(salonServices);
                     }
 
                     @Override
@@ -395,14 +368,6 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                 });
-    }
-
-    private void getAllSalonName(ArrayList<SalonService> salonServices) {
-        String name;
-        for (int i = 0; i < salonServices.size(); i++) {
-            name = salonServices.get(i).getSalon().getName();
-            salonNameList.add(name);
-        }
     }
 
     private void getAllAddress(ArrayList<SalonService> salonServices) {
@@ -434,80 +399,11 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void clickToRedirectToSearchByLocation(View view) {
-//        LocationManager locationManager;
-//        String lat, lng;
-//        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//            return;
-//        }
-//        Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-//        if(location!=null){
-//            lat = location.getLatitude()+"";
-//            lng= location.getLongitude()+"";
-//
-//        }
-//
-//        Toast.makeText(this, "location", Toast.LENGTH_SHORT).show();
-//
-//
-//
-
-//        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-//            startActivity(new Intent(MainActivity.this, MapsActivity.class));
-//
-//            finish();
-//            return;
-//        }
-//
-//
-//        Dexter.withActivity(MainActivity.this).withPermission(Manifest.permission.ACCESS_FINE_LOCATION).withListener(new PermissionListener() {
-//            @Override
-//            public void onPermissionGranted(PermissionGrantedResponse response) {
-//                Intent intent = new Intent(MainActivity.this, MapsActivity.class);
-//                intent.putExtra("list address",addressList);
-//
-//                startActivity(intent);
-//
-//
-//            }
-//
-//            @Override
-//            public void onPermissionDenied(PermissionDeniedResponse response) {
-//                if(response.isPermanentlyDenied()){
-//                    AlertDialog.Builder builder  = new AlertDialog.Builder(MainActivity.this);
-//                    builder.setTitle("Khong dc cap quyen")
-//                            .setMessage("Hay cho phep truy cap Location")
-//                            .setNegativeButton("cancel",null)
-//                            .setPositiveButton("ok", new DialogInterface.OnClickListener() {
-//                                @Override
-//                                public void onClick(DialogInterface dialogInterface, int i) {
-//                                    Intent intent = new Intent();
-//                                    intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-//                                    intent.setData(Uri.fromParts("pakage", getPackageName(),null));
-//
-//                                }
-//                            }).show();
-//
-//                }
-//
-//                else
-//                    Toast.makeText(MainActivity.this, "Permission denied", Toast.LENGTH_SHORT).show();
-//
-//            }
-//
-//            @Override
-//            public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
-//                token.continuePermissionRequest();
-//            }
-//        }).check();
-
-
-    }
 
     public void clickToLogout(MenuItem item) {
         finish();
         sessionManager.logout();
+        startActivity(new Intent(this,LoginActivity.class));
 
     }
 }
