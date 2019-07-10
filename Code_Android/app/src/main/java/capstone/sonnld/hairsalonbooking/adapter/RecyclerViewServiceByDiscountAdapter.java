@@ -27,6 +27,7 @@ public class RecyclerViewServiceByDiscountAdapter extends RecyclerView.Adapter<R
     private ArrayList<SalonService> salonServices;
     private String des;
     private String serviceName;
+    private String salonName;
     private String discountValue;
     private String salonAddress;
     private String saleValue;
@@ -82,7 +83,10 @@ public class RecyclerViewServiceByDiscountAdapter extends RecyclerView.Adapter<R
         imgUrl = salonServices.get(position).getSalon().getUrl();
         price = salonServices.get(position).getPrice();
         discountValue = salonServices.get(position).getDiscount().getDiscountValue();
+        String salonName = salonServices.get(position).getSalon().getName();
 
+
+        holder.txtSalonName.setText(salonName);
         holder.txtServicePrice.setText(price);
         holder.txtServiceSalePrice.setText(getSalePrice(price,discountValue));
         holder.txtSalonServiceName.setText(uppercaseFirstLetter(serviceName));
@@ -106,7 +110,8 @@ public class RecyclerViewServiceByDiscountAdapter extends RecyclerView.Adapter<R
                 intent.putExtra("SalonName", salonServices.get(position).getSalon().getName());
                 intent.putExtra("Description", des);
                 intent.putExtra("Thumbnail", salonServices.get(position).getSalon().getUrl());
-                intent.putExtra("Address", salonServices.get(position).getSalon().getAddress().getStreet());
+                intent.putExtra("Address", salonServices.get(position).getSalon().getAddress().getStreetNumber() + ", "
+                        + salonServices.get(position).getSalon().getAddress().getStreet());
                 // data need to be received in DetailSalonA
                 mContext.startActivity(intent);
 
@@ -150,12 +155,14 @@ public class RecyclerViewServiceByDiscountAdapter extends RecyclerView.Adapter<R
         TextView txtServicePrice;
         TextView txtServiceSalePrice;
         ImageView imgSalonThumb;
+        TextView txtSalonName;
         CardView cardView;
 
         public MyViewHolder(View itemView) {
             super(itemView);
 
             txtSalonServiceName = itemView.findViewById(R.id.salon_service_name);
+            txtSalonName = itemView.findViewById(R.id.salon_name);
             txtServicePrice = itemView.findViewById(R.id.txt_service_price);
             txtServiceSalePrice = itemView.findViewById(R.id.txt_service_sale_price);
             txtSalonAddress = itemView.findViewById(R.id.salon_address);

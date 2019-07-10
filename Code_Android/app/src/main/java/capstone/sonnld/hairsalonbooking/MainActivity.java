@@ -3,10 +3,12 @@ package capstone.sonnld.hairsalonbooking;
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.design.widget.NavigationView;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -18,8 +20,10 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.karumi.dexter.Dexter;
@@ -31,6 +35,7 @@ import com.karumi.dexter.listener.single.PermissionListener;
 
 import java.text.Normalizer;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.regex.Pattern;
 
 import capstone.sonnld.hairsalonbooking.adapter.RecyclerViewFilterServiceAdapter;
@@ -40,6 +45,7 @@ import capstone.sonnld.hairsalonbooking.api.HairSalonAPI;
 import capstone.sonnld.hairsalonbooking.api.RetrofitClient;
 import capstone.sonnld.hairsalonbooking.model.BookingDetail;
 import capstone.sonnld.hairsalonbooking.model.SalonService;
+import capstone.sonnld.hairsalonbooking.model.SessionManager;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -50,6 +56,9 @@ public class MainActivity extends AppCompatActivity {
 
     // api
     private HairSalonAPI hairSalonAPI;
+    Button btn_ReLogin;
+    TextView txtWelcome;
+    NavigationView navigationview;
 
     // recycler
     private RecyclerView recyclerView;
@@ -63,6 +72,8 @@ public class MainActivity extends AppCompatActivity {
 
     // search
     private SearchView mSearchView;
+
+    MenuItem logoutMenu;
 
     // adapter
     private RecyclerViewFilterServiceAdapter filterServiceAdapter;
@@ -78,6 +89,9 @@ public class MainActivity extends AppCompatActivity {
 
     // btn location
     private ImageView btnLocation;
+
+    //Session Login
+    SessionManager sessionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +112,77 @@ public class MainActivity extends AppCompatActivity {
         mActionBarDrawerToggle.syncState();
 
         //end setup sideBar
+
+
+
+
+        navigationview = findViewById(R.id.navigationview);
+        View header = navigationview.getHeaderView(0);
+
+        btn_ReLogin = header.findViewById(R.id.btn_ReLogin);
+
+
+        txtWelcome = header.findViewById(R.id.txtWelcome);
+
+        //Logout menu
+
+
+        logoutMenu= (MenuItem) navigationview.getMenu().findItem(R.id.lbLogout);
+        logoutMenu.setVisible(false);
+
+
+        sessionManager = new SessionManager(getApplicationContext());
+        if(sessionManager.isLogin()) {
+
+            HashMap<String,String > user = sessionManager.getUserDetail();
+            String mName = user.get(sessionManager.USERNAME);
+            txtWelcome.setText("Xin chào, "+mName+"!");
+            btn_ReLogin.setVisibility(View.GONE);
+            logoutMenu.setVisible(true);
+
+        }
+
+
+        btn_ReLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sessionManager = new SessionManager(getApplicationContext());
+                finish();
+                sessionManager.checkLogin();
+                HashMap<String,String > user = sessionManager.getUserDetail();
+                String mName = user.get(sessionManager.USERNAME);
+                txtWelcome.setText("Xin chào, "+mName+"!");
+            }
+        });
+
+
+
+
+
+
+
+
+
+
+//
+//        Intent intentLogin = getIntent();
+//        intentLogin.getStringExtra("username");
+//
+//        if (intentLogin.getStringExtra("username")!=null){
+//            btn_ReLogin.setVisibility(View.GONE);
+//            txtWelcome.setText("Xin chào, "+intentLogin.getStringExtra("username")+"!");
+//            txtWelcome.setVisibility(View.VISIBLE);
+//
+//        }
+//        else {
+//            btn_ReLogin.setVisibility(View.VISIBLE);
+//            txtWelcome.setVisibility(View.GONE);
+//        }
+
+
+
+
+
 
         // init button
         btnLocation = findViewById(R.id.btn_location);
@@ -417,6 +502,12 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        }).check();
 
+
+    }
+
+    public void clickToLogout(MenuItem item) {
+        finish();
+        sessionManager.logout();
 
     }
 }

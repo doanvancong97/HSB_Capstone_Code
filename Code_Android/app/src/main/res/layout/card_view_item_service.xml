@@ -69,7 +69,7 @@
                 android:paddingTop="5dp"
                 android:gravity="center|right|top"
                 android:text="Price"
-                android:textSize="10dp"
+                android:textSize="15dp"
                 android:textColor="@color/fadeGray"
                 />
 

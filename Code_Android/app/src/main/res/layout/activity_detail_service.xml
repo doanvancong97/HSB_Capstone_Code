@@ -74,28 +74,7 @@
                                 android:layout_width="fill_parent"
                                 android:layout_height="0dp"
 
-                                android:layout_weight="1">
-
-
-                                <ImageView
-                                    android:layout_width="15dp"
-                                    android:layout_height="15dp"
-                                    android:layout_gravity="right"
-                                    android:layout_weight="1"
-                                    android:paddingLeft="25dp"
-
-                                    app:srcCompat="@drawable/star" />
-
-                                <TextView
-                                    android:id="@+id/txtRating"
-                                    android:layout_width="0dp"
-                                    android:layout_height="fill_parent"
-                                    android:layout_weight="7"
-                                    android:text="4.5"
-                                    android:textSize="12dp" />
-
-
-                            </LinearLayout>
+                                android:layout_weight="1"/>
 
 
                             />
@@ -112,7 +91,7 @@
                         android:layout_height="200dp"
 
                         android:background="#6969"
-                        android:scaleType="centerCrop"
+                        android:scaleType="fitXY"
 
                         />
 
@@ -169,19 +148,25 @@
                             android:layout_weight="1"
                             android:gravity="center"
                             android:text="Địa chỉ áp dụng: "
-
-
                             android:textSize="12dp" />
 
-                        <Spinner
+                        <!--<Spinner-->
 
-                            android:id="@+id/spAddress"
+                            <!--android:id="@+id/spAddress"-->
+                            <!--android:layout_width="0dp"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_weight="2"-->
+
+
+                            <!--/>-->
+                        <TextView
+                            android:id="@+id/txt_address"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="2"
-
-
-                            />
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="Địa chỉ "
+                            android:textSize="12dp" />
 
 
                     </LinearLayout>
@@ -216,11 +201,11 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
                             android:background="@drawable/my_text_view_bg"
-                            android:gravity="center"
-
-                            android:text="Chọn ngày và giờ"
-
-                            android:textSize="17dp"
+                            android:padding="5dp"
+                            android:text="Chọn ngày và giờ:"
+                            android:textAllCaps="true"
+                            android:textColor="@color/black"
+                            android:textSize="15dp"
                             android:textStyle="bold" />
 
 
@@ -308,7 +293,8 @@
         android:background="@drawable/button_shape"
         android:text="Tiếp tục"
         android:textColor="#FFFFFF"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:fontFamily="sans-serif-condensed-medium"/>
 
 
 </RelativeLayout>

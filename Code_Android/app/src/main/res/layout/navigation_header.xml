@@ -5,8 +5,19 @@
     android:layout_width="match_parent"
     android:layout_height="100dp">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:textSize="25dp"
+        android:id="@+id/txtWelcome"
+        android:layout_centerInParent="true"
+        android:fontFamily="sans-serif-condensed-medium"
+        />
+
 
     <Button
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/button_shape"
@@ -16,7 +27,7 @@
         android:padding="20dp"
         android:drawablePadding="15dp"
         android:layout_centerInParent="true"
-        android:onClick="clickToRedirectToLogin"/>
+        android:id="@+id/btn_ReLogin"/>
 
 
 

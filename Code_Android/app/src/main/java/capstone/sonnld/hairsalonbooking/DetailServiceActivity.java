@@ -50,7 +50,7 @@ import static capstone.sonnld.hairsalonbooking.R.drawable.button_time;
 
 public class DetailServiceActivity extends AppCompatActivity implements DatePickerListener {
 
-    int im = 0;
+
     private Toolbar mToolbar;
 
     private TextView txtSalonName;
@@ -58,6 +58,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
     private TextView txtDescription;
     private TextView txtServicePrice;
     private TextView txtServiceSalePrice;
+    private TextView txtAddress;
     private Button btnConfirm;
     private RecyclerView recyclerView;
     private ImageView imgThumb;
@@ -90,16 +91,17 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
         setContentView(R.layout.activity_detail_service);
 
         // setup spinner address
-        ArrayAdapter<String> addressAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, listAddress);
+//        ArrayAdapter<String> addressAdapter = new ArrayAdapter<String>(this,
+//                android.R.layout.simple_spinner_item, listAddress);
+//
+//        spAddress = findViewById(R.id.spAddress);
+//
+//
+//        addressAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        spAddress.setAdapter(addressAdapter);
 
-        spAddress = findViewById(R.id.spAddress);
 
-
-        addressAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spAddress.setAdapter(addressAdapter);
-
-
+        txtAddress = findViewById(R.id.txt_address);
         txtSalonService = findViewById(R.id.txt_salon_service_name);
         txtServicePrice = findViewById(R.id.txt_salon_service_price);
         txtServiceSalePrice = findViewById(R.id.txt_service_sale_price);
@@ -108,8 +110,9 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
         imgThumb = findViewById(R.id.img_thumbnail);
         btnConfirm = findViewById(R.id.btn_confirm);
         linearTimePiker = findViewById(R.id.linearTimePicker);
-
         imgLogo = findViewById(R.id.img_logo);
+
+
         HorizontalPicker picker = (HorizontalPicker) findViewById(R.id.datePicker);
 
         // initialize it and attach a listener
@@ -125,82 +128,6 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
 
         picker.setDate(new DateTime());
 
-//        linearTimePiker = findViewById(R.id.linearTimePicker);
-////        Date date = new Date();   // given date
-////        Calendar calendar = GregorianCalendar.getInstance(); // creates a new calendar instance
-////        calendar.setTime(date);   // assigns calendar to given date
-////        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-//        String maxHour = "23:00";
-//        String[] splitMaxHour = maxHour.split(":");
-//        int maxH = Integer.parseInt(splitMaxHour[0]);
-//        String minHour = "08:00";
-//        String[] splitMinHour = minHour.split(":");
-//        int minH = Integer.parseInt(splitMinHour[0]);
-//        double step = 30;
-//
-//        double run = (maxH - minH) / (step / 60) + Integer.parseInt(splitMaxHour[1]) / step - Integer.parseInt(splitMinHour[1]) / step;
-//
-//        Calendar calendar = Calendar.getInstance();
-//        Calendar calendar2 = Calendar.getInstance();
-//
-//        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
-//        try {
-//
-//            Date start = format.parse(minHour);
-//            Date end = format.parse(maxHour);
-//
-//
-//            calendar.setTime(start);
-//            calendar2.setTime(end);
-//
-//
-//            for (int i = 0; i <= run; i++) {
-//                slotID++;
-//                final Button slot = new Button(this);
-//                slot.setId(slotID);
-//
-//                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-//                params.setMargins(10, 10, 10, 10);
-//                slot.setLayoutParams(params);
-//                slot.setBackgroundResource(button_time);
-//                slot.setTextColor(Color.parseColor("#DB1507"));
-//                slot.setText(calendar.getTime().getHours() + ":" + calendar.getTime().getMinutes());
-//
-//
-//                linearTimePiker.addView(slot);
-//                calendar.add(Calendar.MINUTE, (int) step);
-//                slot.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        Toast.makeText(DetailServiceActivity.this, slot.getText(), Toast.LENGTH_SHORT).show();
-//                        bookedTime = slot.getText().toString();
-//                        if (isChoose == false) {
-//                            slot.setBackgroundResource(R.drawable.button_time_choose);
-//                            slot.setTextColor(Color.WHITE);
-//                            isChoose = true;
-//                            slotIDisChoose = slot.getId();
-//
-//                        } else {
-//
-//                            Button b = findViewById(slotIDisChoose);
-//                            b.setBackgroundResource(button_time);
-//                            b.setTextColor(Color.parseColor("#DB1507"));
-//
-//
-//                            slot.setBackgroundResource(R.drawable.button_time_choose);
-//                            slot.setTextColor(Color.WHITE);
-//                            isChoose = true;
-//                            slotIDisChoose = slot.getId();
-//                        }
-//                    }
-//                });
-//
-//            }
-//
-//
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
 
 
         //Receive data from view adapter
@@ -212,7 +139,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
         String imgUrl = intent.getExtras().getString("Thumbnail");
         String salonServicePrice = intent.getExtras().getString("SalonServicePrice");
         String discountValue = intent.getExtras().getString("DiscountValue");
-
+        String address = intent.getExtras().getString("Address");
 
         //set new value for view
         txtSalonName.setText(salonName);
@@ -221,6 +148,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
         txtServicePrice.setPaintFlags(txtServicePrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         txtServiceSalePrice.setText(getSalePrice(salonServicePrice, discountValue));
         txtDescription.setText(description);
+        txtAddress.setText(address);
         Picasso.with(this).load(imgUrl).into(imgThumb);
 
 

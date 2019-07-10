@@ -26,43 +26,11 @@
                 android:textColor="@color/red2"
                 android:textStyle="bold" />
 
-            <android.support.v7.widget.AppCompatImageView
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:src="@drawable/rau_location_map" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:drawableLeft="@drawable/locaton_icon"
-                android:gravity="center|start"
-                android:paddingLeft="70dp"
-                android:text="1084 Quang Trung, Gò Vấp, TP. HCM" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:drawableLeft="@drawable/compass"
-                    android:paddingLeft="50dp"
-                    android:text="  Chỉ đường"
-                    android:textColor="@color/red2" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="fill_parent"
-                    android:layout_weight="1"
-                    android:drawableLeft="@drawable/phone"
-                    android:paddingLeft="50dp"
-                    android:text="  Gọi cửa hàng"
-                    android:textColor="@color/red2" />
 
 
-            </LinearLayout>
+
+
+
 
             <TextView
                 android:layout_width="match_parent"
@@ -152,6 +120,29 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:paddingLeft="20dp"
+                    android:text="Địa chỉ" />
+
+                <TextView
+                    android:id="@+id/txt_addr"
+                    android:layout_width="0dp"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:paddingLeft="40dp"
+                    android:text="XXX"
+                     />
+
+
+            </LinearLayout>
+
 
             <com.borjabravo.readmoretextview.ReadMoreTextView
 
@@ -211,8 +202,9 @@
                     android:layout_weight="1"
                     android:background="@drawable/button_cancel"
                     android:onClick="unBooking"
-                    android:text="Hủy đặt chỗ"
-                    android:textSize="18sp" />
+                    android:text="Quay lại"
+                    android:textSize="18sp"
+                    android:fontFamily="sans-serif-condensed-medium"/>
 
                 <Button
                     android:id="@+id/btn_accept"
@@ -225,7 +217,9 @@
                     android:background="@drawable/button_accept"
                     android:onClick="unBooking"
                     android:text="Xác nhận"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:textColor="@color/white"
+                    android:fontFamily="sans-serif-condensed-medium"/>
             </LinearLayout>
         </LinearLayout>
 

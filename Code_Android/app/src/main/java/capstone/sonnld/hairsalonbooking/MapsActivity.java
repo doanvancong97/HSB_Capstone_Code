@@ -128,8 +128,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 markerOptions.title(salonName);
                 markerOptions.snippet(salonId + "");
 
-                int height = 80;
-                int width = 80;
+                int height = 150;
+                int width = 150;
                 BitmapDrawable bitmapdraw = (BitmapDrawable) getResources().getDrawable(R.drawable.logo_30_shine);
                 Bitmap b = bitmapdraw.getBitmap();
                 Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
@@ -162,7 +162,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     rp_bg.startRippleAnimation();
 
                 }
-            }, 2000);
+            }, 1000);
 
 
             new Handler().postDelayed(new Runnable() {

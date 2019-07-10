@@ -50,6 +50,15 @@
 
                     android:icon="@drawable/locked"
                     android:title="Chính sách bảo mật" />
+                <item
+
+
+                    android:title="Đăng xuất"
+                    android:onClick="clickToLogout"
+                    android:id="@+id/lbLogout"
+
+                    />
+
             </menu>
         </item>
 

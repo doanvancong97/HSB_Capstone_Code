@@ -106,7 +106,8 @@
         android:background="@color/white"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/navigation_header"
-        app:menu="@menu/navigation_menu" />
+        app:menu="@menu/navigation_menu"
+        android:id="@+id/navigationview"/>
 
 
 </android.support.v4.widget.DrawerLayout>
