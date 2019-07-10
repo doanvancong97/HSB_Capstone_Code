@@ -143,14 +143,17 @@ public class MainActivity extends AppCompatActivity {
         btn_ReLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                finish();
                 sessionManager = new SessionManager(getApplicationContext());
                 if(!sessionManager.isLogin()){
                     Intent i = new Intent(MainActivity.this,LoginActivity.class);
                     startActivity(i);
-                    HashMap<String,String > user = sessionManager.getUserDetail();
-                    String mName = user.get(sessionManager.USERNAME);
-                    txtWelcome.setText("Xin chào, "+mName+"!");
+
                 }
+
+                HashMap<String,String > user = sessionManager.getUserDetail();
+                String mName = user.get(sessionManager.USERNAME);
+                txtWelcome.setText("Xin chào, "+mName+"!");
 
             }
         });
@@ -401,9 +404,10 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void clickToLogout(MenuItem item) {
-        finish();
+
         sessionManager.logout();
-        startActivity(new Intent(this,LoginActivity.class));
+        finish();
+        startActivity(getIntent());
 
     }
 }

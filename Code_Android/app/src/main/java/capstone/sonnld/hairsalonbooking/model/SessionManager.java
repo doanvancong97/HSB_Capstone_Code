@@ -21,56 +21,50 @@ public class SessionManager {
 
     public SessionManager(Context context) {
         this.context = context;
-        sharedPreferences = context.getSharedPreferences(PREF_NAME,PRIVATE_MODE);
-        editor=sharedPreferences.edit();
+        sharedPreferences = context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
+        editor = sharedPreferences.edit();
 
     }
 
-    public Context getContext() {
-        return context;
-    }
+
 
     public void setContext(Context context) {
         this.context = context;
     }
 
-    public void createSession(String username){
-        editor.putBoolean(LOGIN,true);
-        editor.putString(USERNAME,username);
+    public void createSession(String username) {
+        editor.putBoolean(LOGIN, true);
+        editor.putString(USERNAME, username);
         editor.apply();
 
 
     }
 
-    public boolean isLogin(){
-        return sharedPreferences.getBoolean(LOGIN,false);
+    public boolean isLogin() {
+        return sharedPreferences.getBoolean(LOGIN, false);
     }
 
-    public void checkLogin(){
-        if (!isLogin()){
-            Intent i = new Intent(getContext(),LoginActivity.class);
-            getContext().startActivity(i);
+//    public void checkLogin() {
+//        if (!isLogin()) {
+//            Intent i = new Intent(getContext(), LoginActivity.class);
+//            getContext().startActivity(i);
+//
+//        }
+//    }
 
-        }
-    }
+    public HashMap<String, String> getUserDetail() {
 
-    public HashMap<String,String> getUserDetail(){
-
-        HashMap<String,String> user = new HashMap<>();
-        user.put(USERNAME,sharedPreferences.getString(USERNAME,null));
+        HashMap<String, String> user = new HashMap<>();
+        user.put(USERNAME, sharedPreferences.getString(USERNAME, null));
         return user;
 
 
     }
 
 
-    public void logout(){
+    public void logout() {
         editor.clear();
         editor.commit();
-
-
-
-
 
 
     }
