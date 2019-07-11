@@ -119,8 +119,8 @@
                             android:gravity="center|right"
                             android:paddingRight="15dp"
                             android:text="Price"
-                            android:textColor="@color/fadeGray"
-                            android:textSize="15dp" />
+                            android:textColor="@color/black"
+                            android:textSize="18dp" />
 
                         <TextView
                             android:id="@+id/txt_service_sale_price"

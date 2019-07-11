@@ -93,8 +93,8 @@
                     android:paddingLeft="10dp"
                     android:gravity="center|right"
                     android:text="Price"
-                    android:textSize="15dp"
-                    android:textColor="@color/fadeGray"
+                    android:textSize="18dp"
+                    android:textColor="@color/black"
                      />
 
                 <TextView

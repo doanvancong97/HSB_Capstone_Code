@@ -11,13 +11,16 @@ import capstone.sonnld.hairsalonbooking.MainActivity;
 
 public class SessionManager {
     SharedPreferences sharedPreferences;
-    public SharedPreferences.Editor editor;
-    public Context context;
-    int PRIVATE_MODE = 0;
+    private SharedPreferences.Editor editor;
+    private Context context;
+    private int PRIVATE_MODE = 0;
 
-    public static final String PREF_NAME = "LOGIN";
-    public static final String LOGIN = "IS_LOGIN";
-    public static final String USERNAME = "USERNAME";
+    private final String PREF_NAME = "LOGIN";
+    private final String LOGIN = "IS_LOGIN";
+    private final String USERNAME = "USERNAME";
+
+
+
 
     public SessionManager(Context context) {
         this.context = context;
@@ -26,10 +29,44 @@ public class SessionManager {
 
     }
 
+    public SharedPreferences getSharedPreferences() {
+        return sharedPreferences;
+    }
 
+    public void setSharedPreferences(SharedPreferences sharedPreferences) {
+        this.sharedPreferences = sharedPreferences;
+    }
+
+    public SharedPreferences.Editor getEditor() {
+        return editor;
+    }
+
+    public void setEditor(SharedPreferences.Editor editor) {
+        this.editor = editor;
+    }
+
+    public Context getContext() {
+        return context;
+    }
 
     public void setContext(Context context) {
         this.context = context;
+    }
+
+    public int getPRIVATE_MODE() {
+        return PRIVATE_MODE;
+    }
+
+    public  String getPrefName() {
+        return PREF_NAME;
+    }
+
+    public  String getLOGIN() {
+        return LOGIN;
+    }
+
+    public  String getUSERNAME() {
+        return USERNAME;
     }
 
     public void createSession(String username) {
@@ -44,13 +81,7 @@ public class SessionManager {
         return sharedPreferences.getBoolean(LOGIN, false);
     }
 
-//    public void checkLogin() {
-//        if (!isLogin()) {
-//            Intent i = new Intent(getContext(), LoginActivity.class);
-//            getContext().startActivity(i);
-//
-//        }
-//    }
+
 
     public HashMap<String, String> getUserDetail() {
 

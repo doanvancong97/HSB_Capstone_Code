@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     Button btn_ReLogin;
+    LinearLayout lnWelcome;
     TextView txtWelcome;
     NavigationView navigationview;
 
@@ -120,7 +121,9 @@ public class MainActivity extends AppCompatActivity {
         View header = navigationview.getHeaderView(0);
 
         btn_ReLogin = header.findViewById(R.id.btn_ReLogin);
+        lnWelcome = header.findViewById(R.id.lnWelcome);
         txtWelcome = header.findViewById(R.id.txtWelcome);
+        lnWelcome.setVisibility(View.GONE);
 
         //Logout menu
 
@@ -133,7 +136,8 @@ public class MainActivity extends AppCompatActivity {
         if(sessionManager.isLogin()) {
 
             HashMap<String,String > user = sessionManager.getUserDetail();
-            String mName = user.get(sessionManager.USERNAME);
+            String mName = user.get(sessionManager.getUSERNAME());
+            lnWelcome.setVisibility(View.VISIBLE);
             txtWelcome.setText("Xin chào, "+mName+"!");
             btn_ReLogin.setVisibility(View.GONE);
             logoutMenu.setVisible(true);
@@ -152,7 +156,8 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 HashMap<String,String > user = sessionManager.getUserDetail();
-                String mName = user.get(sessionManager.USERNAME);
+                String mName = user.get(sessionManager.getUSERNAME());
+
                 txtWelcome.setText("Xin chào, "+mName+"!");
 
             }
@@ -165,6 +170,7 @@ public class MainActivity extends AppCompatActivity {
 
         //recycler view for service by discount
         recyclerView = findViewById(R.id.recycler_view_salon);
+        recyclerView.hasFixedSize();
         recyclerView.setLayoutManager(new GridLayoutManager(MainActivity.this, 2));
         getAllSalonServiceByDiscount();
 

@@ -25,7 +25,6 @@
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".UserDetailActivity" />
         <activity android:name=".BookingDetailActivity" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".LoginActivity" />
