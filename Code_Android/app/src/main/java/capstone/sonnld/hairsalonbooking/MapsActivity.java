@@ -14,6 +14,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -53,12 +55,19 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     //
     private ArrayList<SalonService> salonServices = new ArrayList<>();
 
+    TextView salon_service_name;
+    LinearLayout lnDeatailOfMarker;
+    TextView salon_address;
+
     String address;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         rp_bg = findViewById(R.id.rp_bg);
+        salon_service_name= findViewById(R.id.salon_service_name);
+        lnDeatailOfMarker = findViewById(R.id.lnDeatailOfMarker);
+        salon_address = findViewById(R.id.salon_address);
 
         //init retro
         Retrofit retrofit = RetrofitClient.getInstance();
@@ -146,9 +155,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         Intent intent = new Intent(MapsActivity.this, DetailSalonActivity.class);
                         intent.putExtra("SalonId", Integer.parseInt(marker.getSnippet()));
                         intent.putExtra("SalonName", marker.getTitle());
-                        marker.setSnippet(address);
-                        startActivity(intent);
-                        finish();
+
+
+
+                        salon_service_name.setText(marker.getTitle());
+                        salon_address.setText("address of salonId = " + marker.getSnippet());
+                        lnDeatailOfMarker.setVisibility(View.VISIBLE);
+
+
+
+//                        startActivity(intent);
+//                        finish();
                         return true;
 
                     }

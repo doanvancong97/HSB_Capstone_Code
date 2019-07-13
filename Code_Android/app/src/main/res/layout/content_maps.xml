@@ -34,4 +34,26 @@
         <!--android:src="@drawable/location" />-->
     </com.skyfishjy.library.RippleBackground>
 
+
+    <LinearLayout
+        android:id="@+id/lnDeatailOfMarker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone">
+
+        <include layout="@layout/card_view_item_filter_salon_service" />
+
+
+
+
+
+
+    </LinearLayout>
+
+
+
+
+
+
 </RelativeLayout>
