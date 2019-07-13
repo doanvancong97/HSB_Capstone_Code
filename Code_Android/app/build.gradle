@@ -39,6 +39,9 @@ dependencies {
     implementation 'com.google.android.libraries.places:places:1.1.0'
     implementation 'com.skyfishjy.ripplebackground:library:1.0.1'
 
+    //load image
+    implementation 'com.koushikdutta.ion:ion:2.+'
+
     //retro impl
     implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'

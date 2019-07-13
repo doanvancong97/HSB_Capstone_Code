@@ -110,6 +110,7 @@ public class RecyclerViewServiceByDiscountAdapter extends RecyclerView.Adapter<R
                 intent.putExtra("SalonName", salonServices.get(position).getSalon().getName());
                 intent.putExtra("Description", des);
                 intent.putExtra("Thumbnail", salonServices.get(position).getSalon().getUrl());
+                intent.putExtra("Logo", salonServices.get(position).getSalon().getLogoUrl());
                 intent.putExtra("Address", salonServices.get(position).getSalon().getAddress().getStreetNumber() + ", "
                         + salonServices.get(position).getSalon().getAddress().getStreet());
                 // data need to be received in DetailSalonA

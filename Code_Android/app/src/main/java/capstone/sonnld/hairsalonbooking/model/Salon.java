@@ -32,6 +32,9 @@ public class Salon implements Serializable {
     @SerializedName("address")
     @Expose
     private Address address;
+    @SerializedName("logo_url")
+    @Expose
+    private String logoUrl;
     @SerializedName("services")
     @Expose
     private List<Service> services = null;
@@ -100,6 +103,14 @@ public class Salon implements Serializable {
         this.address = address;
     }
 
+    public String getLogoUrl() {
+        return logoUrl;
+    }
+
+    public void setLogoUrl(String logoUrl) {
+        this.logoUrl = logoUrl;
+    }
+
     public List<Service> getServices() {
         return services;
     }
@@ -107,4 +118,5 @@ public class Salon implements Serializable {
     public void setServices(List<Service> services) {
         this.services = services;
     }
+
 }

@@ -15,7 +15,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:label">
-        <activity android:name=".DetailSalonActivity"></activity>
+        <activity android:name=".UserDetailActivity"></activity>
+        <activity android:name=".DetailSalonActivity" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
