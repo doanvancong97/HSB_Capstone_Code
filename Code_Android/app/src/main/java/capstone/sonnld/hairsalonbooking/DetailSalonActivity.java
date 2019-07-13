@@ -90,7 +90,6 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
         txtDescription = findViewById(R.id.txt_description);
         imgThumb = findViewById(R.id.img_thumbnail);
         btnConfirm = findViewById(R.id.btn_confirm);
-
         imgLogo = findViewById(R.id.img_logo);
         HorizontalPicker picker = (HorizontalPicker) findViewById(R.id.datePicker);
 
@@ -258,7 +257,11 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
                         String imgUrl = services.get(0).getSalon().getUrl();
                         String address = services.get(0).getSalon().getAddress().getStreetNumber() + ", "
                                 + services.get(0).getSalon().getAddress().getStreet();
+                        String logUrl = services.get(0).getSalon().getLogoUrl();
                         txtAddress.setText(address);
+                        Picasso.with(DetailSalonActivity.this).
+                                load(logUrl)
+                                .into(imgLogo);
                         Picasso.with(DetailSalonActivity.this).
                                 load(imgUrl)
                                 .into(imgThumb);

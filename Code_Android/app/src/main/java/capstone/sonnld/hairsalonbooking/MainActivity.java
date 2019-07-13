@@ -3,7 +3,6 @@ package capstone.sonnld.hairsalonbooking;
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -32,6 +31,7 @@ import com.karumi.dexter.listener.PermissionDeniedResponse;
 import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
+import com.squareup.picasso.Picasso;
 
 import java.text.Normalizer;
 import java.util.ArrayList;
@@ -43,6 +43,7 @@ import capstone.sonnld.hairsalonbooking.adapter.RecyclerViewServiceByDiscountAda
 import capstone.sonnld.hairsalonbooking.adapter.RecyclerViewServiceByRatingAdapter;
 import capstone.sonnld.hairsalonbooking.api.HairSalonAPI;
 import capstone.sonnld.hairsalonbooking.api.RetrofitClient;
+import capstone.sonnld.hairsalonbooking.model.Account;
 import capstone.sonnld.hairsalonbooking.model.BookingDetail;
 import capstone.sonnld.hairsalonbooking.model.SalonService;
 import capstone.sonnld.hairsalonbooking.model.SessionManager;
@@ -50,13 +51,15 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class MainActivity extends AppCompatActivity {
 
     // api
     private HairSalonAPI hairSalonAPI;
-
 
     Button btn_ReLogin;
     LinearLayout lnWelcome;
@@ -88,20 +91,26 @@ public class MainActivity extends AppCompatActivity {
 
     // list salon address, name
     private ArrayList<String> addressList = new ArrayList<>();
-    private ArrayList<String> salonNameList = new ArrayList<>();
     private ArrayList<SalonService> salonServiceArrayList = new ArrayList<>();
 
     // btn location
     private ImageView btnLocation;
 
     //Session Login
-    SessionManager sessionManager;
+    private SessionManager sessionManager;
+    private String mUserName;
+    private ImageView imgAvatar;
+    String fullName;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //init api
+        Retrofit retrofit = RetrofitClient.getInstance();
+        hairSalonAPI = retrofit.create(HairSalonAPI.class);
 
         //setup tool bar
         mToolbar = findViewById(R.id.nav_action_bar);
@@ -117,56 +126,53 @@ public class MainActivity extends AppCompatActivity {
 
         //end setup sideBar
 
+
+        // User detail setup
         navigationview = findViewById(R.id.navigationview);
         View header = navigationview.getHeaderView(0);
 
         btn_ReLogin = header.findViewById(R.id.btn_ReLogin);
         lnWelcome = header.findViewById(R.id.lnWelcome);
         txtWelcome = header.findViewById(R.id.txtWelcome);
+        imgAvatar = header.findViewById(R.id.img_avatar);
+
         lnWelcome.setVisibility(View.GONE);
 
-        //Logout menu
-
-
-        logoutMenu= (MenuItem) navigationview.getMenu().findItem(R.id.lbLogout);
+        logoutMenu = (MenuItem) navigationview.getMenu().findItem(R.id.lbLogout);
         logoutMenu.setVisible(false);
 
 
         sessionManager = new SessionManager(getApplicationContext());
-        if(sessionManager.isLogin()) {
+        if (sessionManager.isLogin()) {
 
-            HashMap<String,String > user = sessionManager.getUserDetail();
-            String mName = user.get(sessionManager.getUSERNAME());
+            HashMap<String, String> user = sessionManager.getUserDetail();
+            mUserName = user.get(sessionManager.getUSERNAME());
             lnWelcome.setVisibility(View.VISIBLE);
-            txtWelcome.setText("Xin chào, "+mName+"!");
+//            txtWelcome.setText("Xin chào, " + mUserName);
+            txtWelcome.setText("Xin chào, " + fullName);
+            initUserDetail();
             btn_ReLogin.setVisibility(View.GONE);
             logoutMenu.setVisible(true);
 
         }
+
 
         btn_ReLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
                 sessionManager = new SessionManager(getApplicationContext());
-                if(!sessionManager.isLogin()){
-                    Intent i = new Intent(MainActivity.this,LoginActivity.class);
+                if (!sessionManager.isLogin()) {
+                    Intent i = new Intent(MainActivity.this, LoginActivity.class);
                     startActivity(i);
-
                 }
-
-                HashMap<String,String > user = sessionManager.getUserDetail();
-                String mName = user.get(sessionManager.getUSERNAME());
-
-                txtWelcome.setText("Xin chào, "+mName+"!");
+                HashMap<String, String> user = sessionManager.getUserDetail();
+                mUserName = user.get(sessionManager.getUSERNAME());
+                initUserDetail();
 
             }
         });
 
-
-        //init retro
-        Retrofit retrofit = RetrofitClient.getInstance();
-        hairSalonAPI = retrofit.create(HairSalonAPI.class);
 
         //recycler view for service by discount
         recyclerView = findViewById(R.id.recycler_view_salon);
@@ -226,7 +232,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                     Intent intent = new Intent(MainActivity.this, MapsActivity.class);
-                    intent.putExtra("salonServiceList",salonServiceArrayList);
+                    intent.putExtra("salonServiceList", salonServiceArrayList);
                     startActivity(intent);
 
                     return;
@@ -237,7 +243,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onPermissionGranted(PermissionGrantedResponse response) {
                         Intent intent = new Intent(MainActivity.this, MapsActivity.class);
-                        intent.putExtra("salonServiceList",salonServiceArrayList);
+                        intent.putExtra("salonServiceList", salonServiceArrayList);
                         startActivity(intent);
 
                     }
@@ -272,6 +278,26 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+    }
+
+    private void initUserDetail(){
+        Call<Account> call = hairSalonAPI.getUserDetail(mUserName);
+        call.enqueue(new Callback<Account>() {
+            @Override
+            public void onResponse(Call<Account> call, Response<Account> response) {
+                Account currentAcc = response.body();
+                String avatarUrl = currentAcc.getAvatar();
+                fullName = currentAcc.getFullname();
+                Picasso.with(MainActivity.this).load(avatarUrl).into(imgAvatar);
+                txtWelcome.setText("Xin chào, " + fullName );
+            }
+
+            @Override
+            public void onFailure(Call<Account> call, Throwable t) {
+
+            }
+        });
     }
 
     public String removeAccent(String s) {
@@ -415,5 +441,11 @@ public class MainActivity extends AppCompatActivity {
         finish();
         startActivity(getIntent());
 
+    }
+
+    public void goToUserDetail(View view) {
+        Intent intent = new Intent(this, UserDetailActivity.class);
+        intent.putExtra("username",mUserName);
+        startActivity(intent);
     }
 }

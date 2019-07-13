@@ -1,149 +1,168 @@
 package capstone.sonnld.hairsalonbooking.model;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 public class Account implements Serializable {
-    private String password;
-
-    private String birthdate;
-
-    private String address;
-
-    private String phoneNumber;
-
-    private String user_id;
-
-    private String roleId;
-
-    private String fullname;
-
-    private String avatar;
-
-    private String job;
-
-    private String email;
-
+    @SerializedName("user_id")
+    @Expose
+    private Integer userId;
+    @SerializedName("username")
+    @Expose
     private String username;
-
+    @SerializedName("password")
+    @Expose
+    private String password;
+    @SerializedName("fullname")
+    @Expose
+    private String fullname;
+    @SerializedName("birthdate")
+    @Expose
+    private String birthdate;
+    @SerializedName("email")
+    @Expose
+    private String email;
+    @SerializedName("job")
+    @Expose
+    private String job;
+    @SerializedName("address")
+    @Expose
+    private String address;
+    @SerializedName("phoneNumber")
+    @Expose
+    private String phoneNumber;
+    @SerializedName("avatar")
+    @Expose
+    private String avatar;
+    @SerializedName("status")
+    @Expose
     private String status;
+    @SerializedName("create_time")
+    @Expose
+    private Object createTime;
+    @SerializedName("update_time")
+    @Expose
+    private Object updateTime;
+    @SerializedName("role_id")
+    @Expose
+    private Integer roleId;
 
-    public String getPassword ()
-    {
-        return password;
-    }
-
-    public void setPassword (String password)
-    {
+    public Account(String username, String password) {
+        this.username = username;
         this.password = password;
     }
 
-    public String getBirthdate ()
-    {
-        return birthdate;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setBirthdate (String birthdate)
-    {
-        this.birthdate = birthdate;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
-    public String getAddress ()
-    {
-        return address;
-    }
-
-    public void setAddress (String address)
-    {
-        this.address = address;
-    }
-
-    public String getPhoneNumber ()
-    {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber (String phoneNumber)
-    {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public String getUser_id ()
-    {
-        return user_id;
-    }
-
-    public void setUser_id (String user_id)
-    {
-        this.user_id = user_id;
-    }
-
-    public String getRoleId ()
-    {
-        return roleId;
-    }
-
-    public void setRoleId (String roleId)
-    {
-        this.roleId = roleId;
-    }
-
-    public String getFullname ()
-    {
-        return fullname;
-    }
-
-    public void setFullname (String fullname)
-    {
-        this.fullname = fullname;
-    }
-
-    public String getAvatar ()
-    {
-        return avatar;
-    }
-
-    public void setAvatar (String avatar)
-    {
-        this.avatar = avatar;
-    }
-
-    public String getJob ()
-    {
-        return job;
-    }
-
-    public void setJob (String job)
-    {
-        this.job = job;
-    }
-
-    public String getEmail ()
-    {
-        return email;
-    }
-
-    public void setEmail (String email)
-    {
-        this.email = email;
-    }
-
-    public String getUsername ()
-    {
+    public String getUsername() {
         return username;
     }
 
-    public void setUsername (String username)
-    {
+    public void setUsername(String username) {
         this.username = username;
     }
 
-    public String getStatus ()
-    {
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getFullname() {
+        return fullname;
+    }
+
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
+    }
+
+    public String getBirthdate() {
+        return birthdate;
+    }
+
+    public void setBirthdate(String birthdate) {
+        this.birthdate = birthdate;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getJob() {
+        return job;
+    }
+
+    public void setJob(String job) {
+        this.job = job;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus (String status)
-    {
+    public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Object getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Object createTime) {
+        this.createTime = createTime;
+    }
+
+    public Object getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Object updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public Integer getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(Integer roleId) {
+        this.roleId = roleId;
     }
 }

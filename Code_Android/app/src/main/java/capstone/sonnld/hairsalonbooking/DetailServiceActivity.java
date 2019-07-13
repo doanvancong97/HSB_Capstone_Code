@@ -140,6 +140,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
         String salonServicePrice = intent.getExtras().getString("SalonServicePrice");
         String discountValue = intent.getExtras().getString("DiscountValue");
         String address = intent.getExtras().getString("Address");
+        String logoUrl = intent.getExtras().getString("Logo");
 
         //set new value for view
         txtSalonName.setText(salonName);
@@ -150,6 +151,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
         txtDescription.setText(description);
         txtAddress.setText(address);
         Picasso.with(this).load(imgUrl).into(imgThumb);
+        Picasso.with(this).load(logoUrl).into(imgLogo);
 
 
         recyclerViewTimeSlot = findViewById(R.id.recycler_view_time_slot);

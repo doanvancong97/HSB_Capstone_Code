@@ -3,6 +3,7 @@ package capstone.sonnld.hairsalonbooking.api;
 import java.util.ArrayList;
 
 import capstone.sonnld.hairsalonbooking.dto.BookingDTO;
+import capstone.sonnld.hairsalonbooking.model.Account;
 import capstone.sonnld.hairsalonbooking.model.BookingDetail;
 import capstone.sonnld.hairsalonbooking.model.Salon;
 import capstone.sonnld.hairsalonbooking.model.SalonService;
@@ -26,6 +27,12 @@ public interface HairSalonAPI {
     @GET("salon/search/{salonName}")
     Observable<Salon> getSalon(@Path("salonName") String salonName);
 
+    @GET("users-details/{username}")
+    Call<Account> getUserDetail(@Path("username") String username);
+
     @POST("booking")
     Call<BookingDTO> postBooking(@Body BookingDTO bookingDTO);
+
+    @POST("login")
+    Call<Void> checkLogin(@Body Account account);
 }

@@ -40,11 +40,11 @@
                         <ImageView
                             android:id="@+id/img_logo"
                             android:layout_width="0dp"
-                            android:layout_height="fill_parent"
+                            android:layout_height="match_parent"
                             android:layout_weight="1.5"
                             android:paddingLeft="10dp"
                             android:src="@drawable/logo_tran"
-
+                            android:scaleType="centerCrop"
                             />
 
 

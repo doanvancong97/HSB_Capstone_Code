@@ -28,11 +28,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.libraries.places.api.net.PlacesClient;
+import com.koushikdutta.ion.Ion;
 import com.skyfishjy.library.RippleBackground;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import capstone.sonnld.hairsalonbooking.api.HairSalonAPI;
 import capstone.sonnld.hairsalonbooking.api.RetrofitClient;
@@ -119,6 +122,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         + salonServices.get(i).getSalon().getAddress().getStreet();;
                 final String salonName = salonServices.get(i).getSalon().getName();
                 final int salonId = salonServices.get(i).getSalon().getSalonId();
+                String logoUrl = salonServices.get(i).getSalon().getLogoUrl();
                 loc = getLocationFromAddress(address);
                 point = new LatLng(loc.getLat(), loc.getLng());
 
@@ -130,13 +134,26 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 int height = 150;
                 int width = 150;
-                BitmapDrawable bitmapdraw = (BitmapDrawable) getResources().getDrawable(R.drawable.logo_30_shine);
-                Bitmap b = bitmapdraw.getBitmap();
-                Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
+//                BitmapDrawable bitmapdraw = (BitmapDrawable) getResources().getDrawable(R.drawable.logo_30_shine);
+//                Bitmap b = bitmapdraw.getBitmap();
+//                Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
+//
+//
+//
+//                markerOptions.icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
 
+                try {
+                    Bitmap bmImg = Ion.with(this)
+                            .load(logoUrl).asBitmap().get();
 
-                markerOptions.icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
+                    Bitmap smallMarker = Bitmap.createScaledBitmap(bmImg, width, height, false);
+                    markerOptions.icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
 
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
 
                 mMap.addMarker(markerOptions);
                 mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
