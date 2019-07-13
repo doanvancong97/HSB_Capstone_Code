@@ -10,6 +10,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -27,6 +28,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.libraries.places.api.net.PlacesClient;
@@ -90,6 +92,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         mMap = googleMap;
+        MapStyleOptions mapStyleOptions=MapStyleOptions.loadRawResourceStyle(this,R.raw.style_maps);
+
+
+
+        mMap.setMapStyle(mapStyleOptions);
         mMap.setMyLocationEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
         Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
@@ -102,44 +109,27 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (location != null) {
             you = new LatLng(location.getLatitude(), location.getLongitude());
 
-//            GeoPoint loc1 = getLocationFromAddress("65 trần thị hè");
-//            GeoPoint loc2 = getLocationFromAddress("103 tô ký");
-//            GeoPoint loc3= getLocationFromAddress("đại học fpt, quận 12");
-
-//            LatLng point1 = new LatLng(loc1.getLat(),loc1.getLng());
-//            LatLng point2 = new LatLng(loc2.getLat(),loc2.getLng());
-//            LatLng point3 = new LatLng(loc3.getLat(),loc3.getLng());
-//
-//            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(you, 15));
-//            MarkerOptions markerOptions1 = new MarkerOptions();
-//            MarkerOptions markerOptions2= new MarkerOptions();
-//
-//            MarkerOptions markerOptions3 = new MarkerOptions();
-//
-//            markerOptions1.position(point1);
-//            markerOptions2.position(point2);
-//            markerOptions3.position(point3);
-//            mMap.addMarker(markerOptions1);
-//            mMap.addMarker(markerOptions2);
-//            mMap.addMarker(markerOptions3);
 
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(you, 13));
 
 
             for (int i = 0; i < salonServices.size(); i++) {
                 address = salonServices.get(i).getSalon().getAddress().getStreetNumber() + ", "
-                        + salonServices.get(i).getSalon().getAddress().getStreet();;
-                final String salonName = salonServices.get(i).getSalon().getName();
-                final int salonId = salonServices.get(i).getSalon().getSalonId();
+                        + salonServices.get(i).getSalon().getAddress().getStreet();
+                 String salonName = salonServices.get(i).getSalon().getName();
+                 int salonId = salonServices.get(i).getSalon().getSalonId();
                 String logoUrl = salonServices.get(i).getSalon().getLogoUrl();
                 loc = getLocationFromAddress(address);
                 point = new LatLng(loc.getLat(), loc.getLng());
 
-                final MarkerOptions markerOptions = new MarkerOptions();
+                 MarkerOptions markerOptions = new MarkerOptions();
+
                 markerOptions.position(point);
 //                markerOptions.snippet(address);
                 markerOptions.title(salonName);
                 markerOptions.snippet(salonId + "");
+
+
 
                 int height = 150;
                 int width = 150;
@@ -164,20 +154,33 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     e.printStackTrace();
                 }
 
-                mMap.addMarker(markerOptions);
+                mMap.addMarker(markerOptions).setTag(address);
+
+
                 mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                     @Override
                     public boolean onMarkerClick(Marker marker) {
-                        Toast.makeText(MapsActivity.this, "Đang chuyển tới trang chủ của " + marker.getTitle() + "...", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(MapsActivity.this, DetailSalonActivity.class);
-                        intent.putExtra("SalonId", Integer.parseInt(marker.getSnippet()));
-                        intent.putExtra("SalonName", marker.getTitle());
+//                        Toast.makeText(MapsActivity.this, "Đang chuyển tới trang chủ của " + marker.getTitle() + "...", Toast.LENGTH_SHORT).show();
+//                        Intent intent = new Intent(MapsActivity.this, DetailSalonActivity.class);
+//                        intent.putExtra("SalonId", Integer.parseInt(marker.getSnippet()));
+//                        intent.putExtra("SalonName", marker.getTitle());
 
 
 
                         salon_service_name.setText(marker.getTitle());
-                        salon_address.setText("address of salonId = " + marker.getSnippet());
+                        salon_address.setText(marker.getTag().toString());
                         lnDeatailOfMarker.setVisibility(View.VISIBLE);
+
+                        salon_service_name.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Toast.makeText(MapsActivity.this, "chỉ đường", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                                        Uri.parse("geo:0,0?q=37.423156,-122.084917 (" + "hihi" + ")"));
+                                startActivity(intent);
+                            }
+                        });
+
 
 
 
@@ -188,7 +191,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     }
                 });
 
+
+
+
             }
+
+
 
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -205,7 +213,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     rp_bg.stopRippleAnimation();
 
                 }
-            }, 4000);
+            }, 2500);
 
 
         }
