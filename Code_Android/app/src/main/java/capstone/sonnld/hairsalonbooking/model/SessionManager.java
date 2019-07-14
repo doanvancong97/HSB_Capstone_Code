@@ -10,7 +10,7 @@ import capstone.sonnld.hairsalonbooking.LoginActivity;
 import capstone.sonnld.hairsalonbooking.MainActivity;
 
 public class SessionManager {
-    SharedPreferences sharedPreferences;
+    private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
     private Context context;
     private int PRIVATE_MODE = 0;

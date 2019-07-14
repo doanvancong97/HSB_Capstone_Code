@@ -11,15 +11,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.borjabravo.readmoretextview.ReadMoreTextView;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import capstone.sonnld.hairsalonbooking.adapter.RecyclerViewSelectedServiceAdapter;
 import capstone.sonnld.hairsalonbooking.api.HairSalonAPI;
 import capstone.sonnld.hairsalonbooking.api.RetrofitClient;
 import capstone.sonnld.hairsalonbooking.dto.BookingDTO;
 import capstone.sonnld.hairsalonbooking.dto.BookingDetailsDTO;
+import capstone.sonnld.hairsalonbooking.model.Account;
 import capstone.sonnld.hairsalonbooking.model.SalonService;
+import capstone.sonnld.hairsalonbooking.model.SessionManager;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -35,13 +39,24 @@ public class BookingDetailActivity extends AppCompatActivity {
     private TextView txtBookedTime;
     private TextView txtTotalPrice;
     private TextView txtAddress;
-    private HairSalonAPI hairSalonAPI;
+
     private ArrayList<BookingDetailsDTO> bookingDetailsDTOList = new ArrayList<>();
 
+    // api
+    private HairSalonAPI hairSalonAPI;
+
+    // user detail
+    private TextView txtUsername;
+    private String mUserName;
+    private SessionManager sessionManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_booking_detail);
+
+        //init api
+        Retrofit retrofit = RetrofitClient.getInstance();
+        hairSalonAPI = retrofit.create(HairSalonAPI.class);
 
         txt_description = findViewById(R.id.txt_description2);
         txtTotalPrice = findViewById(R.id.txt_total);
@@ -49,6 +64,7 @@ public class BookingDetailActivity extends AppCompatActivity {
         txtBookedDate = findViewById(R.id.txt_booked_date);
         txtBookedTime = findViewById(R.id.txt_booked_time);
         txtAddress = findViewById(R.id.txt_address);
+        txtUsername = findViewById(R.id.txt_username);
 
         String des1 = "ÁP DỤNG KHI DÙNG DỊCH VỤ TẠI CỬA HÀNG* \n" +
                 "\n" +
@@ -75,15 +91,17 @@ public class BookingDetailActivity extends AppCompatActivity {
                 "- Mã giảm giá không có giá trị quy đổi thành tiền mặt ";
         txt_description.setText(des1);
 
+
         // get data from detail salon/ detail service activity
         Intent intent = getIntent();
         ArrayList<SalonService> salonServices =
                 (ArrayList<SalonService>) intent.getSerializableExtra("chkService");
         String bookedDate = intent.getExtras().getString("bookedDate");
         String bookedTime = intent.getExtras().getString("bookedTime");
-
         String address = intent.getExtras().getString("salonAddress");
+        String username = intent.getExtras().getString("username");
 
+        // setup value
         int totalPrice = 0;
         for (int i = 0; i < salonServices.size(); i++) {
             String price = salonServices.get(i).getPrice();
@@ -95,16 +113,13 @@ public class BookingDetailActivity extends AppCompatActivity {
         txtBookedDate.setText(bookedDate);
         txtBookedTime.setText(bookedTime);
         txtAddress.setText(address);
-
+        txtUsername.setText(username);
 
         recyclerView = findViewById(R.id.recycler_selected_service);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
         RecyclerViewSelectedServiceAdapter serviceAdapter =
                 new RecyclerViewSelectedServiceAdapter(this, salonServices);
         recyclerView.setAdapter(serviceAdapter);
-
-        Retrofit retrofit = RetrofitClient.getInstance();
-        hairSalonAPI = retrofit.create(HairSalonAPI.class);
 
         for (int i = 0; i < salonServices.size(); i++) {
             int salonServiceID = salonServices.get(i).getSalonServiceId();
@@ -124,6 +139,7 @@ public class BookingDetailActivity extends AppCompatActivity {
 
 
     }
+    
 
     public void submitBooking() {
         BookingDTO bookingDTO = new BookingDTO(1, "Sonnnnnn", "09999999", "2019-12-19", "12:12", "process", bookingDetailsDTOList);

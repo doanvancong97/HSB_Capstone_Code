@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
     private SessionManager sessionManager;
     private String mUserName;
     private ImageView imgAvatar;
-    String fullName;
+
 
 
     @Override
@@ -148,8 +148,6 @@ public class MainActivity extends AppCompatActivity {
             HashMap<String, String> user = sessionManager.getUserDetail();
             mUserName = user.get(sessionManager.getUSERNAME());
             lnWelcome.setVisibility(View.VISIBLE);
-//            txtWelcome.setText("Xin chào, " + mUserName);
-            txtWelcome.setText("Xin chào, " + fullName);
             initUserDetail();
             btn_ReLogin.setVisibility(View.GONE);
             logoutMenu.setVisible(true);
@@ -288,7 +286,7 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<Account> call, Response<Account> response) {
                 Account currentAcc = response.body();
                 String avatarUrl = currentAcc.getAvatar();
-                fullName = currentAcc.getFullname();
+                String fullName = currentAcc.getFullname();
                 Picasso.with(MainActivity.this).load(avatarUrl).into(imgAvatar);
                 txtWelcome.setText("Xin chào, " + fullName );
             }

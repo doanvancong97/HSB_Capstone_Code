@@ -1,8 +1,8 @@
 package capstone.sonnld.hairsalonbooking.model;
 
 public class GeoPoint {
-    double lat;
-    double lng;
+    private double lat;
+    private double lng;
 
     public GeoPoint(double lat, double lng) {
         this.lat = lat;

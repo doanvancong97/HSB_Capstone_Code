@@ -33,16 +33,22 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 
 import capstone.sonnld.hairsalonbooking.adapter.RecyclerViewExtraServiceAdapter;
 import capstone.sonnld.hairsalonbooking.api.HairSalonAPI;
 import capstone.sonnld.hairsalonbooking.api.RetrofitClient;
 import capstone.sonnld.hairsalonbooking.dto.BookingDetailsDTO;
+import capstone.sonnld.hairsalonbooking.model.Account;
 import capstone.sonnld.hairsalonbooking.model.SalonService;
+import capstone.sonnld.hairsalonbooking.model.SessionManager;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 
 import static capstone.sonnld.hairsalonbooking.R.drawable.button_time;
@@ -85,6 +91,10 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
     private ArrayList<SalonService> chkService = new ArrayList<>();
     private ArrayList<BookingDetailsDTO> bookingDetailsDTOList = new ArrayList<>();
 
+    // user detail
+    private String mUserName;
+    private SessionManager sessionManager;
+    String fullName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -167,22 +177,58 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
         getAllExtraService(salonId);
 
 
+        // setup user
+        sessionManager = new SessionManager(getApplicationContext());
+        if (sessionManager.isLogin()) {
+
+            HashMap<String, String> user = sessionManager.getUserDetail();
+            mUserName = user.get(sessionManager.getUSERNAME());
+            initUserDetail();
+        }
+
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // setup data for booking
 
                 chkService = extraServiceAdapter.getCheckedSalonServices();
-                Intent sendDataToBooking =
-                        new Intent(DetailServiceActivity.this, BookingDetailActivity.class);
-                sendDataToBooking.putExtra("chkService", chkService);
-                sendDataToBooking.putExtra("bookedDate", bookedDate);
-                sendDataToBooking.putExtra("bookedTime", bookedTime);
-                sendDataToBooking.putExtra("salonAddress",txtAddress.getText());
-                startActivity(sendDataToBooking);
+                if(chkService.size() == 0){
+                    Toast.makeText(DetailServiceActivity.this,"Bạn chưa chọn dịch vụ",Toast.LENGTH_LONG).show();
+                }else if(fullName == null){
+                    Toast.makeText(DetailServiceActivity.this,
+                            "Hãy đăng nhập để tiếp tục đặt lịch",Toast.LENGTH_LONG).show();
+                }else{
+                    // send data to booking detail activity
+                    Intent sendDataToBooking =
+                            new Intent(DetailServiceActivity.this, BookingDetailActivity.class);
+                    sendDataToBooking.putExtra("chkService", chkService);
+                    sendDataToBooking.putExtra("bookedDate", bookedDate);
+                    sendDataToBooking.putExtra("bookedTime", bookedTime);
+                    sendDataToBooking.putExtra("salonAddress",txtAddress.getText());
+                    sendDataToBooking.putExtra("username",fullName);
+                    startActivity(sendDataToBooking);
+                }
+
             }
         });
 
+    }
+
+    private void initUserDetail(){
+        Call<Account> call = hairSalonAPI.getUserDetail(mUserName);
+        call.enqueue(new Callback<Account>() {
+            @Override
+            public void onResponse(Call<Account> call, Response<Account> response) {
+                Account currentAcc = response.body();
+                fullName = currentAcc.getFullname();
+
+            }
+
+            @Override
+            public void onFailure(Call<Account> call, Throwable t) {
+
+            }
+        });
     }
 
     @Override
@@ -324,6 +370,8 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
 
                 linearTimePiker.addView(slot);
                 calendar.add(Calendar.MINUTE, (int) step);
+
+                // onclick select time
                 slot.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -340,8 +388,6 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
                             Button b = findViewById(slotIDisChoose);
                             b.setBackgroundResource(button_time);
                             b.setTextColor(Color.parseColor("#DB1507"));
-
-
                             slot.setBackgroundResource(R.drawable.button_time_choose);
                             slot.setTextColor(Color.WHITE);
                             isChoose = true;
