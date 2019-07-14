@@ -77,6 +77,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
     private int slotIDisChoose = 0;
     private int slotID = 0;
     private String bookedTime = "";
+    boolean slotIsChoose = false;
 
 
     private Spinner spAddress, spService;
@@ -95,6 +96,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
     private String mUserName;
     private SessionManager sessionManager;
     String fullName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -137,7 +139,6 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
                 .init();
 
         picker.setDate(new DateTime());
-
 
 
         //Receive data from view adapter
@@ -186,26 +187,33 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
             initUserDetail();
         }
 
+
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // setup data for booking
 
                 chkService = extraServiceAdapter.getCheckedSalonServices();
-                if(chkService.size() == 0){
-                    Toast.makeText(DetailServiceActivity.this,"Bạn chưa chọn dịch vụ",Toast.LENGTH_LONG).show();
-                }else if(fullName == null){
+
+                if (fullName == null) {
                     Toast.makeText(DetailServiceActivity.this,
-                            "Hãy đăng nhập để tiếp tục đặt lịch",Toast.LENGTH_LONG).show();
-                }else{
+                            "Hãy đăng nhập để tiếp tục đặt lịch!", Toast.LENGTH_LONG).show();
+                    startActivity(new Intent(DetailServiceActivity.this,LoginActivity.class));
+                } else if (chkService.size() == 0) {
+                    Toast.makeText(DetailServiceActivity.this, "Bạn chưa chọn dịch vụ!", Toast.LENGTH_LONG).show();
+
+                } else if (!isChoose) {
+                    Toast.makeText(DetailServiceActivity.this,
+                            "Bạn chưa chọn thời gian đến!", Toast.LENGTH_LONG).show();
+                } else {
                     // send data to booking detail activity
                     Intent sendDataToBooking =
                             new Intent(DetailServiceActivity.this, BookingDetailActivity.class);
                     sendDataToBooking.putExtra("chkService", chkService);
                     sendDataToBooking.putExtra("bookedDate", bookedDate);
                     sendDataToBooking.putExtra("bookedTime", bookedTime);
-                    sendDataToBooking.putExtra("salonAddress",txtAddress.getText());
-                    sendDataToBooking.putExtra("username",fullName);
+                    sendDataToBooking.putExtra("salonAddress", txtAddress.getText());
+                    sendDataToBooking.putExtra("username", fullName);
                     startActivity(sendDataToBooking);
                 }
 
@@ -214,7 +222,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
 
     }
 
-    private void initUserDetail(){
+    private void initUserDetail() {
         Call<Account> call = hairSalonAPI.getUserDetail(mUserName);
         call.enqueue(new Callback<Account>() {
             @Override
@@ -256,22 +264,20 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
         if (bookedDate.equals(dateFormat.format(today))) {
             Toast.makeText(this, "Today", Toast.LENGTH_SHORT).show();
             linearTimePiker.removeAllViews();
-            isChoose=false;
+            isChoose = false;
             generateSlotToday();
 
 
         } else {
             Toast.makeText(this, bookedDate, Toast.LENGTH_SHORT).show();
             linearTimePiker.removeAllViews();
-            isChoose=false;
+            isChoose = false;
 
             generateSlot();
         }
 
 
-
     }
-
 
 
     private void getAllExtraService(int salonId) {
@@ -320,7 +326,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
         return str.substring(0, 1).toUpperCase() + str.substring(1);
     }
 
-    public void generateSlot(){
+    public void generateSlot() {
 
 //        Date date = new Date();   // given date
 //        Calendar calendar = GregorianCalendar.getInstance(); // creates a new calendar instance
@@ -361,10 +367,10 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
                 slot.setLayoutParams(params);
                 slot.setBackgroundResource(button_time);
                 slot.setTextColor(Color.parseColor("#DB1507"));
-                if(calendar.getTime().getMinutes()<10)
+                if (calendar.getTime().getMinutes() < 10)
 
-                    minute = "0"+calendar.getTime().getMinutes();
-                else minute = calendar.getTime().getMinutes()+"";
+                    minute = "0" + calendar.getTime().getMinutes();
+                else minute = calendar.getTime().getMinutes() + "";
                 slot.setText(calendar.getTime().getHours() + ":" + minute);
 
 
@@ -405,7 +411,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
     }
 
 
-    public void generateSlotToday(){
+    public void generateSlotToday() {
 
 //        Date date = new Date();   // given date
 //        Calendar calendar = GregorianCalendar.getInstance(); // creates a new calendar instance
@@ -418,26 +424,44 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
         String[] currentHourArr = currentHour.split(":");
 
 
+        String maxSlot = "23:00";
+        String minSlot = "08:00";
+        String[] splitMaxSlot = maxSlot.split(":");
+        String[] splitMinSlot = minSlot.split(":");
 
-        String maxHour = "23:00";
-        String minHour = "";
-        String[] splitMaxHour = maxHour.split(":");
-        int maxH = Integer.parseInt(splitMaxHour[0]);
+        int maxSlotHour = Integer.parseInt(splitMaxSlot[0]);
+        int minSlotHour = Integer.parseInt(splitMinSlot[0]);
 
-        if(Integer.parseInt(currentHourArr[1])+step>=60){
-             minHour = (Integer.parseInt(currentHourArr[0])+1)+":00";
+
+        if(minSlotHour<=Integer.parseInt(currentHourArr[0])){
+            if (Integer.parseInt(currentHourArr[1]) + step >= 60) {
+                minSlot = (Integer.parseInt(currentHourArr[0]) + 1) + ":00";
+
+            } else {
+                minSlot = (Integer.parseInt(currentHourArr[0]) + ":" + (int) step);
+
+            }
+
+
+        }else {
+
+            if (Integer.parseInt(splitMinSlot[1]) + step >= 60) {
+                minSlot = (minSlotHour + 1) + ":00";
+
+            } else {
+                minSlot = (minSlotHour + ":00");
+
+            }
 
         }
-        else {
-             minHour = (Integer.parseInt(currentHourArr[0])+":"+(int)step);
-
-        }
-
-        String[] splitMinHour = minHour.split(":");
-        int minH = Integer.parseInt(splitMinHour[0]);
 
 
-        double run = (maxH - minH) / (step / 60) + Integer.parseInt(splitMaxHour[1]) / step - Integer.parseInt(splitMinHour[1]) / step;
+
+
+
+
+// number of button will generate
+        double run = (maxSlotHour - minSlotHour) / (step / 60) + Integer.parseInt(splitMaxSlot[1]) / step - Integer.parseInt(splitMinSlot[1]) / step;
 
         Calendar calendar = Calendar.getInstance();
         Calendar calendar2 = Calendar.getInstance();
@@ -445,8 +469,8 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
         SimpleDateFormat format = new SimpleDateFormat("HH:mm");
         try {
 
-            Date start = format.parse(minHour);
-            Date end = format.parse(maxHour);
+            Date start = format.parse(minSlot);
+            Date end = format.parse(maxSlot);
 
 
             calendar.setTime(start);
@@ -464,10 +488,10 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
                 slot.setLayoutParams(params);
                 slot.setBackgroundResource(button_time);
                 slot.setTextColor(Color.parseColor("#DB1507"));
-                if(calendar.getTime().getMinutes()<10)
+                if (calendar.getTime().getMinutes() < 10)
 
-                 minute = "0"+calendar.getTime().getMinutes();
-                else minute = calendar.getTime().getMinutes()+"";
+                    minute = "0" + calendar.getTime().getMinutes();
+                else minute = calendar.getTime().getMinutes() + "";
                 slot.setText(calendar.getTime().getHours() + ":" + minute);
 
 
@@ -506,7 +530,6 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
             e.printStackTrace();
         }
     }
-
 
 
 }

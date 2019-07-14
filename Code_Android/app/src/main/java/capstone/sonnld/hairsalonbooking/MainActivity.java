@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView txtService;
     private SearchView mSearchView;
 
-    MenuItem logoutMenu;
+
 
     // adapter
     private RecyclerViewFilterServiceAdapter filterServiceAdapter;
@@ -138,8 +138,7 @@ public class MainActivity extends AppCompatActivity {
 
         lnWelcome.setVisibility(View.GONE);
 
-        logoutMenu = (MenuItem) navigationview.getMenu().findItem(R.id.lbLogout);
-        logoutMenu.setVisible(false);
+
 
 
         sessionManager = new SessionManager(getApplicationContext());
@@ -150,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
             lnWelcome.setVisibility(View.VISIBLE);
             initUserDetail();
             btn_ReLogin.setVisibility(View.GONE);
-            logoutMenu.setVisible(true);
+
 
         }
 
