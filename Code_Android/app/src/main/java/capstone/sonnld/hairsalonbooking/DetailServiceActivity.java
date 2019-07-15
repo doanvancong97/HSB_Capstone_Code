@@ -417,11 +417,11 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
 //        Calendar calendar = GregorianCalendar.getInstance(); // creates a new calendar instance
 //        calendar.setTime(date);   // assigns calendar to given date
 //        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        double step = 30;
+        double step = 30; //30 mins
         DateFormat dateFormat = new SimpleDateFormat("HH:mm");
         Date date = new Date();
         String currentHour = dateFormat.format(date);
-        String[] currentHourArr = currentHour.split(":");
+        String[] spliCurrentHour = currentHour.split(":");
 
 
         String maxSlot = "23:00";
@@ -433,12 +433,16 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
         int minSlotHour = Integer.parseInt(splitMinSlot[0]);
 
 
-        if(minSlotHour<=Integer.parseInt(currentHourArr[0])){
-            if (Integer.parseInt(currentHourArr[1]) + step >= 60) {
-                minSlot = (Integer.parseInt(currentHourArr[0]) + 1) + ":00";
+        if(minSlotHour<=Integer.parseInt(spliCurrentHour[0])){
+            if (Integer.parseInt(spliCurrentHour[1]) + step >= 60) {
+                minSlot = (Integer.parseInt(spliCurrentHour[0]) + 1) + ":00";
+                minSlotHour = Integer.parseInt(spliCurrentHour[0]);
+                splitMinSlot = spliCurrentHour;
 
             } else {
-                minSlot = (Integer.parseInt(currentHourArr[0]) + ":" + (int) step);
+                minSlot = (Integer.parseInt(spliCurrentHour[0]) + ":" + (int) step);
+                minSlotHour = Integer.parseInt(spliCurrentHour[0]);
+
 
             }
 

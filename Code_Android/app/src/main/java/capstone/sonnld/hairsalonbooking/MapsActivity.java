@@ -171,15 +171,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         salon_address.setText(marker.getTag().toString());
                         lnDeatailOfMarker.setVisibility(View.VISIBLE);
 
-                        salon_service_name.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                Toast.makeText(MapsActivity.this, "chỉ đường", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
-                                        Uri.parse("geo:0,0?q=37.423156,-122.084917 (" + "hihi" + ")"));
-                                startActivity(intent);
-                            }
-                        });
+//                        salon_service_name.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View view) {
+//                                Toast.makeText(MapsActivity.this, "chỉ đường", Toast.LENGTH_SHORT).show();
+//                                Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+//                                        Uri.parse("geo:0,0?q=37.423156,-122.084917 (" + "hihi" + ")"));
+//                                startActivity(intent);
+//                            }
+//                        });
 
 
 

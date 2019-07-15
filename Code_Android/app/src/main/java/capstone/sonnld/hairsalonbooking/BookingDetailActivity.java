@@ -1,6 +1,9 @@
 package capstone.sonnld.hairsalonbooking;
 
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -13,8 +16,10 @@ import android.widget.Toast;
 import com.borjabravo.readmoretextview.ReadMoreTextView;
 import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import capstone.sonnld.hairsalonbooking.adapter.RecyclerViewSelectedServiceAdapter;
 import capstone.sonnld.hairsalonbooking.api.HairSalonAPI;
@@ -22,6 +27,7 @@ import capstone.sonnld.hairsalonbooking.api.RetrofitClient;
 import capstone.sonnld.hairsalonbooking.dto.BookingDTO;
 import capstone.sonnld.hairsalonbooking.dto.BookingDetailsDTO;
 import capstone.sonnld.hairsalonbooking.model.Account;
+import capstone.sonnld.hairsalonbooking.model.GeoPoint;
 import capstone.sonnld.hairsalonbooking.model.SalonService;
 import capstone.sonnld.hairsalonbooking.model.SessionManager;
 import retrofit2.Call;
@@ -44,6 +50,7 @@ public class BookingDetailActivity extends AppCompatActivity {
 
     // api
     private HairSalonAPI hairSalonAPI;
+    TextView txtDirection;
 
     // user detail
     private TextView txtUsername;
@@ -53,6 +60,7 @@ public class BookingDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_booking_detail);
+        txtDirection = findViewById(R.id.txtDirection);
 
         //init api
         Retrofit retrofit = RetrofitClient.getInstance();
@@ -98,7 +106,7 @@ public class BookingDetailActivity extends AppCompatActivity {
                 (ArrayList<SalonService>) intent.getSerializableExtra("chkService");
         String bookedDate = intent.getExtras().getString("bookedDate");
         String bookedTime = intent.getExtras().getString("bookedTime");
-        String address = intent.getExtras().getString("salonAddress");
+        final String address = intent.getExtras().getString("salonAddress");
         String username = intent.getExtras().getString("username");
 
         // setup value
@@ -114,6 +122,22 @@ public class BookingDetailActivity extends AppCompatActivity {
         txtBookedTime.setText(bookedTime);
         txtAddress.setText(address);
         txtUsername.setText(username);
+
+        txtDirection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                                                Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+//                                        Uri.parse("geo:0,0?q="+getLocationFromAddress(address).getLat()+","+getLocationFromAddress (address).getLng() + "hihi" + ")"));
+//                                startActivity(intent);
+
+
+                Uri gmmIntentUri = Uri.parse("google.navigation:q="+address);
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                startActivity(mapIntent);
+            }
+        });
+
 
         recyclerView = findViewById(R.id.recycler_selected_service);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
@@ -174,5 +198,29 @@ public class BookingDetailActivity extends AppCompatActivity {
 
     public void unBooking(View view) {
         finish();
+    }
+
+    public GeoPoint getLocationFromAddress(String strAddress) {
+
+        Geocoder coder = new Geocoder(this);
+        List<Address> address;
+        GeoPoint p1 = null;
+
+        try {
+            address = coder.getFromLocationName(strAddress, 5);
+            if (address == null) {
+                return null;
+            }
+            Address location = address.get(0);
+            location.getLatitude();
+            location.getLongitude();
+
+            p1 = new GeoPoint(location.getLatitude(), location.getLongitude());
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return p1;
     }
 }
