@@ -14,7 +14,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,38 +47,44 @@ import capstone.sonnld.hairsalonbooking.api.HairSalonAPI;
 import capstone.sonnld.hairsalonbooking.api.RetrofitClient;
 import capstone.sonnld.hairsalonbooking.model.GeoPoint;
 import capstone.sonnld.hairsalonbooking.model.SalonService;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
-    GoogleMap mMap;
-    FusedLocationProviderClient fusedLocationProviderClient;
-    PlacesClient placesClient;
-    Location mLastKnownLocation;
-    LocationCallback locationCallback;
-    View mapView;
-    final float DEFAULT_ZOOM = 15;
-    RippleBackground rp_bg;
+    private GoogleMap mMap;
+
+    private RippleBackground rp_bg;
     private HairSalonAPI hairSalonAPI;
     //
     private ArrayList<SalonService> salonServices = new ArrayList<>();
 
-    TextView salon_service_name;
-    LinearLayout lnDeatailOfMarker;
-    TextView salon_address;
+    private TextView salon_service_name;
+    private LinearLayout lnDeatailOfMarker;
+    private TextView salon_address;
+    private ImageView salon_img;
 
-    String address;
+    private String address;
+
+    private CardView cardViewSalonDetail;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         rp_bg = findViewById(R.id.rp_bg);
-        salon_service_name= findViewById(R.id.salon_service_name);
+        salon_service_name = findViewById(R.id.salon_service_name);
         lnDeatailOfMarker = findViewById(R.id.lnDeatailOfMarker);
         salon_address = findViewById(R.id.salon_address);
+        cardViewSalonDetail = findViewById(R.id.card_view_salon_detail);
+
 
         //init retro
         Retrofit retrofit = RetrofitClient.getInstance();
         hairSalonAPI = retrofit.create(HairSalonAPI.class);
+        salon_img = findViewById(R.id.salon_img);
 
         // get data from main activity
         Intent intent = getIntent();
@@ -92,8 +100,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         mMap = googleMap;
-        MapStyleOptions mapStyleOptions=MapStyleOptions.loadRawResourceStyle(this,R.raw.style_maps);
-
+        MapStyleOptions mapStyleOptions = MapStyleOptions.loadRawResourceStyle(this, R.raw.style_maps);
 
 
         mMap.setMapStyle(mapStyleOptions);
@@ -116,19 +123,18 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             for (int i = 0; i < salonServices.size(); i++) {
                 address = salonServices.get(i).getSalon().getAddress().getStreetNumber() + ", "
                         + salonServices.get(i).getSalon().getAddress().getStreet();
-                 String salonName = salonServices.get(i).getSalon().getName();
-                 int salonId = salonServices.get(i).getSalon().getSalonId();
+                String salonName = salonServices.get(i).getSalon().getName();
+                int salonId = salonServices.get(i).getSalon().getSalonId();
                 String logoUrl = salonServices.get(i).getSalon().getLogoUrl();
                 loc = getLocationFromAddress(address);
                 point = new LatLng(loc.getLat(), loc.getLng());
 
-                 MarkerOptions markerOptions = new MarkerOptions();
+                MarkerOptions markerOptions = new MarkerOptions();
 
                 markerOptions.position(point);
 //                markerOptions.snippet(address);
                 markerOptions.title(salonName);
                 markerOptions.snippet(salonId + "");
-
 
 
                 int height = 150;
@@ -157,19 +163,47 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 mMap.addMarker(markerOptions).setTag(address);
 
 
+
                 mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                     @Override
-                    public boolean onMarkerClick(Marker marker) {
+                    public boolean onMarkerClick(final Marker marker) {
 //                        Toast.makeText(MapsActivity.this, "Đang chuyển tới trang chủ của " + marker.getTitle() + "...", Toast.LENGTH_SHORT).show();
 //                        Intent intent = new Intent(MapsActivity.this, DetailSalonActivity.class);
 //                        intent.putExtra("SalonId", Integer.parseInt(marker.getSnippet()));
 //                        intent.putExtra("SalonName", marker.getTitle());
 
+//                        markerSalon=marker;
 
 
-                        salon_service_name.setText(marker.getTitle());
-                        salon_address.setText(marker.getTag().toString());
-                        lnDeatailOfMarker.setVisibility(View.VISIBLE);
+                        Toast.makeText(MapsActivity.this, marker.getSnippet(), Toast.LENGTH_SHORT).show();
+                            int id = Integer.parseInt(marker.getSnippet());
+
+                            getSalonById(id);
+
+
+                            //String imgUrl = salonServices.get(i).getSalon().getUrl();
+                            salon_service_name.setText(marker.getTitle());
+                            salon_address.setText(marker.getTag().toString());
+                            //Picasso.with(MapsActivity.this).load(imgUrl).into(salon_img);
+                            lnDeatailOfMarker.setVisibility(View.VISIBLE);
+
+                        cardViewSalonDetail.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+
+                                Toast.makeText(MapsActivity.this, "Đang chuyển tới trang chủ của " + marker.getTitle() + "...", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(MapsActivity.this, DetailSalonActivity.class);
+                                intent.putExtra("SalonId", Integer.parseInt(marker.getSnippet()));
+                                intent.putExtra("SalonName", marker.getTitle());
+                                startActivity(intent);
+                                finish();
+
+
+                            }
+                        });
+
+
+
 
 //                        salon_service_name.setOnClickListener(new View.OnClickListener() {
 //                            @Override
@@ -182,8 +216,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 //                        });
 
 
-
-
 //                        startActivity(intent);
 //                        finish();
                         return true;
@@ -194,8 +226,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
 
-            }
 
+
+
+            }
 
 
             new Handler().postDelayed(new Runnable() {
@@ -224,6 +258,39 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 //                .strokeColor(Color.RED));
 
 
+    }
+
+    private void getSalonById(int salonId){
+        hairSalonAPI.getSalonServiceBySalonId(salonId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<ArrayList<SalonService>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(ArrayList<SalonService> services) {
+                        String imgUrl = services.get(0).getSalon().getUrl();
+                        String address = services.get(0).getSalon().getAddress().getStreetNumber() + ", "
+                                + services.get(0).getSalon().getAddress().getStreet();
+                        String logUrl = services.get(0).getSalon().getLogoUrl();
+
+                        Picasso.with(MapsActivity.this).load(imgUrl).into(salon_img);
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
     public GeoPoint getLocationFromAddress(String strAddress) {

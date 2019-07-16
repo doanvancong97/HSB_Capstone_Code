@@ -80,7 +80,8 @@ public class UserDetailActivity extends AppCompatActivity {
     public void clicktoLogout(View view) {
 
         sessionManager.logout();
-        finish();
         startActivity(new Intent(this,MainActivity.class));
+        finish();
+
     }
 }

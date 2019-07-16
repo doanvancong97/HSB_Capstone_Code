@@ -42,7 +42,7 @@
         android:layout_alignParentBottom="true"
         android:visibility="gone">
 
-        <include layout="@layout/card_view_item_filter_salon_service" />
+        <include layout="@layout/card_view_item_salon_detail" />
 
 
 

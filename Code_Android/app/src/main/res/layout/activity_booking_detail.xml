@@ -128,7 +128,7 @@
                     android:paddingLeft="100dp"
                     android:text="  Chỉ đường"
                     android:textColor="#067011"
-                    android:drawableLeft="@drawable/icons8_east_direction_30px"
+                    android:drawableLeft="@drawable/compass"
                     android:textSize="50px"
                     />
 

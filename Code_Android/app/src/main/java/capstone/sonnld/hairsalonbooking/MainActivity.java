@@ -61,10 +61,10 @@ public class MainActivity extends AppCompatActivity {
     // api
     private HairSalonAPI hairSalonAPI;
 
-    Button btn_ReLogin;
-    LinearLayout lnWelcome;
-    TextView txtWelcome;
-    NavigationView navigationview;
+    private Button btn_ReLogin;
+    private LinearLayout lnWelcome;
+    private TextView txtWelcome;
+    private NavigationView navigationview;
 
     // recycler
     private RecyclerView recyclerView;
@@ -157,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
         btn_ReLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+
                 sessionManager = new SessionManager(getApplicationContext());
                 if (!sessionManager.isLogin()) {
                     Intent i = new Intent(MainActivity.this, LoginActivity.class);

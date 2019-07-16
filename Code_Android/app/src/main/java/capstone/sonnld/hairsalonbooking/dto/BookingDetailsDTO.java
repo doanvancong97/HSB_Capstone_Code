@@ -1,11 +1,11 @@
 package capstone.sonnld.hairsalonbooking.dto;
 
 public class BookingDetailsDTO {
-    Integer id;
-    Integer salon_service_id;
-    Integer review_id;
-    String serviceName;
-    String status;// process
+    private Integer id;
+    private Integer salon_service_id;
+    private Integer review_id;
+    private String serviceName;
+    private String status;// process
 
     public BookingDetailsDTO(Integer salon_service_id, Integer review_id, String serviceName, String status) {
         this.salon_service_id = salon_service_id;

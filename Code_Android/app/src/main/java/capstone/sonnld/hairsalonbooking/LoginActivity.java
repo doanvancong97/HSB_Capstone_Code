@@ -22,17 +22,17 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class LoginActivity extends AppCompatActivity {
-    EditText edtUsername, edtPassword;
-    TextView txtResult;
-    ProgressBar loading;
-    SessionManager sessionManager;
+    private EditText edtUsername, edtPassword;
+    private TextView txtResult;
+    private ProgressBar loading;
+    private SessionManager sessionManager;
 
     // api
     private HairSalonAPI hairSalonAPI;
 
     //login
 
-    Account account;
+    private Account account;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

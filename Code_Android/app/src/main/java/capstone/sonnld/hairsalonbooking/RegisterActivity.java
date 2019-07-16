@@ -13,9 +13,9 @@ import android.widget.Toast;
 public class RegisterActivity extends AppCompatActivity {
 
 
-    EditText edtName, edtUsername, edtPassword, edtPhoneNumber, edtConfirmPassword;
-    ProgressBar loading;
-    TextView txtResult;
+    private EditText edtName, edtUsername, edtPassword, edtPhoneNumber, edtConfirmPassword;
+    private ProgressBar loading;
+    private TextView txtResult;
 
 
     @Override

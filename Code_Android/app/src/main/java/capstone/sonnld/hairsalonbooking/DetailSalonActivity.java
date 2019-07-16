@@ -52,8 +52,8 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
     private RecyclerView recyclerView;
     private ImageView imgThumb;
     private ImageView imgLogo;
-    DatePickerTimeline timeline;
-    LinearLayout linearTimePiker;
+
+    private LinearLayout linearTimePiker;
 
     //Button time
     private boolean isChoose = false;
@@ -62,11 +62,8 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
     private String bookedTime="";
 
 
-    private Spinner spAddress, spService;
-    private static final String[] listAddress =
-            {"1084 Quang Trung, F.12, Quận Gò Vấp, TP. HCM", "18 Nguyễn Ảnh Thủ, F. Trung Mỹ Tây, Quận 12, TP. HCM", "30 Nguyễn Trãi, F.10,  Quận 10"};
 
-    private RecyclerView recyclerViewTimeSlot;
+
 
     private RecyclerViewExtraServiceAdapter extraServiceAdapter;
     private String bookedDate = "";
