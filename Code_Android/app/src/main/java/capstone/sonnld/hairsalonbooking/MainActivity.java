@@ -191,6 +191,12 @@ public class MainActivity extends AppCompatActivity {
         // setup search view
 
         mSearchView = findViewById(R.id.search_view);
+        mSearchView.setIconifiedByDefault(true);
+        mSearchView.setFocusable(true);
+        mSearchView.setIconified(false);
+        mSearchView.requestFocusFromTouch();
+
+
         homeLayout = findViewById(R.id.home_layout);
         homeLayout.requestFocus();
         searchResultLayout = findViewById(R.id.show_search_result_layout);
