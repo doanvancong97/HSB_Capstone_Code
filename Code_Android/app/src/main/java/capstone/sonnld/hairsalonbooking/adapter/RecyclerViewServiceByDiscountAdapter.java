@@ -119,14 +119,6 @@ public class RecyclerViewServiceByDiscountAdapter extends RecyclerView.Adapter<R
             }
         });
 
-        holder.txtSalonServiceName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(mContext,salonServices.get(position).getService().getServiceName(),Toast.LENGTH_LONG).show();
-            }
-        });
-
-
     }
 
     public String getSalePrice(String price,String discountValue){

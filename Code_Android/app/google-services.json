@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1008271255767",
+    "firebase_url": "https://codeandroid-b6876.firebaseio.com",
+    "project_id": "codeandroid-b6876",
+    "storage_bucket": "codeandroid-b6876.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1008271255767:android:93399c949a7e6536",
+        "android_client_info": {
+          "package_name": "capstone.sonnld.hairsalonbooking"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1008271255767-thpift5adef0qck6eb7253t57erd9bq0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "capstone.sonnld.hairsalonbooking",
+            "certificate_hash": "c6dc5d5d21e51989f7a587f7441c82da213eff94"
+          }
+        },
+        {
+          "client_id": "1008271255767-aheckhbao84q0ld35fjcql1k2q0vvrt7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAmqmMQCF-J7K2yZ9R_vqDvoL6JsCm39N0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1008271255767-aheckhbao84q0ld35fjcql1k2q0vvrt7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

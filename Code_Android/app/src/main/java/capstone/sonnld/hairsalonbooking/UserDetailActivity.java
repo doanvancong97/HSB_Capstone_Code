@@ -29,6 +29,11 @@ public class UserDetailActivity extends AppCompatActivity {
     private String fullname;
     private ImageView imgAvatar;
     private TextView txtUsername;
+    private TextView txtEmail;
+    private TextView txtPhone;
+    private Account currentAcc;
+
+    // session
     private SessionManager sessionManager;
 
     @Override
@@ -45,11 +50,12 @@ public class UserDetailActivity extends AppCompatActivity {
         //
         imgAvatar = findViewById(R.id.img_avatar);
         txtUsername = findViewById(R.id.txt_username);
+        txtEmail = findViewById(R.id.txt_email);
+        txtPhone = findViewById(R.id.txt_phone);
 
-        // get data from main activity
+        // get data from main activity, UpdateProfileActivity
         Intent intent = getIntent();
         username = intent.getExtras().getString("username");
-
         initUserDetail();
 
 
@@ -60,12 +66,15 @@ public class UserDetailActivity extends AppCompatActivity {
         accountCall.enqueue(new Callback<Account>() {
             @Override
             public void onResponse(Call<Account> call, Response<Account> response) {
-                Account currentAcc = response.body();
+                currentAcc = response.body();
                 String avatarUrl = currentAcc.getAvatar();
+                String email = currentAcc.getEmail();
+                String phoneNumer = currentAcc.getPhoneNumber();
                 fullname = currentAcc.getFullname();
                 Picasso.with(UserDetailActivity.this).load(avatarUrl).into(imgAvatar);
                 txtUsername.setText(fullname);
-
+                txtEmail.setText(email);
+                txtPhone.setText(phoneNumer);
             }
 
             @Override
@@ -83,5 +92,14 @@ public class UserDetailActivity extends AppCompatActivity {
         startActivity(new Intent(this,MainActivity.class));
         finish();
 
+    }
+
+    public void clickToUpdateProfile(View view) {
+
+        //send data to UpdateProfileActivity
+        Intent intent = new Intent(this,UpdateProfileActivity.class);
+        intent.putExtra("UserDetail",currentAcc);
+        startActivity(intent);
+        finish();
     }
 }

@@ -35,4 +35,10 @@ public interface HairSalonAPI {
 
     @POST("login")
     Call<Void> checkLogin(@Body Account account);
+
+    @POST("users/{id}")
+    Call<Void> updateUser(@Path("id") int id, @Body Account account);
+
+    @POST("sign-up")
+    Call<Void> registerUser(@Body Account account);
 }

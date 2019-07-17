@@ -15,7 +15,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:label">
-        <activity android:name=".UserDetailActivity"></activity>
+        <activity android:name=".UpdateProfileActivity"></activity>
+        <activity android:name=".UserDetailActivity" />
         <activity android:name=".DetailSalonActivity" />
 
         <meta-data

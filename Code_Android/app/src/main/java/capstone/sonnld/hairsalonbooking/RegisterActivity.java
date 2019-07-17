@@ -10,12 +10,29 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import capstone.sonnld.hairsalonbooking.api.HairSalonAPI;
+import capstone.sonnld.hairsalonbooking.api.RetrofitClient;
+import capstone.sonnld.hairsalonbooking.model.Account;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+
 public class RegisterActivity extends AppCompatActivity {
 
 
-    private EditText edtName, edtUsername, edtPassword, edtPhoneNumber, edtConfirmPassword;
+    private EditText edtName;
+    private EditText edtUsername;
+    private EditText edtPassword;
+    private EditText edtPhoneNumber;
+    private EditText edtConfirmPassword;
+    private EditText edtEmail;
     private ProgressBar loading;
     private TextView txtResult;
+
+    // api
+    private HairSalonAPI hairSalonAPI;
+
 
 
     @Override
@@ -23,44 +40,77 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        //init api
+        Retrofit retrofit = RetrofitClient.getInstance();
+        hairSalonAPI = retrofit.create(HairSalonAPI.class);
+
         edtName = findViewById(R.id.edtName);
         edtUsername = findViewById(R.id.edtUsername);
         edtPassword = findViewById(R.id.edtPassword);
         edtPhoneNumber = findViewById(R.id.edtPhoneNumber);
         edtConfirmPassword = findViewById(R.id.edtConfirmPassword);
+        edtEmail = findViewById(R.id.edt_email);
         loading = findViewById(R.id.loading);
         txtResult = findViewById(R.id.txtResult);
-
-
     }
 
 
+    private void registerUser(Account account){
+        Call<Void> call = hairSalonAPI.registerUser(account);
+
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if(response.code() == 200){
+                    Toast.makeText(RegisterActivity.this,
+                            "Register OK", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
+            }
+        });
+    }
+
     public void clickToRegister(View view) {
 
-        String name = edtName.getText().toString();
+        String fullname = edtName.getText().toString();
         String username = edtUsername.getText().toString();
         String phone = edtPhoneNumber.getText().toString();
         String password = edtPassword.getText().toString();
         String confirmPassword = edtConfirmPassword.getText().toString();
+        String email = edtEmail.getText().toString();
 
 
-        if (edtName.getText().toString().isEmpty()) {
+        if (fullname.isEmpty()) {
             edtName.setError("Nhập Tên");
         }
-        if (edtUsername.getText().toString().isEmpty()) {
+        if (username.isEmpty()) {
             edtUsername.setError("Nhập username");
         }
-        if (edtPhoneNumber.getText().toString().isEmpty()) {
+        if (phone.isEmpty()) {
             edtPhoneNumber.setError("Nhập số điện thoại");
         }
-        if (edtPassword.getText().toString().isEmpty()) {
+        if (password.isEmpty()) {
             edtPassword.setError("Nhập mật khẩu");
         }
-        if (edtConfirmPassword.getText().toString().isEmpty()) {
+        if (email.isEmpty()) {
+            edtEmail.setError("Nhập email");
+        }
+        if (confirmPassword.isEmpty()) {
             edtConfirmPassword.setError("Nhập mật khẩu xác nhận");
+        }else if(!confirmPassword.equals(password)){
+            edtConfirmPassword.setError("Mật khẩu xác nhận chưa đúng");
         }
 
-        if(!edtName.getText().toString().isEmpty() && !edtUsername.getText().toString().isEmpty() && !edtPhoneNumber.getText().toString().isEmpty() &&!edtPassword.getText().toString().isEmpty() && !edtConfirmPassword.getText().toString().isEmpty() ){
+        if(edtName.getError() == null
+                && edtUsername.getError() == null
+                && edtPhoneNumber.getError() == null
+                && edtPassword.getError() == null
+                && edtConfirmPassword.getError() == null
+                && edtEmail.getError() == null ){
             loading.setVisibility(View.VISIBLE);
             final Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
@@ -71,23 +121,18 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             }, 3000);
 
+            Account account = new Account(username,password,fullname,email,phone);
+            registerUser(account);
 
             Toast.makeText(this, "Đăng kí thành công", Toast.LENGTH_SHORT).show();
-
-
-            Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-            intent.putExtra("username", username);
+            Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
             startActivity(intent);
+            finish();
 
         }else {
 
             txtResult.setText("Vui lòng nhập đầy đủ thông tin!");
-
         }
-
-
-
-
 
     }
 

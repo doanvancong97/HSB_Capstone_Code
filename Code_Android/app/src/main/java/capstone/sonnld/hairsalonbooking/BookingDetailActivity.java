@@ -126,10 +126,6 @@ public class BookingDetailActivity extends AppCompatActivity {
         txtDirection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                                                Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
-//                                        Uri.parse("geo:0,0?q="+getLocationFromAddress(address).getLat()+","+getLocationFromAddress (address).getLng() + "hihi" + ")"));
-//                                startActivity(intent);
-
 
                 Uri gmmIntentUri = Uri.parse("google.navigation:q="+address);
                 Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);

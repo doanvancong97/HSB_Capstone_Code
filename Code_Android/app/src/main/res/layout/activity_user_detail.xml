@@ -62,6 +62,40 @@
             android:layout_weight="1">
 
             <TextView
+                android:id="@+id/txt_email"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/my_text_view_bg"
+                android:drawableLeft="@drawable/envelope"
+                android:drawablePadding="20dp"
+                android:gravity="center|left"
+                android:text="Email"
+                android:textColor="@color/black"
+                android:textSize="20dp" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/txt_phone"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/my_text_view_bg"
+                android:drawableLeft="@drawable/smartphone"
+                android:drawablePadding="20dp"
+                android:gravity="center|left"
+                android:text="Số điện thoại"
+                android:textColor="@color/black"
+                android:textSize="20dp" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/my_text_view_bg"
@@ -70,7 +104,9 @@
                 android:gravity="center|left"
                 android:text="Sửa profile"
                 android:textColor="@color/black"
-                android:textSize="20dp" />
+                android:textSize="20dp"
+                android:onClick="clickToUpdateProfile"
+                />
         </LinearLayout>
 
         <LinearLayout
