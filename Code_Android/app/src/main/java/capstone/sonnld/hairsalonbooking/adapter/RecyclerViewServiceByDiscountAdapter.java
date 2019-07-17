@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -80,7 +79,7 @@ public class RecyclerViewServiceByDiscountAdapter extends RecyclerView.Adapter<R
         salonAddress = salonServices.get(position).getSalon().getAddress().getStreetNumber() + ", "
                 + salonServices.get(position).getSalon().getAddress().getStreet();
         saleValue = " - " + salonServices.get(position).getDiscount().getDiscountValue() + "%";
-        imgUrl = salonServices.get(position).getSalon().getUrl();
+        imgUrl = salonServices.get(position).getThumbUrl();
         price = salonServices.get(position).getPrice();
         discountValue = salonServices.get(position).getDiscount().getDiscountValue();
         String salonName = salonServices.get(position).getSalon().getName();
@@ -92,9 +91,9 @@ public class RecyclerViewServiceByDiscountAdapter extends RecyclerView.Adapter<R
         holder.txtSalonServiceName.setText(uppercaseFirstLetter(serviceName));
         holder.txtSalonAddress.setText(salonAddress);
         holder.txtSaleValue.setText(saleValue);
-        Picasso.with(mContext).
-                load(imgUrl)
-                .into(holder.imgSalonThumb);
+        Picasso.with(mContext)
+                .load(imgUrl)
+                .into(holder.imgServiceThumb);
 
 
         // event when tap on a item
@@ -147,7 +146,7 @@ public class RecyclerViewServiceByDiscountAdapter extends RecyclerView.Adapter<R
         TextView txtSaleValue;
         TextView txtServicePrice;
         TextView txtServiceSalePrice;
-        ImageView imgSalonThumb;
+        ImageView imgServiceThumb;
         TextView txtSalonName;
         CardView cardView;
 
@@ -160,7 +159,7 @@ public class RecyclerViewServiceByDiscountAdapter extends RecyclerView.Adapter<R
             txtServiceSalePrice = itemView.findViewById(R.id.txt_service_sale_price);
             txtSalonAddress = itemView.findViewById(R.id.salon_address);
             txtSaleValue = itemView.findViewById(R.id.txt_sale_value);
-            imgSalonThumb = itemView.findViewById(R.id.salon_img);
+            imgServiceThumb = itemView.findViewById(R.id.salon_img);
             cardView = itemView.findViewById(R.id.card_view_salon_service);
 
             txtServicePrice.setPaintFlags(txtServicePrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);

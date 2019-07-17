@@ -54,7 +54,7 @@ public class RecyclerViewSelectedServiceAdapter extends RecyclerView.Adapter<Rec
         holder.imgIcon.setImageResource(R.drawable.kid);
 //        Picasso.with(mContext).
 //                load(imgUrl)
-//                .into(holder.imgSalonThumb);
+//                .into(holder.imgServiceThumb);
 
 
         // event when tap on a item
