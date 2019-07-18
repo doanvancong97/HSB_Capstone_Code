@@ -70,6 +70,9 @@ public class UpdateProfileActivity extends AppCompatActivity {
 
         btnCancel = findViewById(R.id.btn_cancel);
         btnChooseFile = findViewById(R.id.btn_choose_file);
+
+
+
         btnSave = findViewById(R.id.btn_save);
 
         edtEmail = findViewById(R.id.edt_email);
@@ -103,11 +106,26 @@ public class UpdateProfileActivity extends AppCompatActivity {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(uploadTask == null){
-                    String fullName = edtUsername.getText().toString();
-                    String phone = edtPhoneNumber.getText().toString();
-                    String email = edtEmail.getText().toString();
-                    Account newAccount = new Account(fullName, email, phone, imgUrl);
+                String fullName = edtUsername.getText().toString();
+                String phone = edtPhoneNumber.getText().toString();
+                String email = edtEmail.getText().toString();
+                if(uploadTask != null){
+                    if(uploadTask.isInProgress()){
+                        Toast.makeText(UpdateProfileActivity.this,
+                                "Đang tải hình ảnh, xin vui lòng chờ đợi", Toast.LENGTH_SHORT).show();
+                    }else{
+
+                        Account newAccount = new Account(fullName, email, phone, imgUrl);
+                        updateUserDetail(newAccount);
+                        Toast.makeText(UpdateProfileActivity.this,
+                                "Cập nhật profile thành công", Toast.LENGTH_SHORT).show();
+                        Intent saveIntent = new Intent(UpdateProfileActivity.this,UserDetailActivity.class);
+                        saveIntent.putExtra("username",account.getUsername());
+                        startActivity(saveIntent);
+                        finish();
+                    }
+                }else {
+                    Account newAccount = new Account(fullName, email, phone);
                     updateUserDetail(newAccount);
                     Toast.makeText(UpdateProfileActivity.this,
                             "Cập nhật profile thành công", Toast.LENGTH_SHORT).show();
@@ -115,11 +133,8 @@ public class UpdateProfileActivity extends AppCompatActivity {
                     saveIntent.putExtra("username",account.getUsername());
                     startActivity(saveIntent);
                     finish();
-
-                }else if(uploadTask.isInProgress()){
-                    Toast.makeText(UpdateProfileActivity.this,
-                            "Đang tải hình ảnh, xin vui lòng chờ đợi", Toast.LENGTH_SHORT).show();
                 }
+
 
             }
         });
@@ -165,10 +180,9 @@ public class UpdateProfileActivity extends AppCompatActivity {
 
     private void uploadFile() {
         if (imgUri != null) {
-            // complete upload path( ex: uploads/12312312.jpg )
+            // complete upload path( ex: AvatarImages/12312312.jpg )
             StorageReference fileReference = storageReference.child(System.currentTimeMillis()
                     + "." + getFileExtension(imgUri));
-
 
             uploadTask = fileReference.putFile(imgUri)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -181,8 +195,8 @@ public class UpdateProfileActivity extends AppCompatActivity {
                                     progressBar.setProgress(0);
                                 }
                             }, 5000);
-                            Toast.makeText(UpdateProfileActivity.this,
-                                    "Tải ảnh thành công", Toast.LENGTH_LONG).show();
+//                            Toast.makeText(UpdateProfileActivity.this,
+//                                    "Tải ảnh thành công", Toast.LENGTH_LONG).show();
                             progressBar.setVisibility(View.GONE);
                             Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
                             // wait until url task is done
@@ -211,7 +225,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
                     });
         } else {
 //            Toast.makeText(UpdateProfileActivity.this, "No file is selected", Toast.LENGTH_LONG).show();
-            imgUrl = account.getAvatar();
+//            imgUrl = account.getAvatar();
         }
     }
 

@@ -102,4 +102,8 @@ public class UserDetailActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+
+    public void clickToChangePassword(View view) {
+
+    }
 }

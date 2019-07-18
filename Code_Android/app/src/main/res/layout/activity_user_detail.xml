@@ -123,7 +123,10 @@
                 android:gravity="center|left"
                 android:text="Đổi mật khẩu"
                 android:textColor="@color/black"
-                android:textSize="20dp" />
+                android:textSize="20dp"
+                android:clickable="true"
+                android:onClick="clickToChangePassword"
+                />
         </LinearLayout>
 
         <LinearLayout
