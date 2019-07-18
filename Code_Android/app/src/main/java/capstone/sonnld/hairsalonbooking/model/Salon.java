@@ -39,6 +39,18 @@ public class Salon implements Serializable {
     @Expose
     private List<Service> services = null;
 
+    @SerializedName("description")
+    @Expose
+    private String description;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public Integer getSalonId() {
         return salonId;
     }

@@ -52,29 +52,7 @@ public class RecyclerViewServiceByDiscountAdapter extends RecyclerView.Adapter<R
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
         //show item
-        des = "ÁP DỤNG KHI DÙNG DỊCH VỤ TẠI CỬA HÀNG* \n" +
-                "\n" +
-                "- Giảm 20% tổng hóa đơn áp dụng cho tất cả các dịch vụ \n" +
-                "- Áp dụng cho khách hàng nữ \n" +
-                "- Mỗi mã ưu đãi đổi được nhiều suất trong suốt chương trình \n" +
-                "- Khách hàng có thể lấy nhiều mã trong suốt chương trình \n" +
-                "\n" +
-                "THỜI GIAN ÁP DỤNG \n" +
-                "- Khung giờ: 9h30 - 19h00\t\n" +
-                "- Áp dụng tất cả các ngày trong tuần \n" +
-                "- Không áp dụng các ngày lễ, Tết: 30/4, 1/5 \n" +
-                "\n" +
-                "Chi tiết địa điểm xem tại \"Điểm áp dụng\" \n" +
-                "\n" +
-                "Vui lòng bấm XÁC NHẬN ĐẶT CHỖ để nhận mã giảm giá \n" +
-                "\n" +
-                "LƯU Ý \n" +
-                "- Chương trình chỉ áp dụng với khách dùng dịch vụ tại cửa hàng \n" +
-                "- Không áp dụng đồng thời với các chương trình khác của MIA.Nails & Cafe \n" +
-                "- Không áp dụng phụ thu \n" +
-                "- Ưu đãi chưa bao gồm VAT \n" +
-                "- Khách hàng được phép đến sớm hoặc muộn hơn 15 phút so với giờ hẹn đến \n" +
-                "- Mã giảm giá không có giá trị quy đổi thành tiền mặt ";
+        des = salonServices.get(position).getSalon().getDescription();
         serviceName = salonServices.get(position).getService().getServiceName();
         salonAddress = salonServices.get(position).getSalon().getAddress().getStreetNumber() + ", "
                 + salonServices.get(position).getSalon().getAddress().getStreet();
