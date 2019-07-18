@@ -139,7 +139,6 @@ public class RecyclerViewServiceByDiscountAdapter extends RecyclerView.Adapter<R
             txtSaleValue = itemView.findViewById(R.id.txt_sale_value);
             imgServiceThumb = itemView.findViewById(R.id.salon_img);
             cardView = itemView.findViewById(R.id.card_view_salon_service);
-
             txtServicePrice.setPaintFlags(txtServicePrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         }
     }

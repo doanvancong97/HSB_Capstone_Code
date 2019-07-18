@@ -104,6 +104,16 @@ public class UserDetailActivity extends AppCompatActivity {
     }
 
     public void clickToChangePassword(View view) {
+        Intent intent = new Intent(this,ChangePasswordActivity.class);
+        intent.putExtra("UserDetail",currentAcc);
+        startActivity(intent);
+        finish();
+    }
 
+    public void clickToGoToMainA(View view) {
+        Intent intent = new Intent(this,MainActivity.class);
+        intent.putExtra("username",username);
+        startActivity(intent);
+        finish();
     }
 }

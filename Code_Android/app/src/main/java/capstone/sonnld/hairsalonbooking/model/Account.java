@@ -79,6 +79,10 @@ public class Account implements Serializable {
         this.phoneNumber = phoneNumber;
     }
 
+    public Account(String password) {
+        this.password = password;
+    }
+
     public Integer getUserId() {
         return userId;
     }
