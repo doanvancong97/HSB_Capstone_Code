@@ -146,6 +146,11 @@ public class MainActivity extends AppCompatActivity {
 
             HashMap<String, String> user = sessionManager.getUserDetail();
             mUserName = user.get(sessionManager.getUSERNAME());
+            Intent intent = getIntent();
+            if(intent.getExtras() != null){
+                mUserName = intent.getExtras().getString("username");
+            }
+
             lnWelcome.setVisibility(View.VISIBLE);
             initUserDetail();
             btn_ReLogin.setVisibility(View.GONE);
@@ -165,6 +170,10 @@ public class MainActivity extends AppCompatActivity {
                 }
                 HashMap<String, String> user = sessionManager.getUserDetail();
                 mUserName = user.get(sessionManager.getUSERNAME());
+                Intent intent = getIntent();
+                if(intent.getExtras() != null){
+                    mUserName = intent.getExtras().getString("username");
+                }
                 initUserDetail();
 
             }
@@ -432,17 +441,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void clickToLogout(MenuItem item) {
-
-        sessionManager.logout();
-        finish();
-        startActivity(getIntent());
-
-    }
-
     public void goToUserDetail(View view) {
         Intent intent = new Intent(this, UserDetailActivity.class);
         intent.putExtra("username",mUserName);
         startActivity(intent);
+        finish();
     }
 }

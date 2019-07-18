@@ -14,11 +14,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.borjabravo.readmoretextview.ReadMoreTextView;
-import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import capstone.sonnld.hairsalonbooking.adapter.RecyclerViewSelectedServiceAdapter;
@@ -26,7 +24,6 @@ import capstone.sonnld.hairsalonbooking.api.HairSalonAPI;
 import capstone.sonnld.hairsalonbooking.api.RetrofitClient;
 import capstone.sonnld.hairsalonbooking.dto.BookingDTO;
 import capstone.sonnld.hairsalonbooking.dto.BookingDetailsDTO;
-import capstone.sonnld.hairsalonbooking.model.Account;
 import capstone.sonnld.hairsalonbooking.model.GeoPoint;
 import capstone.sonnld.hairsalonbooking.model.SalonService;
 import capstone.sonnld.hairsalonbooking.model.SessionManager;
@@ -37,7 +34,7 @@ import retrofit2.Retrofit;
 
 public class BookingDetailActivity extends AppCompatActivity {
 
-    private ReadMoreTextView txt_description;
+    private ReadMoreTextView txtDescription;
     private RecyclerView recyclerView;
     private Button btnAccept;
 
@@ -45,17 +42,18 @@ public class BookingDetailActivity extends AppCompatActivity {
     private TextView txtBookedTime;
     private TextView txtTotalPrice;
     private TextView txtAddress;
+    private  TextView txtDirection;
 
     private ArrayList<BookingDetailsDTO> bookingDetailsDTOList = new ArrayList<>();
+    private ArrayList<SalonService> salonServices;
 
     // api
     private HairSalonAPI hairSalonAPI;
-    TextView txtDirection;
+
 
     // user detail
     private TextView txtUsername;
-    private String mUserName;
-    private SessionManager sessionManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,7 +64,7 @@ public class BookingDetailActivity extends AppCompatActivity {
         Retrofit retrofit = RetrofitClient.getInstance();
         hairSalonAPI = retrofit.create(HairSalonAPI.class);
 
-        txt_description = findViewById(R.id.txt_description2);
+        txtDescription = findViewById(R.id.txt_description);
         txtTotalPrice = findViewById(R.id.txt_total);
         btnAccept = findViewById(R.id.btn_accept);
         txtBookedDate = findViewById(R.id.txt_booked_date);
@@ -74,40 +72,17 @@ public class BookingDetailActivity extends AppCompatActivity {
         txtAddress = findViewById(R.id.txt_address);
         txtUsername = findViewById(R.id.txt_username);
 
-        String des1 = "ÁP DỤNG KHI DÙNG DỊCH VỤ TẠI CỬA HÀNG* \n" +
-                "\n" +
-                "- Giảm 20% tổng hóa đơn áp dụng cho tất cả các dịch vụ \n" +
-                "- Áp dụng cho khách hàng nữ \n" +
-                "- Mỗi mã ưu đãi đổi được nhiều suất trong suốt chương trình \n" +
-                "- Khách hàng có thể lấy nhiều mã trong suốt chương trình \n" +
-                "\n" +
-                "THỜI GIAN ÁP DỤNG \n" +
-                "- Khung giờ: 9h30 - 19h00\t\n" +
-                "- Áp dụng tất cả các ngày trong tuần \n" +
-                "- Không áp dụng các ngày lễ, Tết: 30/4, 1/5 \n" +
-                "\n" +
-                "Chi tiết địa điểm xem tại \"Điểm áp dụng\" \n" +
-                "\n" +
-                "Vui lòng bấm XÁC NHẬN ĐẶT CHỖ để nhận mã giảm giá \n" +
-                "\n" +
-                "LƯU Ý \n" +
-                "- Chương trình chỉ áp dụng với khách dùng dịch vụ tại cửa hàng \n" +
-                "- Không áp dụng đồng thời với các chương trình khác của MIA.Nails & Cafe \n" +
-                "- Không áp dụng phụ thu \n" +
-                "- Ưu đãi chưa bao gồm VAT \n" +
-                "- Khách hàng được phép đến sớm hoặc muộn hơn 15 phút so với giờ hẹn đến \n" +
-                "- Mã giảm giá không có giá trị quy đổi thành tiền mặt ";
-        txt_description.setText(des1);
+
 
 
         // get data from detail salon/ detail service activity
         Intent intent = getIntent();
-        ArrayList<SalonService> salonServices =
-                (ArrayList<SalonService>) intent.getSerializableExtra("chkService");
+        salonServices = (ArrayList<SalonService>) intent.getSerializableExtra("chkService");
         String bookedDate = intent.getExtras().getString("bookedDate");
         String bookedTime = intent.getExtras().getString("bookedTime");
         final String address = intent.getExtras().getString("salonAddress");
-        String username = intent.getExtras().getString("username");
+        String fullname = intent.getExtras().getString("fullname");
+        String des = intent.getExtras().getString("description");
 
         // setup value
         int totalPrice = 0;
@@ -121,7 +96,8 @@ public class BookingDetailActivity extends AppCompatActivity {
         txtBookedDate.setText(bookedDate);
         txtBookedTime.setText(bookedTime);
         txtAddress.setText(address);
-        txtUsername.setText(username);
+        txtUsername.setText(fullname);
+        txtDescription.setText(des);
 
         txtDirection.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -162,15 +138,24 @@ public class BookingDetailActivity extends AppCompatActivity {
     
 
     public void submitBooking() {
-        BookingDTO bookingDTO = new BookingDTO(1, "Sonnnnnn", "09999999", "2019-12-19", "12:12", "process", bookingDetailsDTOList);
+        BookingDTO bookingDTO = new BookingDTO(1,
+                "Sonnnnnn", "09999999",
+                "2019-12-19", "12:12", "process", bookingDetailsDTOList);
 
         Call<BookingDTO> call = hairSalonAPI.postBooking(bookingDTO);
 
         call.enqueue(new Callback<BookingDTO>() {
             @Override
             public void onResponse(Call<BookingDTO> call, Response<BookingDTO> response) {
-                Toast.makeText(BookingDetailActivity.this, "Cảm ơn quý khách đã sử dụng dịch vụ.", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(BookingDetailActivity.this, MainActivity.class);
+                Toast.makeText(BookingDetailActivity.this,
+                        "Cảm ơn quý khách đã sử dụng dịch vụ.", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(BookingDetailActivity.this, ReceiptActivity.class);
+                intent.putExtra("fullname",txtUsername.getText().toString());
+                intent.putExtra("bookedDate",txtBookedDate.getText().toString());
+                intent.putExtra("bookedTime",txtBookedTime.getText().toString());
+                intent.putExtra("address",txtAddress.getText().toString());
+                intent.putExtra("salonServices",salonServices);
+                intent.putExtra("totalPrice",txtTotalPrice.getText().toString());
                 startActivity(intent);
                 finish();
             }
@@ -196,27 +181,4 @@ public class BookingDetailActivity extends AppCompatActivity {
         finish();
     }
 
-    public GeoPoint getLocationFromAddress(String strAddress) {
-
-        Geocoder coder = new Geocoder(this);
-        List<Address> address;
-        GeoPoint p1 = null;
-
-        try {
-            address = coder.getFromLocationName(strAddress, 5);
-            if (address == null) {
-                return null;
-            }
-            Address location = address.get(0);
-            location.getLatitude();
-            location.getLongitude();
-
-            p1 = new GeoPoint(location.getLatitude(), location.getLongitude());
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return p1;
-    }
 }

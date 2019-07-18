@@ -2,22 +2,19 @@ package capstone.sonnld.hairsalonbooking;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.github.badoualy.datepicker.DatePickerTimeline;
 import com.github.jhonnyx2012.horizontalpicker.DatePickerListener;
 import com.github.jhonnyx2012.horizontalpicker.HorizontalPicker;
 import com.squareup.picasso.Picasso;
@@ -30,15 +27,21 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 
 import capstone.sonnld.hairsalonbooking.adapter.RecyclerViewExtraServiceAdapter;
 import capstone.sonnld.hairsalonbooking.api.HairSalonAPI;
 import capstone.sonnld.hairsalonbooking.api.RetrofitClient;
+import capstone.sonnld.hairsalonbooking.model.Account;
 import capstone.sonnld.hairsalonbooking.model.SalonService;
+import capstone.sonnld.hairsalonbooking.model.SessionManager;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 
 import static capstone.sonnld.hairsalonbooking.R.drawable.button_time;
@@ -55,15 +58,16 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
 
     private LinearLayout linearTimePiker;
 
+    // user detail
+    private String mUserName;
+    private SessionManager sessionManager;
+    private String fullName;
+
     //Button time
     private boolean isChoose = false;
     private int slotIDisChoose = 0;
     private int slotID = 0;
-    private String bookedTime="";
-
-
-
-
+    private String bookedTime = "";
 
     private RecyclerViewExtraServiceAdapter extraServiceAdapter;
     private String bookedDate = "";
@@ -74,13 +78,9 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_salon);
 
-//        // setup spinner address
-//        ArrayAdapter<String> addressAdapter = new ArrayAdapter<String>(this,
-//                android.R.layout.simple_spinner_item, listAddress);
-//
-//        spAddress = findViewById(R.id.spAddress);
-//        addressAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        spAddress.setAdapter(addressAdapter);
+        //init retro
+        Retrofit retrofit = RetrofitClient.getInstance();
+        hairSalonAPI = retrofit.create(HairSalonAPI.class);
 
         txtAddress = findViewById(R.id.txt_address);
         txtSalonName = findViewById(R.id.txtSalonName);
@@ -111,9 +111,9 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
         String minHour = "8:15";
         String[] splitMinHour = minHour.split(":");
         int minH = Integer.parseInt(splitMinHour[0]);
-        double step=15;
+        double step = 15;
 
-        double run = (maxH-minH)/(step/60) + Integer.parseInt(splitMaxHour[1])/step- Integer.parseInt(splitMinHour[1])/step;
+        double run = (maxH - minH) / (step / 60) + Integer.parseInt(splitMaxHour[1]) / step - Integer.parseInt(splitMinHour[1]) / step;
 
         Calendar calendar = Calendar.getInstance();
         Calendar calendar2 = Calendar.getInstance();
@@ -125,7 +125,7 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
             Date end = format.parse(maxHour);
             calendar.setTime(start);
             calendar2.setTime(end);
-            for (int i = 0;i<=run; i++) {
+            for (int i = 0; i <= run; i++) {
                 slotID++;
                 final Button slot = new Button(this);
                 slot.setId(slotID);
@@ -135,16 +135,16 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
                 slot.setLayoutParams(params);
                 slot.setBackgroundResource(button_time);
                 slot.setTextColor(Color.parseColor("#DB1507"));
-                slot.setText(calendar.getTime().getHours() + ":"+calendar.getTime().getMinutes());
+                slot.setText(calendar.getTime().getHours() + ":" + calendar.getTime().getMinutes());
 
 
                 linearTimePiker.addView(slot);
-                calendar.add(Calendar.MINUTE,(int)step);
+                calendar.add(Calendar.MINUTE, (int) step);
                 slot.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         Toast.makeText(DetailSalonActivity.this, slot.getText(), Toast.LENGTH_SHORT).show();
-                        bookedTime=slot.getText().toString();
+                        bookedTime = slot.getText().toString();
                         if (isChoose == false) {
                             slot.setBackgroundResource(R.drawable.button_time_choose);
                             slot.setTextColor(Color.WHITE);
@@ -173,9 +173,13 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
         }
 
 
-        //init retro
-        Retrofit retrofit = RetrofitClient.getInstance();
-        hairSalonAPI = retrofit.create(HairSalonAPI.class);
+        // setup user
+        sessionManager = new SessionManager(getApplicationContext());
+        if (sessionManager.isLogin()) {
+            HashMap<String, String> user = sessionManager.getUserDetail();
+            mUserName = user.get(sessionManager.getUSERNAME());
+            initUserDetail();
+        }
 
         // get data from map activity
         Intent intent = getIntent();
@@ -183,36 +187,10 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
         String salonName = intent.getExtras().getString("SalonName");
         txtSalonName.setText(salonName);
 
-
         // recycler for extra service
         recyclerView = findViewById(R.id.recycler_view_salon_service);
         recyclerView.setLayoutManager(new GridLayoutManager(DetailSalonActivity.this, 1));
         setupSalonDetail(salonId);
-        String des = "ÁP DỤNG KHI DÙNG DỊCH VỤ TẠI CỬA HÀNG* \n" +
-                "\n" +
-                "- Giảm 20% tổng hóa đơn áp dụng cho tất cả các dịch vụ \n" +
-                "- Áp dụng cho khách hàng nữ \n" +
-                "- Mỗi mã ưu đãi đổi được nhiều suất trong suốt chương trình \n" +
-                "- Khách hàng có thể lấy nhiều mã trong suốt chương trình \n" +
-                "\n" +
-                "THỜI GIAN ÁP DỤNG \n" +
-                "- Khung giờ: 9h30 - 19h00\t\n" +
-                "- Áp dụng tất cả các ngày trong tuần \n" +
-                "- Không áp dụng các ngày lễ, Tết: 30/4, 1/5 \n" +
-                "\n" +
-                "Chi tiết địa điểm xem tại \"Điểm áp dụng\" \n" +
-                "\n" +
-                "Vui lòng bấm XÁC NHẬN ĐẶT CHỖ để nhận mã giảm giá \n" +
-                "\n" +
-                "LƯU Ý \n" +
-                "- Chương trình chỉ áp dụng với khách dùng dịch vụ tại cửa hàng \n" +
-                "- Không áp dụng đồng thời với các chương trình khác của MIA.Nails & Cafe \n" +
-                "- Không áp dụng phụ thu \n" +
-                "- Ưu đãi chưa bao gồm VAT \n" +
-                "- Khách hàng được phép đến sớm hoặc muộn hơn 15 phút so với giờ hẹn đến \n" +
-                "- Mã giảm giá không có giá trị quy đổi thành tiền mặt ";
-        txtDescription.setText(des);
-
 
 
         btnConfirm.setOnClickListener(new View.OnClickListener() {
@@ -221,19 +199,45 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
                 // setup data for booking
 
                 chkService = extraServiceAdapter.getCheckedSalonServices();
-                if(chkService.size() == 0){
-                    Toast.makeText(DetailSalonActivity.this,"Bạn chưa chọn dịch vụ",Toast.LENGTH_LONG).show();
-                }else{
+                if (fullName == null) {
+                    Toast.makeText(DetailSalonActivity.this,
+                            "Hãy đăng nhập để tiếp tục đặt lịch!", Toast.LENGTH_LONG).show();
+                    startActivity(new Intent(DetailSalonActivity.this,LoginActivity.class));
+                } else if (chkService.size() == 0) {
+                    Toast.makeText(DetailSalonActivity.this, "Bạn chưa chọn dịch vụ!", Toast.LENGTH_LONG).show();
 
+                } else if (!isChoose) {
+                    Toast.makeText(DetailSalonActivity.this,
+                            "Bạn chưa chọn thời gian đến!", Toast.LENGTH_LONG).show();
+                } else {
                     // send data to booking detail activity
                     Intent sendDataToBooking =
                             new Intent(DetailSalonActivity.this, BookingDetailActivity.class);
                     sendDataToBooking.putExtra("chkService", chkService);
                     sendDataToBooking.putExtra("bookedDate", bookedDate);
-                    sendDataToBooking.putExtra("bookedTime",bookedTime);
-                    sendDataToBooking.putExtra("salonAddress",txtAddress.getText());
+                    sendDataToBooking.putExtra("bookedTime", bookedTime);
+                    sendDataToBooking.putExtra("salonAddress", txtAddress.getText());
+                    sendDataToBooking.putExtra("fullname", fullName);
+                    sendDataToBooking.putExtra("description", txtDescription.getText().toString());
                     startActivity(sendDataToBooking);
                 }
+
+            }
+        });
+    }
+
+    private void initUserDetail() {
+        Call<Account> call = hairSalonAPI.getUserDetail(mUserName);
+        call.enqueue(new Callback<Account>() {
+            @Override
+            public void onResponse(Call<Account> call, Response<Account> response) {
+                Account currentAcc = response.body();
+                fullName = currentAcc.getFullname();
+
+            }
+
+            @Override
+            public void onFailure(Call<Account> call, Throwable t) {
 
             }
         });
@@ -255,6 +259,9 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
                         String address = services.get(0).getSalon().getAddress().getStreetNumber() + ", "
                                 + services.get(0).getSalon().getAddress().getStreet();
                         String logUrl = services.get(0).getSalon().getLogoUrl();
+                        String des = services.get(0).getSalon().getDescription();
+
+                        txtDescription.setText(des);
                         txtAddress.setText(address);
                         Picasso.with(DetailSalonActivity.this).
                                 load(logUrl)
@@ -279,12 +286,6 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
 
     @Override
     public void onDateSelected(@NonNull final DateTime dateSelected) {
-        // log it for demo
-
-//        Toast.makeText(this, dateSelected.getDayOfMonth()
-//                + "/" + dateSelected.getMonthOfYear()
-//                + "/" + dateSelected.getYear(), Toast.LENGTH_SHORT).show();
-
         String dayOfMonth = dateSelected.getDayOfMonth() + "";
         String monthOfYear = dateSelected.getMonthOfYear() + "";
         String year = dateSelected.getYear() + "";
@@ -302,18 +303,17 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
         if (bookedDate.equals(dateFormat.format(today))) {
             Toast.makeText(this, "Today", Toast.LENGTH_SHORT).show();
             linearTimePiker.removeAllViews();
-            isChoose=false;
+            isChoose = false;
             generateSlotToday();
 
 
         } else {
             Toast.makeText(this, bookedDate, Toast.LENGTH_SHORT).show();
             linearTimePiker.removeAllViews();
-            isChoose=false;
+            isChoose = false;
 
             generateSlot();
         }
-
 
 
     }
@@ -338,7 +338,7 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
         return str.substring(0, 1).toUpperCase() + str.substring(1);
     }
 
-    public void generateSlot(){
+    public void generateSlot() {
 
 //        Date date = new Date();   // given date
 //        Calendar calendar = GregorianCalendar.getInstance(); // creates a new calendar instance
@@ -379,10 +379,10 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
                 slot.setLayoutParams(params);
                 slot.setBackgroundResource(button_time);
                 slot.setTextColor(Color.parseColor("#DB1507"));
-                if(calendar.getTime().getMinutes()<10)
+                if (calendar.getTime().getMinutes() < 10)
 
-                    minute = "0"+calendar.getTime().getMinutes();
-                else minute = calendar.getTime().getMinutes()+"";
+                    minute = "0" + calendar.getTime().getMinutes();
+                else minute = calendar.getTime().getMinutes() + "";
                 slot.setText(calendar.getTime().getHours() + ":" + minute);
 
 
@@ -423,7 +423,7 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
     }
 
 
-    public void generateSlotToday(){
+    public void generateSlotToday() {
 
 //        Date date = new Date();   // given date
 //        Calendar calendar = GregorianCalendar.getInstance(); // creates a new calendar instance
@@ -436,18 +436,16 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
         String[] currentHourArr = currentHour.split(":");
 
 
-
         String maxHour = "23:00";
         String minHour = "";
         String[] splitMaxHour = maxHour.split(":");
         int maxH = Integer.parseInt(splitMaxHour[0]);
 
-        if(Integer.parseInt(currentHourArr[1])+step>=60){
-            minHour = (Integer.parseInt(currentHourArr[0])+1)+":00";
+        if (Integer.parseInt(currentHourArr[1]) + step >= 60) {
+            minHour = (Integer.parseInt(currentHourArr[0]) + 1) + ":00";
 
-        }
-        else {
-            minHour = (Integer.parseInt(currentHourArr[0])+":"+(int)step);
+        } else {
+            minHour = (Integer.parseInt(currentHourArr[0]) + ":" + (int) step);
 
         }
 
@@ -482,10 +480,10 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
                 slot.setLayoutParams(params);
                 slot.setBackgroundResource(button_time);
                 slot.setTextColor(Color.parseColor("#DB1507"));
-                if(calendar.getTime().getMinutes()<10)
+                if (calendar.getTime().getMinutes() < 10)
 
-                    minute = "0"+calendar.getTime().getMinutes();
-                else minute = calendar.getTime().getMinutes()+"";
+                    minute = "0" + calendar.getTime().getMinutes();
+                else minute = calendar.getTime().getMinutes() + "";
                 slot.setText(calendar.getTime().getHours() + ":" + minute);
 
 

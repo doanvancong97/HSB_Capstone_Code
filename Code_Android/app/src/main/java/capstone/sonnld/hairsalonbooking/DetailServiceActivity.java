@@ -90,7 +90,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
     // user detail
     private String mUserName;
     private SessionManager sessionManager;
-    String fullName;
+    private String fullName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,6 +148,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
         String address = intent.getExtras().getString("Address");
         String logoUrl = intent.getExtras().getString("Logo");
 
+
         //set new value for view
         txtSalonName.setText(salonName);
         txtSalonService.setText(uppercaseFirstLetter(salonServiceName) + " (-" + discountValue + "%) ");
@@ -176,7 +177,6 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
         // setup user
         sessionManager = new SessionManager(getApplicationContext());
         if (sessionManager.isLogin()) {
-
             HashMap<String, String> user = sessionManager.getUserDetail();
             mUserName = user.get(sessionManager.getUSERNAME());
             initUserDetail();
@@ -208,7 +208,8 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
                     sendDataToBooking.putExtra("bookedDate", bookedDate);
                     sendDataToBooking.putExtra("bookedTime", bookedTime);
                     sendDataToBooking.putExtra("salonAddress", txtAddress.getText());
-                    sendDataToBooking.putExtra("username", fullName);
+                    sendDataToBooking.putExtra("fullname", fullName);
+                    sendDataToBooking.putExtra("description", txtDescription.getText().toString());
                     startActivity(sendDataToBooking);
                 }
 
