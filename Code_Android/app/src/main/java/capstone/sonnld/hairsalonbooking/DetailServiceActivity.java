@@ -128,7 +128,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
         picker
                 .setListener(this)
                 .setTodayDateTextColor(R.color.red2)
-                .setDays(20)
+                .setDays(7)
                 .setOffset(0)
                 .showTodayButton(false)
                 .init();

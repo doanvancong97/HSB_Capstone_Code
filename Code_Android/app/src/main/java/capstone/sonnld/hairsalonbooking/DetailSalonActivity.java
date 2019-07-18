@@ -96,7 +96,7 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
         picker
                 .setListener(this)
                 .setTodayDateTextColor(R.color.red2)
-                .setDays(20)
+                .setDays(7)
                 .setOffset(0)
                 .showTodayButton(false)
                 .init();
