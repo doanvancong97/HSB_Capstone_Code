@@ -1,9 +1,11 @@
 package capstone.sonnld.hairsalonbooking;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -81,7 +83,6 @@ public class MainActivity extends AppCompatActivity {
     private SearchView mSearchView;
 
 
-
     // adapter
     private RecyclerViewFilterServiceAdapter filterServiceAdapter;
 
@@ -100,7 +101,6 @@ public class MainActivity extends AppCompatActivity {
     private SessionManager sessionManager;
     private String mUserName;
     private ImageView imgAvatar;
-
 
 
     @Override
@@ -139,17 +139,11 @@ public class MainActivity extends AppCompatActivity {
         lnWelcome.setVisibility(View.GONE);
 
 
-
-
         sessionManager = new SessionManager(getApplicationContext());
         if (sessionManager.isLogin()) {
 
             HashMap<String, String> user = sessionManager.getUserDetail();
             mUserName = user.get(sessionManager.getUSERNAME());
-            Intent intent = getIntent();
-            if(intent.getExtras() != null){
-                mUserName = intent.getExtras().getString("username");
-            }
 
             lnWelcome.setVisibility(View.VISIBLE);
             initUserDetail();
@@ -167,13 +161,10 @@ public class MainActivity extends AppCompatActivity {
                 if (!sessionManager.isLogin()) {
                     Intent i = new Intent(MainActivity.this, LoginActivity.class);
                     startActivity(i);
+                    finish();
                 }
                 HashMap<String, String> user = sessionManager.getUserDetail();
                 mUserName = user.get(sessionManager.getUSERNAME());
-                Intent intent = getIntent();
-                if(intent.getExtras() != null){
-                    mUserName = intent.getExtras().getString("username");
-                }
                 initUserDetail();
 
             }
@@ -239,61 +230,169 @@ public class MainActivity extends AppCompatActivity {
 
         // setup location
         btnLocation = findViewById(R.id.btn_location);
+
         btnLocation.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                    Intent intent = new Intent(MainActivity.this, MapsActivity.class);
-                    intent.putExtra("salonServiceList", salonServiceArrayList);
-                    startActivity(intent);
-
-                    return;
-                }
+            public void onClick(View view) {
+                LocationManager lm = (LocationManager) getApplicationContext().getSystemService(getApplicationContext().LOCATION_SERVICE);
+                boolean gps_enabled = false;
 
 
-                Dexter.withActivity(MainActivity.this).withPermission(Manifest.permission.ACCESS_FINE_LOCATION).withListener(new PermissionListener() {
-                    @Override
-                    public void onPermissionGranted(PermissionGrantedResponse response) {
+                gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+
+
+                if (!gps_enabled) {
+
+
+                    Toast.makeText(MainActivity.this, "Location is off", Toast.LENGTH_SHORT).show();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                    builder.setTitle("Định vị đang tắt")
+                            .setMessage("Bạn có muốn bật định vị?")
+                            .setPositiveButton("Có", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+
+                                }
+                            })
+                            .setNegativeButton("Không", null);
+
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+
+
+                } else {
+
+                    Toast.makeText(MainActivity.this, "Location is on", Toast.LENGTH_SHORT).show();
+
+
+                    if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                         Intent intent = new Intent(MainActivity.this, MapsActivity.class);
                         intent.putExtra("salonServiceList", salonServiceArrayList);
                         startActivity(intent);
 
+                        return;
+                    } else {
+                        Dexter.withActivity(MainActivity.this).withPermission(Manifest.permission.ACCESS_FINE_LOCATION).withListener(new PermissionListener() {
+                            @Override
+                            public void onPermissionGranted(PermissionGrantedResponse response) {
+                                Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+                                intent.putExtra("salonServiceList", salonServiceArrayList);
+                                startActivity(intent);
+
+                            }
+
+                            @Override
+                            public void onPermissionDenied(PermissionDeniedResponse response) {
+
+                            }
+
+                            @Override
+                            public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+
+                            }
+
+
+                        }).check();
                     }
+//
 
-                    @Override
-                    public void onPermissionDenied(PermissionDeniedResponse response) {
-                        if (response.isPermanentlyDenied()) {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                            builder.setTitle("Khong dc cap quyen")
-                                    .setMessage("Hay cho phep truy cap Location")
-                                    .setNegativeButton("cancel", null)
-                                    .setPositiveButton("ok", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {
-                                            Intent intent = new Intent();
-                                            intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                            intent.setData(Uri.fromParts("pakage", getPackageName(), null));
 
-                                        }
-                                    }).show();
-
-                        } else
-                            Toast.makeText(MainActivity.this, "Permission denied", Toast.LENGTH_SHORT).show();
-
-                    }
-
-                    @Override
-                    public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
-                        token.continuePermissionRequest();
-                    }
-                }).check();
+                }
             }
         });
 
 
+//        btnLocation.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+//                    Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+//                    intent.putExtra("salonServiceList", salonServiceArrayList);
+//                    startActivity(intent);
+//
+//                    return;
+//                }else {
+//                    Dexter.withActivity(MainActivity.this).withPermission(Manifest.permission.ACCESS_FINE_LOCATION).withListener(new PermissionListener() {
+//                        @Override
+//                        public void onPermissionGranted(PermissionGrantedResponse response) {
+//                            Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+//                            intent.putExtra("salonServiceList", salonServiceArrayList);
+//                            startActivity(intent);
+//
+//                        }
+//
+//                        @Override
+//                        public void onPermissionDenied(PermissionDeniedResponse response) {
+//                            if (response.isPermanentlyDenied()) {
+//                                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+//                                builder.setTitle("Khong dc cap quyen")
+//                                        .setMessage("Hay cho phep truy cap Location")
+//                                        .setNegativeButton("cancel", null)
+//                                        .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+//                                            @Override
+//                                            public void onClick(DialogInterface dialogInterface, int i) {
+//                                                Intent intent = new Intent();
+//                                                intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+//                                                intent.setData(Uri.fromParts("pakage", getPackageName(), null));
+//
+//                                            }
+//                                        }).show();
+//
+//                            } else
+//                                Toast.makeText(MainActivity.this, "Permission denied", Toast.LENGTH_SHORT).show();
+//
+//                        }
+//
+//                        @Override
+//                        public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+//                            token.continuePermissionRequest();
+//                        }
+//                    }).check();
+//                }
+//
+//
+//
+//            }
+//        });
+
+
     }
 
-    private void initUserDetail(){
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        if (sessionManager.isLogin()) {
+
+            HashMap<String, String> user = sessionManager.getUserDetail();
+            mUserName = user.get(sessionManager.getUSERNAME());
+
+            lnWelcome.setVisibility(View.VISIBLE);
+            initUserDetail();
+            btn_ReLogin.setVisibility(View.GONE);
+
+
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                String strEditText = data.getStringExtra("editTextValue");
+            }
+        }
+    }
+
+    public void goToUserDetail(View view) {
+        Intent intent = new Intent(this, UserDetailActivity.class);
+        intent.putExtra("username", mUserName);
+        startActivity(intent);
+
+    }
+
+    private void initUserDetail() {
         Call<Account> call = hairSalonAPI.getUserDetail(mUserName);
         call.enqueue(new Callback<Account>() {
             @Override
@@ -302,7 +401,7 @@ public class MainActivity extends AppCompatActivity {
                 String avatarUrl = currentAcc.getAvatar();
                 String fullName = currentAcc.getFullname();
                 Picasso.with(MainActivity.this).load(avatarUrl).into(imgAvatar);
-                txtWelcome.setText("Xin chào, " + fullName );
+                txtWelcome.setText("Xin chào, " + fullName);
             }
 
             @Override
@@ -447,10 +546,4 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void goToUserDetail(View view) {
-        Intent intent = new Intent(this, UserDetailActivity.class);
-        intent.putExtra("username",mUserName);
-        startActivity(intent);
-        finish();
-    }
 }

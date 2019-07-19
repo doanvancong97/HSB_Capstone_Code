@@ -10,6 +10,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.regex.Pattern;
+
 import capstone.sonnld.hairsalonbooking.api.HairSalonAPI;
 import capstone.sonnld.hairsalonbooking.api.RetrofitClient;
 import capstone.sonnld.hairsalonbooking.model.Account;
@@ -87,23 +89,35 @@ public class RegisterActivity extends AppCompatActivity {
         if (fullname.isEmpty()) {
             edtName.setError("Nhập Tên");
         }
-        if (username.isEmpty()) {
-            edtUsername.setError("Nhập username");
-        }
-        if (phone.isEmpty()) {
-            edtPhoneNumber.setError("Nhập số điện thoại");
-        }
+
+
         if (password.isEmpty()) {
             edtPassword.setError("Nhập mật khẩu");
         }
-        if (email.isEmpty()) {
-            edtEmail.setError("Nhập email");
-        }
+
         if (confirmPassword.isEmpty()) {
             edtConfirmPassword.setError("Nhập mật khẩu xác nhận");
         }else if(!confirmPassword.equals(password)){
             edtConfirmPassword.setError("Mật khẩu xác nhận chưa đúng");
         }
+
+        if(username.length()<6){
+            edtUsername.setError("Tên đăng nhập có ít nhất 6 kí tự");
+
+        }
+
+        if(!isValidMail(email)){
+            edtEmail.setError("Email không đúng định dạng!");
+
+        }
+        if (!isValidMobile(phone)) {
+            edtPhoneNumber.setError("Số điện thoại không tồn tại");
+        }
+
+
+
+
+
 
         if(edtName.getError() == null
                 && edtUsername.getError() == null
@@ -142,4 +156,25 @@ public class RegisterActivity extends AppCompatActivity {
 
         startActivity(intent);
     }
+
+    private boolean isValidMail(String email) {
+
+        String EMAIL_STRING = "^\\w+[@]\\w+";
+
+        return Pattern.compile(EMAIL_STRING).matcher(email).matches();
+
+    }
+
+    private boolean isValidMobile(String phone) {
+        String PHONE_STRING = "^[0]\\d{9}";
+
+        return Pattern.compile(PHONE_STRING).matcher(phone).matches();
+    }
+
+
+
+
+//    private boolean isValidMail(String email) {
+//        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+//    }
 }

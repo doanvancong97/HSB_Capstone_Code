@@ -132,7 +132,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 MarkerOptions markerOptions = new MarkerOptions();
 
                 markerOptions.position(point);
-//                markerOptions.snippet(address);
                 markerOptions.title(salonName);
                 markerOptions.snippet(salonId + "");
 
@@ -202,22 +201,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             }
                         });
 
-
-
-
-//                        salon_service_name.setOnClickListener(new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View view) {
-//                                Toast.makeText(MapsActivity.this, "chỉ đường", Toast.LENGTH_SHORT).show();
-//                                Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
-//                                        Uri.parse("geo:0,0?q=37.423156,-122.084917 (" + "hihi" + ")"));
-//                                startActivity(intent);
-//                            }
-//                        });
-
-
-//                        startActivity(intent);
-//                        finish();
                         return true;
 
                     }
@@ -232,22 +215,22 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
 
 
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    rp_bg.startRippleAnimation();
-
-                }
-            }, 1000);
-
-
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    rp_bg.stopRippleAnimation();
-
-                }
-            }, 2500);
+//            new Handler().postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    rp_bg.startRippleAnimation();
+//
+//                }
+//            }, 1000);
+//
+//
+//            new Handler().postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    rp_bg.stopRippleAnimation();
+//
+//                }
+//            }, 2500);
 
 
         }

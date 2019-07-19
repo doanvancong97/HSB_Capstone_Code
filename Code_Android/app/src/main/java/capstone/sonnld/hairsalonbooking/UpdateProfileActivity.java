@@ -158,10 +158,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-//                if (response.code() == 200) {
-//                    Toast.makeText(UpdateProfileActivity.this,
-//                            "Save user success", Toast.LENGTH_SHORT).show();
-//                }
+
             }
 
             @Override
@@ -194,7 +191,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
                                 public void run() {
                                     progressBar.setProgress(0);
                                 }
-                            }, 5000);
+                            }, 3000);
 //                            Toast.makeText(UpdateProfileActivity.this,
 //                                    "Tải ảnh thành công", Toast.LENGTH_LONG).show();
                             progressBar.setVisibility(View.GONE);

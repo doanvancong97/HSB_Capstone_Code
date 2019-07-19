@@ -25,7 +25,7 @@ public class UserDetailActivity extends AppCompatActivity {
     private HairSalonAPI hairSalonAPI;
 
     // user detail
-    private String username;
+//    private String username;
     private String fullname;
     private ImageView imgAvatar;
     private TextView txtUsername;
@@ -55,13 +55,13 @@ public class UserDetailActivity extends AppCompatActivity {
 
         // get data from main activity, UpdateProfileActivity
         Intent intent = getIntent();
-        username = intent.getExtras().getString("username");
-        initUserDetail();
+        String username = intent.getExtras().getString("username");
+        initUserDetail(username);
 
 
     }
 
-    private void initUserDetail(){
+    private void initUserDetail(String username){
         Call<Account> accountCall = hairSalonAPI.getUserDetail(username);
         accountCall.enqueue(new Callback<Account>() {
             @Override
@@ -83,6 +83,7 @@ public class UserDetailActivity extends AppCompatActivity {
             }
         });
     }
+
 
 
 
@@ -110,10 +111,4 @@ public class UserDetailActivity extends AppCompatActivity {
         finish();
     }
 
-    public void clickToGoToMainA(View view) {
-        Intent intent = new Intent(this,MainActivity.class);
-        intent.putExtra("username",username);
-        startActivity(intent);
-        finish();
-    }
 }
