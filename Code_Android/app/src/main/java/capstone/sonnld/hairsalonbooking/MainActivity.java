@@ -372,6 +372,9 @@ public class MainActivity extends AppCompatActivity {
             btn_ReLogin.setVisibility(View.GONE);
 
 
+        }else {
+            btn_ReLogin.setVisibility(View.VISIBLE);
+            lnWelcome.setVisibility(View.GONE);
         }
     }
 

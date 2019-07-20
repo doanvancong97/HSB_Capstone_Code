@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "1008271255767-5dsgfme7papj0oa0bk6786igj371ooo7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "capstone.sonnld.hairsalonbooking",
+            "certificate_hash": "7c279f12d016baba41b4f39700ed428d875628b4"
+          }
+        },
+        {
           "client_id": "1008271255767-thpift5adef0qck6eb7253t57erd9bq0.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
