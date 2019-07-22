@@ -85,7 +85,11 @@ public class UserDetailActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
 
+    }
 
     public void clicktoLogout(View view) {
 

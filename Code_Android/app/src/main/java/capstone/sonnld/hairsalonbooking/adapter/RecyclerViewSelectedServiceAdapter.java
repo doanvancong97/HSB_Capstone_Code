@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 
 import capstone.sonnld.hairsalonbooking.R;
@@ -47,14 +49,15 @@ public class RecyclerViewSelectedServiceAdapter extends RecyclerView.Adapter<Rec
         price = salonServices.get(position).getPrice();
         discountValue = salonServices.get(position).getDiscount().getDiscountValue();
         salePrice = getSalePrice(price,discountValue);
+        String serviceIcon = salonServices.get(position).getIconUrl();
 
         holder.txtSalonServiceName.setText(uppercaseFirstLetter(serviceName));
         holder.txtServicePrice.setText(salePrice);
 
-        holder.imgIcon.setImageResource(R.drawable.kid);
-//        Picasso.with(mContext).
-//                load(imgUrl)
-//                .into(holder.imgServiceThumb);
+
+        Picasso.with(mContext).
+                load(serviceIcon)
+                .into(holder.imgIcon);
 
 
         // event when tap on a item
