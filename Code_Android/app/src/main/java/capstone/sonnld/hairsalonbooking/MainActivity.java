@@ -479,4 +479,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public void clickToViewHistory(MenuItem item) {
+
+        Intent intent = new Intent(MainActivity.this, HistoryActivity.class);
+        startActivity(intent);
+
+
+    }
 }
