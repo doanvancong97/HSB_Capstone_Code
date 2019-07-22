@@ -4,15 +4,11 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.view.View;
@@ -21,19 +17,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.libraries.places.api.net.PlacesClient;
 import com.koushikdutta.ion.Ion;
 import com.skyfishjy.library.RippleBackground;
 import com.squareup.picasso.Picasso;
@@ -51,6 +43,9 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
@@ -162,7 +157,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 mMap.addMarker(markerOptions).setTag(address);
 
 
-
                 mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                     @Override
                     public boolean onMarkerClick(final Marker marker) {
@@ -175,16 +169,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
                         Toast.makeText(MapsActivity.this, marker.getSnippet(), Toast.LENGTH_SHORT).show();
-                            int id = Integer.parseInt(marker.getSnippet());
+                        int id = Integer.parseInt(marker.getSnippet());
 
-                            getSalonById(id);
+                        getSalonById(id);
 
 
-                            //String imgUrl = salonServices.get(i).getSalon().getUrl();
-                            salon_service_name.setText(marker.getTitle());
-                            salon_address.setText(marker.getTag().toString());
-                            //Picasso.with(MapsActivity.this).load(imgUrl).into(salon_img);
-                            lnDeatailOfMarker.setVisibility(View.VISIBLE);
+                        //String imgUrl = salonServices.get(i).getSalon().getUrl();
+                        salon_service_name.setText(marker.getTitle());
+                        salon_address.setText(marker.getTag().toString());
+                        //Picasso.with(MapsActivity.this).load(imgUrl).into(salon_img);
+                        lnDeatailOfMarker.setVisibility(View.VISIBLE);
 
                         cardViewSalonDetail.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -205,11 +199,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                     }
                 });
-
-
-
-
-
 
 
             }
@@ -243,37 +232,59 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
-    private void getSalonById(int salonId){
-        hairSalonAPI.getSalonServiceBySalonId(salonId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<ArrayList<SalonService>>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
+//    private void getSalonById(int salonId) {
+//        hairSalonAPI.getSalonServiceBySalonId(salonId)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Observer<ArrayList<SalonService>>() {
+//                    @Override
+//                    public void onSubscribe(Disposable d) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onNext(ArrayList<SalonService> services) {
+//                        String imgUrl = services.get(0).getSalon().getUrl();
+//                        String address = services.get(0).getSalon().getAddress().getStreetNumber() + ", "
+//                                + services.get(0).getSalon().getAddress().getStreet();
+//                        String logUrl = services.get(0).getSalon().getLogoUrl();
+//
+//                        Picasso.with(MapsActivity.this).load(imgUrl).into(salon_img);
+//
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onComplete() {
+//
+//                    }
+//                });
+//    }
 
-                    }
+    private void getSalonById(int salonId) {
+        Call call = hairSalonAPI.getSalonServiceBySalonId(salonId);
 
-                    @Override
-                    public void onNext(ArrayList<SalonService> services) {
-                        String imgUrl = services.get(0).getSalon().getUrl();
+        call.enqueue(new Callback() {
+            @Override
+            public void onResponse(Call call, Response response) {
+                ArrayList<SalonService> services = (ArrayList<SalonService>) response.body();
+                String imgUrl = services.get(0).getSalon().getUrl();
                         String address = services.get(0).getSalon().getAddress().getStreetNumber() + ", "
                                 + services.get(0).getSalon().getAddress().getStreet();
                         String logUrl = services.get(0).getSalon().getLogoUrl();
 
                         Picasso.with(MapsActivity.this).load(imgUrl).into(salon_img);
+            }
 
-                    }
+            @Override
+            public void onFailure(Call call, Throwable t) {
 
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
+            }
+        });
     }
 
     public GeoPoint getLocationFromAddress(String strAddress) {

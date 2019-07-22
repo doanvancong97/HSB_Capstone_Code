@@ -243,19 +243,53 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
         });
     }
 
+//    private void setupSalonDetail(int salonId) {
+//        hairSalonAPI.getSalonServiceBySalonId(salonId)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Observer<ArrayList<SalonService>>() {
+//                    @Override
+//                    public void onSubscribe(Disposable d) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onNext(ArrayList<SalonService> services) {
+//                        String imgUrl = services.get(0).getSalon().getUrl();
+//                        String address = services.get(0).getSalon().getAddress().getStreetNumber() + ", "
+//                                + services.get(0).getSalon().getAddress().getStreet();
+//                        String logUrl = services.get(0).getSalon().getLogoUrl();
+//                        String des = services.get(0).getSalon().getDescription();
+//
+//                        txtDescription.setText(des);
+//                        txtAddress.setText(address);
+//                        Picasso.with(DetailSalonActivity.this).
+//                                load(logUrl)
+//                                .into(imgLogo);
+//                        Picasso.with(DetailSalonActivity.this).
+//                                load(imgUrl)
+//                                .into(imgThumb);
+//                        displayExtraService(services);
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onComplete() {
+//
+//                    }
+//                });
+//    }
     private void setupSalonDetail(int salonId) {
-        hairSalonAPI.getSalonServiceBySalonId(salonId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<ArrayList<SalonService>>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onNext(ArrayList<SalonService> services) {
-                        String imgUrl = services.get(0).getSalon().getUrl();
+        Call call = hairSalonAPI.getSalonServiceBySalonId(salonId);
+        call.enqueue(new Callback() {
+            @Override
+            public void onResponse(Call call, Response response) {
+                ArrayList<SalonService> services = (ArrayList<SalonService>) response.body();
+                String imgUrl = services.get(0).getSalon().getUrl();
                         String address = services.get(0).getSalon().getAddress().getStreetNumber() + ", "
                                 + services.get(0).getSalon().getAddress().getStreet();
                         String logUrl = services.get(0).getSalon().getLogoUrl();
@@ -270,18 +304,13 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
                                 load(imgUrl)
                                 .into(imgThumb);
                         displayExtraService(services);
-                    }
+            }
 
-                    @Override
-                    public void onError(Throwable e) {
+            @Override
+            public void onFailure(Call call, Throwable t) {
 
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
+            }
+        });
     }
 
     @Override

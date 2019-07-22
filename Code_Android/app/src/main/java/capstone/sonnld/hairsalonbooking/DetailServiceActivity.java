@@ -12,15 +12,12 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.github.badoualy.datepicker.DatePickerTimeline;
 import com.github.jhonnyx2012.horizontalpicker.DatePickerListener;
 import com.github.jhonnyx2012.horizontalpicker.HorizontalPicker;
 import com.squareup.picasso.Picasso;
@@ -42,10 +39,6 @@ import capstone.sonnld.hairsalonbooking.dto.BookingDetailsDTO;
 import capstone.sonnld.hairsalonbooking.model.Account;
 import capstone.sonnld.hairsalonbooking.model.SalonService;
 import capstone.sonnld.hairsalonbooking.model.SessionManager;
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -193,7 +186,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
                 if (fullName == null) {
                     Toast.makeText(DetailServiceActivity.this,
                             "Hãy đăng nhập để tiếp tục đặt lịch!", Toast.LENGTH_LONG).show();
-                    startActivity(new Intent(DetailServiceActivity.this,LoginActivity.class));
+                    startActivity(new Intent(DetailServiceActivity.this, LoginActivity.class));
                 } else if (chkService.size() == 0) {
                     Toast.makeText(DetailServiceActivity.this, "Bạn chưa chọn dịch vụ!", Toast.LENGTH_LONG).show();
 
@@ -276,31 +269,46 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
     }
 
 
+    //    private void getAllExtraService(int salonId) {
+//        hairSalonAPI.getSalonServiceBySalonId(salonId)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Observer<ArrayList<SalonService>>() {
+//                    @Override
+//                    public void onSubscribe(Disposable d) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onNext(ArrayList<SalonService> salonServices) {
+//                        displayExtraService(salonServices);
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onComplete() {
+//
+//                    }
+//                });
+//    }
     private void getAllExtraService(int salonId) {
-        hairSalonAPI.getSalonServiceBySalonId(salonId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<ArrayList<SalonService>>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
+        Call call = hairSalonAPI.getSalonServiceBySalonId(salonId);
+        call.enqueue(new Callback() {
+            @Override
+            public void onResponse(Call call, Response response) {
+                ArrayList<SalonService> services = (ArrayList<SalonService>) response.body();
+                displayExtraService(services);
+            }
 
-                    }
+            @Override
+            public void onFailure(Call call, Throwable t) {
 
-                    @Override
-                    public void onNext(ArrayList<SalonService> salonServices) {
-                        displayExtraService(salonServices);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
+            }
+        });
     }
 
     private void displayExtraService(ArrayList<SalonService> salonServices) {
@@ -429,7 +437,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
         int minSlotHour = Integer.parseInt(splitMinSlot[0]);
 
 
-        if(minSlotHour<=Integer.parseInt(spliCurrentHour[0])){
+        if (minSlotHour <= Integer.parseInt(spliCurrentHour[0])) {
             if (Integer.parseInt(spliCurrentHour[1]) + step >= 60) {
                 minSlot = (Integer.parseInt(spliCurrentHour[0]) + 1) + ":00";
                 minSlotHour = Integer.parseInt(spliCurrentHour[0]);
@@ -443,7 +451,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
             }
 
 
-        }else {
+        } else {
 
             if (Integer.parseInt(splitMinSlot[1]) + step >= 60) {
                 minSlot = (minSlotHour + 1) + ":00";
@@ -454,10 +462,6 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
             }
 
         }
-
-
-
-
 
 
 // number of button will generate

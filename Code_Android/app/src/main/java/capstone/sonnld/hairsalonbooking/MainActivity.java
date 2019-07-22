@@ -1,12 +1,10 @@
 package capstone.sonnld.hairsalonbooking;
 
 import android.Manifest;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.NavigationView;
@@ -91,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout searchResultLayout;
 
     // list salon address, name
-    private ArrayList<String> addressList = new ArrayList<>();
+
     private ArrayList<SalonService> salonServiceArrayList = new ArrayList<>();
 
     // btn location
@@ -303,60 +301,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-//        btnLocation.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-//                    Intent intent = new Intent(MainActivity.this, MapsActivity.class);
-//                    intent.putExtra("salonServiceList", salonServiceArrayList);
-//                    startActivity(intent);
-//
-//                    return;
-//                }else {
-//                    Dexter.withActivity(MainActivity.this).withPermission(Manifest.permission.ACCESS_FINE_LOCATION).withListener(new PermissionListener() {
-//                        @Override
-//                        public void onPermissionGranted(PermissionGrantedResponse response) {
-//                            Intent intent = new Intent(MainActivity.this, MapsActivity.class);
-//                            intent.putExtra("salonServiceList", salonServiceArrayList);
-//                            startActivity(intent);
-//
-//                        }
-//
-//                        @Override
-//                        public void onPermissionDenied(PermissionDeniedResponse response) {
-//                            if (response.isPermanentlyDenied()) {
-//                                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-//                                builder.setTitle("Khong dc cap quyen")
-//                                        .setMessage("Hay cho phep truy cap Location")
-//                                        .setNegativeButton("cancel", null)
-//                                        .setPositiveButton("ok", new DialogInterface.OnClickListener() {
-//                                            @Override
-//                                            public void onClick(DialogInterface dialogInterface, int i) {
-//                                                Intent intent = new Intent();
-//                                                intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-//                                                intent.setData(Uri.fromParts("pakage", getPackageName(), null));
-//
-//                                            }
-//                                        }).show();
-//
-//                            } else
-//                                Toast.makeText(MainActivity.this, "Permission denied", Toast.LENGTH_SHORT).show();
-//
-//                        }
-//
-//                        @Override
-//                        public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
-//                            token.continuePermissionRequest();
-//                        }
-//                    }).check();
-//                }
-//
-//
-//
-//            }
-//        });
-
-
     }
 
     @Override
@@ -420,31 +364,47 @@ public class MainActivity extends AppCompatActivity {
                 .replaceAll("Đ", "D").replace("đ", "d");
     }
 
+    //    private void getSearchItems() {
+//        hairSalonAPI.getAllServiceByDiscountValue()
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Observer<ArrayList<SalonService>>() {
+//                    @Override
+//                    public void onSubscribe(Disposable d) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onNext(ArrayList<SalonService> salonServices) {
+//                        displayFilterService(salonServices);
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onComplete() {
+//
+//                    }
+//                });
+//    }
     private void getSearchItems() {
-        hairSalonAPI.getAllServiceByDiscountValue()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<ArrayList<SalonService>>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
+        Call call = hairSalonAPI.getAllServiceByDiscountValue();
 
-                    }
+        call.enqueue(new Callback() {
+            @Override
+            public void onResponse(Call call, Response response) {
+                ArrayList<SalonService> salonServices = (ArrayList<SalonService>) response.body();
+                displayFilterService(salonServices);
+            }
 
-                    @Override
-                    public void onNext(ArrayList<SalonService> salonServices) {
-                        displayFilterService(salonServices);
-                    }
+            @Override
+            public void onFailure(Call call, Throwable t) {
 
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
+            }
+        });
     }
 
     private void displayFilterService(ArrayList<SalonService> services) {
@@ -454,30 +414,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getAllSalonServiceByRating() {
-        hairSalonAPI.getAllServiceByRating()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<ArrayList<BookingDetail>>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
+        Call call = hairSalonAPI.getAllServiceByRating();
 
-                    }
+        call.enqueue(new Callback() {
+            @Override
+            public void onResponse(Call call, Response response) {
+                ArrayList<BookingDetail> bookingDetails = (ArrayList<BookingDetail>) response.body();
+                displayServiceByRating(bookingDetails);
+            }
 
-                    @Override
-                    public void onNext(ArrayList<BookingDetail> bookingDetails) {
-                        displayServiceByRating(bookingDetails);
-                    }
+            @Override
+            public void onFailure(Call call, Throwable t) {
 
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
+            }
+        });
     }
 
     private void displayServiceByRating(ArrayList<BookingDetail> bookingDetails) {
@@ -486,44 +436,24 @@ public class MainActivity extends AppCompatActivity {
         recyclerViewBestService.setAdapter(viewNewestAdapter);
     }
 
+
     private void getAllSalonServiceByDiscount() {
+        Call call = hairSalonAPI.getAllServiceByDiscountValue();
 
-        hairSalonAPI.getAllServiceByDiscountValue()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<ArrayList<SalonService>>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
+        call.enqueue(new Callback() {
+            @Override
+            public void onResponse(Call call, Response response) {
+                ArrayList<SalonService> salonServices = (ArrayList<SalonService>) response.body();
+                displayServiceByDiscount(salonServices);
+            }
 
-                    }
+            @Override
+            public void onFailure(Call call, Throwable t) {
 
-                    @Override
-                    public void onNext(ArrayList<SalonService> salonServices) {
-                        displayServiceByDiscount(salonServices);
-                        getAllAddress(salonServices);
-                        salonServiceArrayList = new ArrayList<>(salonServices);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
+            }
+        });
     }
 
-    private void getAllAddress(ArrayList<SalonService> salonServices) {
-        String addr;
-        for (int i = 0; i < salonServices.size(); i++) {
-            addr = salonServices.get(i).getSalon().getAddress().getStreet();
-            addressList.add(addr);
-        }
-
-    }
 
     private void displayServiceByDiscount(ArrayList<SalonService> salonServices) {
         RecyclerViewServiceByDiscountAdapter viewAdapter

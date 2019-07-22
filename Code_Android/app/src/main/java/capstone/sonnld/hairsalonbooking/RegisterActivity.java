@@ -115,10 +115,6 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
 
-
-
-
-
         if(edtName.getError() == null
                 && edtUsername.getError() == null
                 && edtPhoneNumber.getError() == null

@@ -11,6 +11,8 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,11 +58,12 @@ public class RecyclerViewExtraServiceAdapter extends RecyclerView.Adapter<Recycl
         discountValue = salonServices.get(position).getDiscount().getDiscountValue();
         price = salonServices.get(position).getPrice();
         serviceSalePrice = getSalePrice(price,discountValue);
+        String serviceImg = salonServices.get(position).getIconUrl();
 
         holder.txtSalonServiceName.setText(uppercaseFirstLetter(serviceName) + " (-" + discountValue + "%)" );
         holder.txtPrice.setText(price);
         holder.txtSalePrice.setText(serviceSalePrice);
-        holder.imgServiceIcon.setImageResource(R.drawable.kid);
+        Picasso.with(mContext).load(serviceImg).into(holder.imgServiceIcon);
         holder.setItemClickListener(new ItemClickListener() {
             @Override
             public void onItemClick(View view, int pos) {

@@ -15,17 +15,15 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 public interface HairSalonAPI {
+
     @GET("salonservice")
-    Observable<ArrayList<SalonService>> getAllServiceByDiscountValue();
+    Call<ArrayList<SalonService>> getAllServiceByDiscountValue();
 
     @GET("booking-details")
-    Observable<ArrayList<BookingDetail>> getAllServiceByRating();
+    Call<ArrayList<BookingDetail>> getAllServiceByRating();
 
     @GET("salonservice/{id}")
-    Observable<ArrayList<SalonService>> getSalonServiceBySalonId(@Path("id") int id);
-
-    @GET("salon/search/{salonName}")
-    Observable<Salon> getSalon(@Path("salonName") String salonName);
+    Call<ArrayList<SalonService>> getSalonServiceBySalonId(@Path("id") int id);
 
     @GET("users-details/{username}")
     Call<Account> getUserDetail(@Path("username") String username);
