@@ -6,45 +6,50 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 
 public class BookingDetail implements Serializable {
-    @SerializedName("id")
+    @SerializedName("booking_details_id")
     @Expose
-    private Integer id;
-    @SerializedName("salon_service_id")
+    private Integer bookingDetailsId;
+    @SerializedName("booking_id")
     @Expose
-    private Integer salonServiceId;
+    private Integer bookingId;
+    @SerializedName("review")
+    @Expose
+    private Review review;
     @SerializedName("review_id")
     @Expose
     private Integer reviewId;
-    @SerializedName("rating")
-    @Expose
-    private Integer rating;
-    @SerializedName("salonName")
-    @Expose
-    private String salonName;
-    @SerializedName("serviceName")
-    @Expose
-    private String serviceName;
-    @SerializedName("status")
-    @Expose
-    private String status;
     @SerializedName("salonService")
     @Expose
     private SalonService salonService;
+    @SerializedName("salon_service_id")
+    @Expose
+    private Integer salonServiceId;
+    @SerializedName("status")
+    @Expose
+    private String status;
 
-    public Integer getId() {
-        return id;
+    public Integer getBookingDetailsId() {
+        return bookingDetailsId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setBookingDetailsId(Integer bookingDetailsId) {
+        this.bookingDetailsId = bookingDetailsId;
     }
 
-    public Integer getSalonServiceId() {
-        return salonServiceId;
+    public Integer getBookingId() {
+        return bookingId;
     }
 
-    public void setSalonServiceId(Integer salonServiceId) {
-        this.salonServiceId = salonServiceId;
+    public void setBookingId(Integer bookingId) {
+        this.bookingId = bookingId;
+    }
+
+    public Review getReview() {
+        return review;
+    }
+
+    public void setReview(Review review) {
+        this.review = review;
     }
 
     public Integer getReviewId() {
@@ -55,28 +60,20 @@ public class BookingDetail implements Serializable {
         this.reviewId = reviewId;
     }
 
-    public Integer getRating() {
-        return rating;
+    public SalonService getSalonService() {
+        return salonService;
     }
 
-    public void setRating(Integer rating) {
-        this.rating = rating;
+    public void setSalonService(SalonService salonService) {
+        this.salonService = salonService;
     }
 
-    public String getSalonName() {
-        return salonName;
+    public Integer getSalonServiceId() {
+        return salonServiceId;
     }
 
-    public void setSalonName(String salonName) {
-        this.salonName = salonName;
-    }
-
-    public String getServiceName() {
-        return serviceName;
-    }
-
-    public void setServiceName(String serviceName) {
-        this.serviceName = serviceName;
+    public void setSalonServiceId(Integer salonServiceId) {
+        this.salonServiceId = salonServiceId;
     }
 
     public String getStatus() {
@@ -87,11 +84,4 @@ public class BookingDetail implements Serializable {
         this.status = status;
     }
 
-    public SalonService getSalonService() {
-        return salonService;
-    }
-
-    public void setSalonService(SalonService salonService) {
-        this.salonService = salonService;
-    }
 }

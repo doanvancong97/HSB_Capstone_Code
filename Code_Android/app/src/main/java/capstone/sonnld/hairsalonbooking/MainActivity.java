@@ -87,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
     // layout
     private LinearLayout homeLayout;
     private LinearLayout searchResultLayout;
+    private int userID=999;
 
     // list salon address, name
 
@@ -347,6 +348,7 @@ public class MainActivity extends AppCompatActivity {
                 Account currentAcc = response.body();
                 String avatarUrl = currentAcc.getAvatar();
                 String fullName = currentAcc.getFullname();
+                userID = currentAcc.getUserId();
                 Picasso.with(MainActivity.this).load(avatarUrl).into(imgAvatar);
                 txtWelcome.setText("Xin chào, " + fullName);
             }
@@ -367,31 +369,7 @@ public class MainActivity extends AppCompatActivity {
                 .replaceAll("Đ", "D").replace("đ", "d");
     }
 
-    //    private void getSearchItems() {
-//        hairSalonAPI.getAllServiceByDiscountValue()
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new Observer<ArrayList<SalonService>>() {
-//                    @Override
-//                    public void onSubscribe(Disposable d) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onNext(ArrayList<SalonService> salonServices) {
-//                        displayFilterService(salonServices);
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable e) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onComplete() {
-//
-//                    }
-//                });
+
 //    }
     private void getSearchItems() {
         Call call = hairSalonAPI.getAllServiceByDiscountValue();
@@ -482,6 +460,8 @@ public class MainActivity extends AppCompatActivity {
     public void clickToViewHistory(MenuItem item) {
 
         Intent intent = new Intent(MainActivity.this, HistoryActivity.class);
+        intent.putExtra("USER_ID",userID);
+        Toast.makeText(this, userID+"", Toast.LENGTH_SHORT).show();
         startActivity(intent);
 
 

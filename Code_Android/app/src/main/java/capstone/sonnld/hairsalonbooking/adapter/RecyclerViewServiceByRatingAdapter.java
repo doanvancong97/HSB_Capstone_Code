@@ -81,7 +81,7 @@ public class RecyclerViewServiceByRatingAdapter extends RecyclerView.Adapter<Rec
          salonAddress = bookingDetailList.get(position).getSalonService().getSalon().getAddress().getStreetNumber()+", "
                  +bookingDetailList.get(position).getSalonService().getSalon().getAddress().getStreet();
          saleValue = " - " + bookingDetailList.get(position).getSalonService().getDiscount().getDiscountValue()+"%";
-         rate = bookingDetailList.get(position).getRating() + "";
+         //rate = bookingDetailList.get(position).getRating() + "";
          imgUrl = bookingDetailList.get(position).getSalonService().getSalon().getUrl();
          price = bookingDetailList.get(position).getSalonService().getPrice();
          discountValue = bookingDetailList.get(position).getSalonService().getDiscount().getDiscountValue();

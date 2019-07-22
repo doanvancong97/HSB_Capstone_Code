@@ -1,78 +1,91 @@
 package capstone.sonnld.hairsalonbooking.model;
 
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
+import java.util.List;
 
 public class Booking implements Serializable {
-    private String booking_id;
-
-    private String booking_date;
-
-    private String booking_time;
-
-    private String customer_id;
-
+    @SerializedName("account")
+    @Expose
     private Account account;
-
+    @SerializedName("bookingDetailsCollection")
+    @Expose
+    private List<BookingDetail> bookingDetail = null;
+    @SerializedName("booking_date")
+    @Expose
+    private String bookingDate;
+    @SerializedName("booking_id")
+    @Expose
+    private Integer bookingId;
+    @SerializedName("booking_time")
+    @Expose
+    private String bookingTime;
+    @SerializedName("customer_id")
+    @Expose
+    private Integer customerId;
+    @SerializedName("status")
+    @Expose
     private String status;
 
-    public String getBooking_id ()
-    {
-        return booking_id;
-    }
-
-    public void setBooking_id (String booking_id)
-    {
-        this.booking_id = booking_id;
-    }
-
-    public String getBooking_date ()
-    {
-        return booking_date;
-    }
-
-    public void setBooking_date (String booking_date)
-    {
-        this.booking_date = booking_date;
-    }
-
-    public String getBooking_time ()
-    {
-        return booking_time;
-    }
-
-    public void setBooking_time (String booking_time)
-    {
-        this.booking_time = booking_time;
-    }
-
-    public String getCustomer_id ()
-    {
-        return customer_id;
-    }
-
-    public void setCustomer_id (String customer_id)
-    {
-        this.customer_id = customer_id;
-    }
-
-    public Account getAccount ()
-    {
+    public Account getAccount() {
         return account;
     }
 
-    public void setAccount (Account account)
-    {
+    public void setAccount(Account account) {
         this.account = account;
     }
 
-    public String getStatus ()
-    {
+
+
+
+    public String getBookingDate() {
+        return bookingDate;
+    }
+
+    public List<BookingDetail> getBookingDetail() {
+        return bookingDetail;
+    }
+
+    public void setBookingDetail(List<BookingDetail> bookingDetail) {
+        this.bookingDetail = bookingDetail;
+    }
+
+    public void setBookingDate(String bookingDate) {
+        this.bookingDate = bookingDate;
+    }
+
+    public Integer getBookingId() {
+        return bookingId;
+    }
+
+    public void setBookingId(Integer bookingId) {
+        this.bookingId = bookingId;
+    }
+
+    public String getBookingTime() {
+        return bookingTime;
+    }
+
+    public void setBookingTime(String bookingTime) {
+        this.bookingTime = bookingTime;
+    }
+
+    public Integer getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Integer customerId) {
+        this.customerId = customerId;
+    }
+
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus (String status)
-    {
+    public void setStatus(String status) {
         this.status = status;
     }
 }
