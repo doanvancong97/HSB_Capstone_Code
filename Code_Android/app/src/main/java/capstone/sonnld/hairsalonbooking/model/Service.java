@@ -6,24 +6,40 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 
 public class Service implements Serializable {
+    @SerializedName("category")
+    @Expose
+    private Category category;
+    @SerializedName("category_id")
+    @Expose
+    private Integer categoryId;
     @SerializedName("service_id")
     @Expose
     private Integer serviceId;
     @SerializedName("service_name")
     @Expose
     private String serviceName;
-    @SerializedName("unit")
-    @Expose
-    private String unit;
     @SerializedName("status")
     @Expose
     private String status;
-    @SerializedName("category_id")
+    @SerializedName("unit")
     @Expose
-    private Integer categoryId;
-    @SerializedName("category")
-    @Expose
-    private Category category;
+    private String unit;
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public Integer getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Integer categoryId) {
+        this.categoryId = categoryId;
+    }
 
     public Integer getServiceId() {
         return serviceId;
@@ -41,14 +57,6 @@ public class Service implements Serializable {
         this.serviceName = serviceName;
     }
 
-    public String getUnit() {
-        return unit;
-    }
-
-    public void setUnit(String unit) {
-        this.unit = unit;
-    }
-
     public String getStatus() {
         return status;
     }
@@ -57,19 +65,11 @@ public class Service implements Serializable {
         this.status = status;
     }
 
-    public Integer getCategoryId() {
-        return categoryId;
+    public String getUnit() {
+        return unit;
     }
 
-    public void setCategoryId(Integer categoryId) {
-        this.categoryId = categoryId;
-    }
-
-    public Category getCategory() {
-        return category;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
+    public void setUnit(String unit) {
+        this.unit = unit;
     }
 }

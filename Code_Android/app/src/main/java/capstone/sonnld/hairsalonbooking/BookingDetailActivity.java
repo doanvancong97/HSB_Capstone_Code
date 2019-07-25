@@ -53,6 +53,8 @@ public class BookingDetailActivity extends AppCompatActivity {
 
     // user detail
     private TextView txtUsername;
+    private int userId;
+    private String phone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,16 +74,16 @@ public class BookingDetailActivity extends AppCompatActivity {
         txtAddress = findViewById(R.id.txt_address);
         txtUsername = findViewById(R.id.txt_username);
 
-
-
-
         // get data from detail salon/ detail service activity
         Intent intent = getIntent();
         salonServices = (ArrayList<SalonService>) intent.getSerializableExtra("chkService");
         String bookedDate = intent.getExtras().getString("bookedDate");
         String bookedTime = intent.getExtras().getString("bookedTime");
-        final String address = intent.getExtras().getString("salonAddress");
+        String address = intent.getExtras().getString("salonAddress");
         String fullname = intent.getExtras().getString("fullname");
+        userId = intent.getExtras().getInt("userId");
+        Toast.makeText(this, userId + "", Toast.LENGTH_SHORT).show();
+        phone = intent.getExtras().getString("phoneNum");
         String des = intent.getExtras().getString("description");
 
         // setup value
@@ -103,7 +105,7 @@ public class BookingDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Uri gmmIntentUri = Uri.parse("google.navigation:q="+address);
+                Uri gmmIntentUri = Uri.parse("google.navigation:q="+txtAddress.getText().toString());
                 Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
                 mapIntent.setPackage("com.google.android.apps.maps");
                 startActivity(mapIntent);
@@ -138,9 +140,10 @@ public class BookingDetailActivity extends AppCompatActivity {
     
 
     public void submitBooking() {
-        BookingDTO bookingDTO = new BookingDTO(1,
-                "Sonnnnnn", "09999999",
-                "2019-12-19", "12:12", "process", bookingDetailsDTOList);
+        BookingDTO bookingDTO = new BookingDTO(userId,
+                txtUsername.getText().toString(), phone,
+                txtBookedDate.getText().toString(), txtBookedTime.getText().toString(),
+                "process", bookingDetailsDTOList);
 
         Call<BookingDTO> call = hairSalonAPI.postBooking(bookingDTO);
 

@@ -6,56 +6,40 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 
 public class Discount implements Serializable {
-    @SerializedName("discountId")
+    @SerializedName("couponCode")
     @Expose
-    private Integer discountId;
-    @SerializedName("discountValue")
-    @Expose
-    private String discountValue;
-    @SerializedName("discountUnit")
-    @Expose
-    private String discountUnit;
+    private String couponCode;
     @SerializedName("createDate")
     @Expose
     private String createDate;
-    @SerializedName("validFrom")
+    @SerializedName("discountId")
     @Expose
-    private String validFrom;
-    @SerializedName("validUntil")
+    private Integer discountId;
+    @SerializedName("discountUnit")
     @Expose
-    private String validUntil;
-    @SerializedName("couponCode")
+    private String discountUnit;
+    @SerializedName("discountValue")
     @Expose
-    private Object couponCode;
+    private String discountValue;
     @SerializedName("status")
     @Expose
     private String status;
     @SerializedName("user_id")
     @Expose
     private Integer userId;
+    @SerializedName("validFrom")
+    @Expose
+    private String validFrom;
+    @SerializedName("validUntil")
+    @Expose
+    private String validUntil;
 
-    public Integer getDiscountId() {
-        return discountId;
+    public String getCouponCode() {
+        return couponCode;
     }
 
-    public void setDiscountId(Integer discountId) {
-        this.discountId = discountId;
-    }
-
-    public String getDiscountValue() {
-        return discountValue;
-    }
-
-    public void setDiscountValue(String discountValue) {
-        this.discountValue = discountValue;
-    }
-
-    public String getDiscountUnit() {
-        return discountUnit;
-    }
-
-    public void setDiscountUnit(String discountUnit) {
-        this.discountUnit = discountUnit;
+    public void setCouponCode(String couponCode) {
+        this.couponCode = couponCode;
     }
 
     public String getCreateDate() {
@@ -66,28 +50,28 @@ public class Discount implements Serializable {
         this.createDate = createDate;
     }
 
-    public String getValidFrom() {
-        return validFrom;
+    public Integer getDiscountId() {
+        return discountId;
     }
 
-    public void setValidFrom(String validFrom) {
-        this.validFrom = validFrom;
+    public void setDiscountId(Integer discountId) {
+        this.discountId = discountId;
     }
 
-    public String getValidUntil() {
-        return validUntil;
+    public String getDiscountUnit() {
+        return discountUnit;
     }
 
-    public void setValidUntil(String validUntil) {
-        this.validUntil = validUntil;
+    public void setDiscountUnit(String discountUnit) {
+        this.discountUnit = discountUnit;
     }
 
-    public Object getCouponCode() {
-        return couponCode;
+    public String getDiscountValue() {
+        return discountValue;
     }
 
-    public void setCouponCode(Object couponCode) {
-        this.couponCode = couponCode;
+    public void setDiscountValue(String discountValue) {
+        this.discountValue = discountValue;
     }
 
     public String getStatus() {
@@ -104,5 +88,21 @@ public class Discount implements Serializable {
 
     public void setUserId(Integer userId) {
         this.userId = userId;
+    }
+
+    public String getValidFrom() {
+        return validFrom;
+    }
+
+    public void setValidFrom(String validFrom) {
+        this.validFrom = validFrom;
+    }
+
+    public String getValidUntil() {
+        return validUntil;
+    }
+
+    public void setValidUntil(String validUntil) {
+        this.validUntil = validUntil;
     }
 }

@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
     // layout
     private LinearLayout homeLayout;
     private LinearLayout searchResultLayout;
-    private int userID=999;
+    private int userID;
 
     // list salon address, name
 
@@ -123,8 +123,6 @@ public class MainActivity extends AppCompatActivity {
         mDrawerLayout.addDrawerListener(mActionBarDrawerToggle);
         mActionBarDrawerToggle.syncState();
 
-        //end setup sideBar
-
 
         // User detail setup
         navigationview = findViewById(R.id.navigationview);
@@ -151,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-
+        //onclick login
         btn_ReLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -230,6 +228,7 @@ public class MainActivity extends AppCompatActivity {
         // setup location
         btnLocation = findViewById(R.id.btn_location);
 
+        // location onclick
         btnLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -370,7 +369,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-//    }
     private void getSearchItems() {
         Call call = hairSalonAPI.getAllServiceByDiscountValue();
 
@@ -463,7 +461,5 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("USER_ID",userID);
         Toast.makeText(this, userID+"", Toast.LENGTH_SHORT).show();
         startActivity(intent);
-
-
     }
 }

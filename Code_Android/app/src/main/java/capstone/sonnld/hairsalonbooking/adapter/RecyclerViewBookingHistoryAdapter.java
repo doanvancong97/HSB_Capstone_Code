@@ -2,7 +2,6 @@ package capstone.sonnld.hairsalonbooking.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Paint;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -17,27 +16,20 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 import capstone.sonnld.hairsalonbooking.DetailServiceActivity;
+import capstone.sonnld.hairsalonbooking.HistoryDetailActivity;
 import capstone.sonnld.hairsalonbooking.R;
 import capstone.sonnld.hairsalonbooking.model.Booking;
-import capstone.sonnld.hairsalonbooking.model.SalonService;
 
 public class RecyclerViewBookingHistoryAdapter extends RecyclerView.Adapter<RecyclerViewBookingHistoryAdapter.MyViewHolder> {
 
     private Context mContext;
     private ArrayList<Booking> listBooking;
-    private String des;
-    private String serviceName;
+
     private String salonName;
-    private String discountValue;
+    private String bookedDate;
+    private String bookedTime;
     private String salonAddress;
-    private String saleValue;
-    private String price;
     private String imgUrl;
-
-
-
-
-
 
     public RecyclerViewBookingHistoryAdapter(Context mContext, ArrayList<Booking> listBooking) {
         this.mContext = mContext;
@@ -55,56 +47,55 @@ public class RecyclerViewBookingHistoryAdapter extends RecyclerView.Adapter<Recy
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
         //show item
 
-        serviceName = listBooking.get(position).getBookingDetail().get(0).getSalonService().getService().getServiceName();
-//        salonAddress = salonServices.get(position).getSalon().getAddress().getStreetNumber() + ", "
-//                + salonServices.get(position).getSalon().getAddress().getStreet();
-        salonAddress = "";
-        saleValue = " - " + listBooking.get(position).getBookingDetail().get(0).getSalonService().getDiscount().getDiscountValue();
-        imgUrl = listBooking.get(position).getBookingDetail().get(0).getSalonService().getThumbUrl();
-        price = listBooking.get(position).getBookingDetail().get(0).getSalonService().getPrice();
-        discountValue = listBooking.get(position).getBookingDetail().get(0).getSalonService().getDiscount().getDiscountValue();
-        String salonName = listBooking.get(position).getBookingDetail().get(0).getSalonService().getSalon().getName();
+        salonName = listBooking.get(position).getBookingDetailsCollection().get(0).getSalonService()
+                .getSalon().getName();
+        salonAddress = listBooking.get(position).getBookingDetailsCollection().get(0).getSalonService()
+                .getSalon().getAddress().getStreetNumber() +
+                listBooking.get(position).getBookingDetailsCollection().get(0).getSalonService()
+                        .getSalon().getAddress().getStreet();
+        bookedDate = "Ngày đến: \n " + listBooking.get(position).getBookingDate();
+        bookedTime = "Giờ đến:\n" + listBooking.get(position).getBookingTime();
+        imgUrl = listBooking.get(position).getBookingDetailsCollection().get(0).getSalonService().getSalon().getUrl();
 
 
-        holder.txtSalonName.setText(salonName);
-        holder.txtServicePrice.setText(price);
-        holder.txtServiceSalePrice.setText(getSalePrice(price,discountValue));
-        holder.txtSalonServiceName.setText(uppercaseFirstLetter(serviceName));
+//        price = listBooking.get(position).getBookingDetailsCollection().get(position).getSalonService().getPrice();
+//        discountValue = listBooking.get(position).getBookingDetailsCollection().
+//                get(position).getSalonService().getDiscount().getDiscountValue();
+
+        holder.txtSalonName.setText(uppercaseFirstLetter(salonName));
+        holder.txtBookedTime.setText(bookedTime);
+        holder.txtBookedDate.setText(bookedDate);
         holder.txtSalonAddress.setText(salonAddress);
-        holder.txtSaleValue.setText(saleValue);
         Picasso.with(mContext)
                 .load(imgUrl)
                 .into(holder.imgServiceThumb);
-//
-//
+
+
 //        // event when tap on a item
-//        holder.cardView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                //pass data to Detail salon activity
-//                Intent intent = new Intent(mContext, DetailServiceActivity.class);
-//                intent.putExtra("SalonID",salonServices.get(position).getSalon().getSalonId());
-//                intent.putExtra("SalonService", salonServices.get(position).getService().getServiceName());
-//                intent.putExtra("SalonServicePrice", salonServices.get(position).getPrice());
-//                intent.putExtra("DiscountValue", salonServices.get(position).getDiscount().getDiscountValue());
-//                intent.putExtra("SalonName", salonServices.get(position).getSalon().getName());
-//                intent.putExtra("Description", des);
-//                intent.putExtra("Thumbnail", salonServices.get(position).getSalon().getUrl());
-//                intent.putExtra("Logo", salonServices.get(position).getSalon().getLogoUrl());
-//                intent.putExtra("Address", salonServices.get(position).getSalon().getAddress().getStreetNumber() + ", "
-//                        + salonServices.get(position).getSalon().getAddress().getStreet());
-//                // data need to be received in DetailSalonA
-//                mContext.startActivity(intent);
-//
-//            }
-//        });
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //pass data to HistoryDetailActivity
+                Intent intent = new Intent(mContext, HistoryDetailActivity.class);
+                intent.putExtra("BookedTime",listBooking.get(position).getBookingTime());
+                intent.putExtra("BookedDate", listBooking.get(position).getBookingDate());
+                intent.putExtra("Address", listBooking.get(position).getBookingDetailsCollection().get(0).getSalonService()
+                        .getSalon().getAddress().getStreetNumber() +
+                        listBooking.get(position).getBookingDetailsCollection().get(0).getSalonService()
+                                .getSalon().getAddress().getStreet());
+                intent.putExtra("SelectedService", listBooking.get(position).getBookingDetailsCollection());
+
+                mContext.startActivity(intent);
+
+            }
+        });
 
     }
 
-    public String getSalePrice(String price,String discountValue){
+    public String getSalePrice(String price, String discountValue) {
 
         String sSalePrice = price.substring(0, price.length() - 1);
         int nSalePrice = Integer.parseInt(sSalePrice);
@@ -125,30 +116,22 @@ public class RecyclerViewBookingHistoryAdapter extends RecyclerView.Adapter<Recy
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView txtSalonServiceName;
-        TextView txtSalonAddress;
-        TextView txtSaleValue;
-        TextView txtServicePrice;
-        TextView txtServiceSalePrice;
-        ImageView imgServiceThumb;
         TextView txtSalonName;
+        TextView txtBookedDate;
+        TextView txtBookedTime;
+        TextView txtSalonAddress;
+        ImageView imgServiceThumb;
         CardView cardView;
 
         public MyViewHolder(View itemView) {
             super(itemView);
 
-            txtSalonServiceName = itemView.findViewById(R.id.salon_service_name);
-            txtSalonName = itemView.findViewById(R.id.salon_name);
-            txtServicePrice = itemView.findViewById(R.id.txt_service_price);
-            txtServiceSalePrice = itemView.findViewById(R.id.txt_service_sale_price);
+            txtSalonName = itemView.findViewById(R.id.txt_salon_name);
+            txtBookedDate = itemView.findViewById(R.id.txt_booked_date);
+            txtBookedTime = itemView.findViewById(R.id.txt_booked_time);
             txtSalonAddress = itemView.findViewById(R.id.salon_address);
-            txtSaleValue = itemView.findViewById(R.id.txt_sale_value);
             imgServiceThumb = itemView.findViewById(R.id.salon_img);
             cardView = itemView.findViewById(R.id.card_view_booking_history);
-            txtServicePrice.setPaintFlags(txtServicePrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-
-
-
 
 
         }

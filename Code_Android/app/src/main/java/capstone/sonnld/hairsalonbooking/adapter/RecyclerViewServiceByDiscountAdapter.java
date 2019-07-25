@@ -24,9 +24,9 @@ public class RecyclerViewServiceByDiscountAdapter extends RecyclerView.Adapter<R
 
     private Context mContext;
     private ArrayList<SalonService> salonServices;
+
     private String des;
     private String serviceName;
-    private String salonName;
     private String discountValue;
     private String salonAddress;
     private String saleValue;

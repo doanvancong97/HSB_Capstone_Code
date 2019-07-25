@@ -1,66 +1,76 @@
 package capstone.sonnld.hairsalonbooking.model;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 public class Review implements Serializable {
-    private String review_id;
-
-    private String user_id;
-
-    private String rating;
-
-    private String create_date;
-
+    @SerializedName("comment")
+    @Expose
+    private String comment;
+    @SerializedName("create_date")
+    @Expose
+    private String createDate;
+    @SerializedName("rating")
+    @Expose
+    private Integer rating;
+    @SerializedName("review_id")
+    @Expose
+    private Integer reviewId;
+    @SerializedName("status")
+    @Expose
     private String status;
+    @SerializedName("user_id")
+    @Expose
+    private String userId;
 
-    public String getReview_id ()
-    {
-        return review_id;
+    public String getComment() {
+        return comment;
     }
 
-    public void setReview_id (String review_id)
-    {
-        this.review_id = review_id;
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
-    public String getUser_id ()
-    {
-        return user_id;
+    public String getCreateDate() {
+        return createDate;
     }
 
-    public void setUser_id (String user_id)
-    {
-        this.user_id = user_id;
+    public void setCreateDate(String createDate) {
+        this.createDate = createDate;
     }
 
-    public String getRating ()
-    {
+    public Integer getRating() {
         return rating;
     }
 
-    public void setRating (String rating)
-    {
+    public void setRating(Integer rating) {
         this.rating = rating;
     }
 
-    public String getCreate_date ()
-    {
-        return create_date;
+    public Integer getReviewId() {
+        return reviewId;
     }
 
-    public void setCreate_date (String create_date)
-    {
-        this.create_date = create_date;
+    public void setReviewId(Integer reviewId) {
+        this.reviewId = reviewId;
     }
 
-    public String getStatus ()
-    {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus (String status)
-    {
+    public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
 }

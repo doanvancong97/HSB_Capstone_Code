@@ -29,37 +29,40 @@ public class HistoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
-        recyclerViewHistory=findViewById(R.id.recycler_view_history);
 
         Retrofit retrofit = RetrofitClient.getInstance();
         hairSalonAPI = retrofit.create(HairSalonAPI.class);
 
-        recyclerViewHistory.setLayoutManager(new GridLayoutManager(this, 1));
         Intent intent = getIntent();
         int userID= intent.getExtras().getInt("USER_ID");
-        getAllBookingHistory(userID);
         Toast.makeText(this, "id="+userID, Toast.LENGTH_SHORT).show();
+
+        recyclerViewHistory=findViewById(R.id.recycler_view_history);
+        recyclerViewHistory.setLayoutManager(new GridLayoutManager(this, 1));
+        getAllBookingHistory(userID);
+
+
     }
 
     private void getAllBookingHistory( int userID) {
-        Call call = hairSalonAPI.getBookingHistoryByUserID(userID);
+        Call<ArrayList<Booking>> call = hairSalonAPI.getBookingHistoryByUserID(userID);
 
-        call.enqueue(new Callback() {
+        call.enqueue(new Callback<ArrayList<Booking>>() {
             @Override
-            public void onResponse(Call call, Response response) {
-                ArrayList<Booking> listBookingHistory = (ArrayList<Booking>) response.body();
-                displayBookingByUserID(listBookingHistory);
+            public void onResponse(Call<ArrayList<Booking>> call, Response<ArrayList<Booking>> response) {
+                displayBookingByUserID(response.body());
             }
 
             @Override
-            public void onFailure(Call call, Throwable t) {
+            public void onFailure(Call<ArrayList<Booking>> call, Throwable t) {
 
             }
         });
     }
 
     private void displayBookingByUserID( ArrayList<Booking> listBookingHistory) {
-        RecyclerViewBookingHistoryAdapter adapter = new RecyclerViewBookingHistoryAdapter(this,listBookingHistory);
+        RecyclerViewBookingHistoryAdapter adapter
+                = new RecyclerViewBookingHistoryAdapter(HistoryActivity.this,listBookingHistory);
         recyclerViewHistory.setAdapter(adapter);
 
     }

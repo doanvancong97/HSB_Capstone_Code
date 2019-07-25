@@ -7,6 +7,12 @@
     android:orientation="vertical"
     tools:context=".HistoryActivity">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Lịch sử đặt chỗ"
+        android:layout_marginBottom="10dp"
+        />
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view_history"
         android:layout_width="match_parent"

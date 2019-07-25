@@ -10,15 +10,15 @@ public class Address implements Serializable {
     @SerializedName("address_id")
     @Expose
     private Integer addressId;
-    @SerializedName("street_number")
-    @Expose
-    private String streetNumber;
-    @SerializedName("street")
-    @Expose
-    private String street;
     @SerializedName("district_id")
     @Expose
     private String districtId;
+    @SerializedName("street")
+    @Expose
+    private String street;
+    @SerializedName("street_number")
+    @Expose
+    private String streetNumber;
 
     public Integer getAddressId() {
         return addressId;
@@ -28,12 +28,12 @@ public class Address implements Serializable {
         this.addressId = addressId;
     }
 
-    public String getStreetNumber() {
-        return streetNumber;
+    public String getDistrictId() {
+        return districtId;
     }
 
-    public void setStreetNumber(String streetNumber) {
-        this.streetNumber = streetNumber;
+    public void setDistrictId(String districtId) {
+        this.districtId = districtId;
     }
 
     public String getStreet() {
@@ -44,11 +44,11 @@ public class Address implements Serializable {
         this.street = street;
     }
 
-    public String getDistrictId() {
-        return districtId;
+    public String getStreetNumber() {
+        return streetNumber;
     }
 
-    public void setDistrictId(String districtId) {
-        this.districtId = districtId;
+    public void setStreetNumber(String streetNumber) {
+        this.streetNumber = streetNumber;
     }
 }

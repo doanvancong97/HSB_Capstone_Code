@@ -8,49 +8,48 @@ import java.io.Serializable;
 public class Account implements Serializable {
     private transient final String DEFAULT_AVATAR_URL = "https://firebasestorage.googleapis.com/v0/b/codeandroid-b6876.appspot.com/o/default%20logo.PNG?alt=media&token=6e06341b-d09c-4e08-8077-1022954a5858";
 
+    @SerializedName("address")
+    @Expose
+    private String address;
+    @SerializedName("avatar")
+    @Expose
+    private String avatar;
+    @SerializedName("birthdate")
+    @Expose
+    private String birthdate;
+    @SerializedName("create_time")
+    @Expose
+    private String createTime;
+    @SerializedName("email")
+    @Expose
+    private String email;
+    @SerializedName("fullname")
+    @Expose
+    private String fullname;
+    @SerializedName("job")
+    @Expose
+    private String job;
+    @SerializedName("password")
+    @Expose
+    private String password;
+    @SerializedName("phoneNumber")
+    @Expose
+    private String phoneNumber;
+    @SerializedName("role_id")
+    @Expose
+    private Integer roleId;
+    @SerializedName("status")
+    @Expose
+    private String status;
+    @SerializedName("update_time")
+    @Expose
+    private String updateTime;
     @SerializedName("user_id")
     @Expose
     private Integer userId;
     @SerializedName("username")
     @Expose
     private String username;
-    @SerializedName("password")
-    @Expose
-    private String password;
-    @SerializedName("fullname")
-    @Expose
-    private String fullname;
-    @SerializedName("birthdate")
-    @Expose
-    private String birthdate;
-    @SerializedName("email")
-    @Expose
-    private String email;
-    @SerializedName("job")
-    @Expose
-    private String job;
-    @SerializedName("address")
-    @Expose
-    private String address;
-    @SerializedName("phoneNumber")
-    @Expose
-    private String phoneNumber;
-    @SerializedName("avatar")
-    @Expose
-    private String avatar;
-    @SerializedName("status")
-    @Expose
-    private String status;
-    @SerializedName("create_time")
-    @Expose
-    private Object createTime;
-    @SerializedName("update_time")
-    @Expose
-    private Object updateTime;
-    @SerializedName("role_id")
-    @Expose
-    private Integer roleId;
-
 
     public Account(String username, String password) {
         this.username = username;
@@ -175,15 +174,15 @@ public class Account implements Serializable {
         return createTime;
     }
 
-    public void setCreateTime(Object createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 
-    public Object getUpdateTime() {
+    public String getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(Object updateTime) {
+    public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime;
     }
 

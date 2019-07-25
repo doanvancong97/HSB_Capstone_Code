@@ -84,6 +84,8 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
     private String mUserName;
     private SessionManager sessionManager;
     private String fullName;
+    private int userId;
+    private String phone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +102,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
 //        addressAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 //        spAddress.setAdapter(addressAdapter);
 
-
+        // find view
         txtAddress = findViewById(R.id.txt_address);
         txtSalonService = findViewById(R.id.txt_salon_service_name);
         txtServicePrice = findViewById(R.id.txt_salon_service_price);
@@ -202,6 +204,8 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
                     sendDataToBooking.putExtra("bookedTime", bookedTime);
                     sendDataToBooking.putExtra("salonAddress", txtAddress.getText());
                     sendDataToBooking.putExtra("fullname", fullName);
+                    sendDataToBooking.putExtra("userId", userId);
+                    sendDataToBooking.putExtra("phoneNum", phone);
                     sendDataToBooking.putExtra("description", txtDescription.getText().toString());
                     startActivity(sendDataToBooking);
                 }
@@ -218,7 +222,8 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
             public void onResponse(Call<Account> call, Response<Account> response) {
                 Account currentAcc = response.body();
                 fullName = currentAcc.getFullname();
-
+                userId = currentAcc.getUserId();
+                phone = currentAcc.getPhoneNumber();
             }
 
             @Override
@@ -230,11 +235,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
 
     @Override
     public void onDateSelected(@NonNull final DateTime dateSelected) {
-        // log it for demo
 
-//        Toast.makeText(this, dateSelected.getDayOfMonth()
-//                + "/" + dateSelected.getMonthOfYear()
-//                + "/" + dateSelected.getYear(), Toast.LENGTH_SHORT).show();
 
         String dayOfMonth = dateSelected.getDayOfMonth() + "";
         String monthOfYear = dateSelected.getMonthOfYear() + "";
@@ -264,37 +265,10 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
 
             generateSlot();
         }
-
+        bookedDate = year + "-" + monthOfYear + "-" + dayOfMonth;
 
     }
 
-
-    //    private void getAllExtraService(int salonId) {
-//        hairSalonAPI.getSalonServiceBySalonId(salonId)
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new Observer<ArrayList<SalonService>>() {
-//                    @Override
-//                    public void onSubscribe(Disposable d) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onNext(ArrayList<SalonService> salonServices) {
-//                        displayExtraService(salonServices);
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable e) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onComplete() {
-//
-//                    }
-//                });
-//    }
     private void getAllExtraService(int salonId) {
         Call call = hairSalonAPI.getSalonServiceBySalonId(salonId);
         call.enqueue(new Callback() {

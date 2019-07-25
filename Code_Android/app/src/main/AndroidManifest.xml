@@ -15,7 +15,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:label">
-        <activity android:name=".HistoryActivity"></activity>
+        <activity android:name=".HistoryDetailActivity"></activity>
+        <activity android:name=".HistoryActivity" />
         <activity android:name=".ReceiptActivity" />
         <activity android:name=".ChangePasswordActivity" />
         <activity android:name=".UpdateProfileActivity" />

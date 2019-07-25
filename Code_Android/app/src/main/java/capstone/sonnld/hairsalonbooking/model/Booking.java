@@ -5,6 +5,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Booking implements Serializable {
@@ -13,7 +14,7 @@ public class Booking implements Serializable {
     private Account account;
     @SerializedName("bookingDetailsCollection")
     @Expose
-    private List<BookingDetail> bookingDetail = null;
+    private ArrayList<BookingDetail> bookingDetailsCollection = null;
     @SerializedName("booking_date")
     @Expose
     private String bookingDate;
@@ -38,19 +39,16 @@ public class Booking implements Serializable {
         this.account = account;
     }
 
+    public ArrayList<BookingDetail> getBookingDetailsCollection() {
+        return bookingDetailsCollection;
+    }
 
-
+    public void setBookingDetailsCollection(ArrayList<BookingDetail> bookingDetailsCollection) {
+        this.bookingDetailsCollection = bookingDetailsCollection;
+    }
 
     public String getBookingDate() {
         return bookingDate;
-    }
-
-    public List<BookingDetail> getBookingDetail() {
-        return bookingDetail;
-    }
-
-    public void setBookingDetail(List<BookingDetail> bookingDetail) {
-        this.bookingDetail = bookingDetail;
     }
 
     public void setBookingDate(String bookingDate) {
