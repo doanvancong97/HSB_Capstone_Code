@@ -63,7 +63,7 @@ public class RecyclerViewExtraServiceAdapter extends RecyclerView.Adapter<Recycl
         holder.txtSalonServiceName.setText(uppercaseFirstLetter(serviceName) + " (-" + discountValue + "%)" );
         holder.txtPrice.setText(price);
         holder.txtSalePrice.setText(serviceSalePrice);
-        Picasso.with(mContext).load(serviceImg).into(holder.imgServiceIcon);
+
         holder.setItemClickListener(new ItemClickListener() {
             @Override
             public void onItemClick(View view, int pos) {
@@ -107,7 +107,7 @@ public class RecyclerViewExtraServiceAdapter extends RecyclerView.Adapter<Recycl
         TextView txtPrice;
         TextView txtSalePrice;
         CheckBox chkBox;
-        ImageView imgServiceIcon;
+
         CardView cardView;
 
         ItemClickListener itemClickListener;
@@ -119,7 +119,7 @@ public class RecyclerViewExtraServiceAdapter extends RecyclerView.Adapter<Recycl
             txtPrice = itemView.findViewById(R.id.txt_salon_service_price);
             txtSalePrice = itemView.findViewById(R.id.txt_service_sale_price);
             chkBox = itemView.findViewById(R.id.chkBox);
-            imgServiceIcon = itemView.findViewById(R.id.service_icon);
+
             cardView = itemView.findViewById(R.id.card_view_service);
 
             txtPrice.setPaintFlags(txtPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);

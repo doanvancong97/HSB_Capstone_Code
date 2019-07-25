@@ -56,8 +56,8 @@ public class RecyclerViewBookingHistoryAdapter extends RecyclerView.Adapter<Recy
                 .getSalon().getAddress().getStreetNumber() +
                 listBooking.get(position).getBookingDetailsCollection().get(0).getSalonService()
                         .getSalon().getAddress().getStreet();
-        bookedDate = "Ngày đến: \n " + listBooking.get(position).getBookingDate();
-        bookedTime = "Giờ đến:\n" + listBooking.get(position).getBookingTime();
+        bookedDate = "Ngày đến: " + listBooking.get(position).getBookingDate();
+        bookedTime = "Giờ đến: " + listBooking.get(position).getBookingTime();
         imgUrl = listBooking.get(position).getBookingDetailsCollection().get(0).getSalonService().getSalon().getUrl();
 
 

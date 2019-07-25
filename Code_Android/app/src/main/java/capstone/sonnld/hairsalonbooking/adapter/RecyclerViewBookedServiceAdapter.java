@@ -56,9 +56,6 @@ public class RecyclerViewBookedServiceAdapter extends RecyclerView.Adapter<Recyc
         holder.txtServicePrice.setText(salePrice);
 
 
-        Picasso.with(mContext).
-                load(serviceIcon)
-                .into(holder.imgIcon);
 
 
         // event when tap on a item
@@ -90,13 +87,13 @@ public class RecyclerViewBookedServiceAdapter extends RecyclerView.Adapter<Recyc
 
         TextView txtSalonServiceName;
         TextView txtServicePrice;
-        ImageView imgIcon;
+
         CardView cardView;
 
         public MyViewHolder(View itemView) {
             super(itemView);
 
-            imgIcon = itemView.findViewById(R.id.service_icon);
+
             txtSalonServiceName = itemView.findViewById(R.id.service_name);
             txtServicePrice = itemView.findViewById(R.id.service_price);
             cardView = itemView.findViewById(R.id.card_view_selected_service);
