@@ -16,7 +16,6 @@ import java.util.ArrayList;
 
 import capstone.sonnld.hairsalonbooking.R;
 import capstone.sonnld.hairsalonbooking.model.BookingDetail;
-import capstone.sonnld.hairsalonbooking.model.SalonService;
 
 public class RecyclerViewBookedServiceAdapter extends RecyclerView.Adapter<RecyclerViewBookedServiceAdapter.MyViewHolder> {
 
@@ -49,25 +48,19 @@ public class RecyclerViewBookedServiceAdapter extends RecyclerView.Adapter<Recyc
         serviceName = bookingDetails.get(position).getSalonService().getService().getServiceName();
         price = bookingDetails.get(position).getSalonService().getPrice();
         discountValue = bookingDetails.get(position).getSalonService().getDiscount().getDiscountValue();
-        salePrice = getSalePrice(price,discountValue);
+        salePrice = getSalePrice(price, discountValue);
         String serviceIcon = bookingDetails.get(position).getSalonService().getIconUrl();
 
         holder.txtSalonServiceName.setText(uppercaseFirstLetter(serviceName));
         holder.txtServicePrice.setText(salePrice);
 
-
         Picasso.with(mContext).
                 load(serviceIcon)
                 .into(holder.imgIcon);
 
-
-        // event when tap on a item
-
-
-
     }
 
-    public String getSalePrice(String price,String discountValue){
+    public String getSalePrice(String price, String discountValue) {
 
         String sSalePrice = price.substring(0, price.length() - 1);
         int nSalePrice = Integer.parseInt(sSalePrice);
