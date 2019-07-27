@@ -35,7 +35,7 @@ public class RegisterActivity extends AppCompatActivity {
     // api
     private HairSalonAPI hairSalonAPI;
 
-
+    private String check = "wait";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,22 +58,45 @@ public class RegisterActivity extends AppCompatActivity {
 
 
     private void registerUser(Account account){
-        Call<Void> call = hairSalonAPI.registerUser(account);
 
-        call.enqueue(new Callback<Void>() {
+        Call<String> call = hairSalonAPI.registerUser(account);
+
+        call.enqueue(new Callback<String>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
+            public void onResponse(Call<String> call, Response<String> response) {
                 if(response.code() == 200){
                     Toast.makeText(RegisterActivity.this,
-                            "Register OK", Toast.LENGTH_LONG).show();
+                            response.body()+ "", Toast.LENGTH_LONG).show();
+
                 }
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {
+            public void onFailure(Call<String> call, Throwable t) {
 
             }
         });
+    }
+
+    private void checkDuplicateUsername(String username) {
+        Call<Account> call = hairSalonAPI.getUserDetail(username);
+
+        call.enqueue(new Callback<Account>() {
+            @Override
+            public void onResponse(Call<Account> call, Response<Account> response) {
+                if(response.code() == 200){
+                    edtUsername.setError("Tên đăng nhập đã tồn tại");
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<Account> call, Throwable t) {
+
+            }
+        });
+
     }
 
     public void clickToRegister(View view) {
@@ -86,9 +109,11 @@ public class RegisterActivity extends AppCompatActivity {
         String email = edtEmail.getText().toString();
 
 
+
         if (fullname.isEmpty()) {
             edtName.setError("Nhập Tên");
         }
+        checkDuplicateUsername(username);
 
 
         if (password.isEmpty()) {
@@ -113,6 +138,10 @@ public class RegisterActivity extends AppCompatActivity {
         if (!isValidMobile(phone)) {
             edtPhoneNumber.setError("Số điện thoại không tồn tại");
         }
+
+
+
+
 
 
         if(edtName.getError() == null
@@ -149,28 +178,23 @@ public class RegisterActivity extends AppCompatActivity {
     public void clickToRedirectToLogin(View view) {
 
         Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-
         startActivity(intent);
     }
 
     private boolean isValidMail(String email) {
 
-        String EMAIL_STRING = "^\\w+[@]\\w+";
-
-        return Pattern.compile(EMAIL_STRING).matcher(email).matches();
+//        String EMAIL_STRING = "^\\w+[@]\\w+";
+//
+//        return Pattern.compile(EMAIL_STRING).matcher(email).matches();
+        return true;
 
     }
 
     private boolean isValidMobile(String phone) {
-        String PHONE_STRING = "^[0]\\d{9}";
-
-        return Pattern.compile(PHONE_STRING).matcher(phone).matches();
+//        String PHONE_STRING = "^[0-9]{9,15}";
+//
+//        return Pattern.compile(PHONE_STRING).matcher(phone).matches();
+        return true;
     }
 
-
-
-
-//    private boolean isValidMail(String email) {
-//        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
-//    }
 }

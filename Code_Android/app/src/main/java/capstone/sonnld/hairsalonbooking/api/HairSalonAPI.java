@@ -39,8 +39,9 @@ public interface HairSalonAPI {
     Call<Void> updateUser(@Path("id") int id, @Body Account account);
 
     @POST("sign-up")
-    Call<Void> registerUser(@Body Account account);
+    Call<String> registerUser(@Body Account account);
 
     @GET("bookingHistory/{accountId}")
     Call<ArrayList<Booking>> getBookingHistoryByUserID(@Path("accountId") int accountId);
+
 }
