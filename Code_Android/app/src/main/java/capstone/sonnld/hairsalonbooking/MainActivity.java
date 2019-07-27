@@ -263,13 +263,11 @@ public class MainActivity extends AppCompatActivity {
 
                     Toast.makeText(MainActivity.this, "Location is on", Toast.LENGTH_SHORT).show();
 
-
                     if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                         Intent intent = new Intent(MainActivity.this, MapsActivity.class);
                         intent.putExtra("salonServiceList", salonServiceArrayList);
                         startActivity(intent);
 
-                        return;
                     } else {
                         Dexter.withActivity(MainActivity.this).withPermission(Manifest.permission.ACCESS_FINE_LOCATION).withListener(new PermissionListener() {
                             @Override
@@ -423,6 +421,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call call, Response response) {
                 ArrayList<SalonService> salonServices = (ArrayList<SalonService>) response.body();
+                salonServiceArrayList = new ArrayList<>(salonServices);
                 displayServiceByDiscount(salonServices);
             }
 

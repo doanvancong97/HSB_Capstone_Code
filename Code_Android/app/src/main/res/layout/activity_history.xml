@@ -5,16 +5,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/white"
     tools:context=".HistoryActivity">
 
     <TextView
+        android:id="@+id/text_service"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/my_text_view_bg"
+        android:padding="5dp"
+        android:gravity="center"
         android:text="Lịch sử đặt chỗ"
-        android:layout_marginBottom="10dp"
-       android:gravity="center"
-        android:textSize="20dp"
-        android:textColor="@color/red2"
+        android:textAllCaps="true"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+
         />
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view_history"
