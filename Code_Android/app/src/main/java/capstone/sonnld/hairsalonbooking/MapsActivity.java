@@ -95,10 +95,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         mMap = googleMap;
-        MapStyleOptions mapStyleOptions = MapStyleOptions.loadRawResourceStyle(this, R.raw.style_maps);
+       // MapStyleOptions mapStyleOptions = MapStyleOptions.loadRawResourceStyle(this, R.raw.style_maps);
 
 
-        mMap.setMapStyle(mapStyleOptions);
+       // mMap.setMapStyle(mapStyleOptions);
         mMap.setMyLocationEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
         Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
@@ -131,8 +131,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 markerOptions.snippet(salonId + "");
 
 
-                int height = 150;
-                int width = 150;
+                int height = 100;
+                int width = 100;
 //                BitmapDrawable bitmapdraw = (BitmapDrawable) getResources().getDrawable(R.drawable.logo_30_shine);
 //                Bitmap b = bitmapdraw.getBitmap();
 //                Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);

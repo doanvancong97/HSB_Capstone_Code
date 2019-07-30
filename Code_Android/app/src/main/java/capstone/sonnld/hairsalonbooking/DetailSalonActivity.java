@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.borjabravo.readmoretextview.ReadMoreTextView;
 import com.github.jhonnyx2012.horizontalpicker.DatePickerListener;
 import com.github.jhonnyx2012.horizontalpicker.HorizontalPicker;
 import com.squareup.picasso.Picasso;
@@ -49,7 +50,7 @@ import static capstone.sonnld.hairsalonbooking.R.drawable.button_time;
 public class DetailSalonActivity extends AppCompatActivity implements DatePickerListener {
     private TextView txtSalonName;
     private TextView txtAddress;
-    private TextView txtDescription;
+    private ReadMoreTextView txtDescription;
     private HairSalonAPI hairSalonAPI;
     private Button btnConfirm;
     private RecyclerView recyclerView;
@@ -84,7 +85,7 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
 
         txtAddress = findViewById(R.id.txt_address);
         txtSalonName = findViewById(R.id.txtSalonName);
-        txtDescription = findViewById(R.id.txt_description);
+        txtDescription = findViewById(R.id.txt_description2);
         imgThumb = findViewById(R.id.img_thumbnail);
         btnConfirm = findViewById(R.id.btn_confirm);
         imgLogo = findViewById(R.id.img_logo);

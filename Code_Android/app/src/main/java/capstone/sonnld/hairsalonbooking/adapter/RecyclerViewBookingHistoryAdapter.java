@@ -53,11 +53,17 @@ public class RecyclerViewBookingHistoryAdapter extends RecyclerView.Adapter<Recy
         salonName = listBooking.get(position).getBookingDetailsCollection().get(0).getSalonService()
                 .getSalon().getName();
         salonAddress = listBooking.get(position).getBookingDetailsCollection().get(0).getSalonService()
-                .getSalon().getAddress().getStreetNumber() +
+                .getSalon().getAddress().getStreetNumber() +","+
                 listBooking.get(position).getBookingDetailsCollection().get(0).getSalonService()
                         .getSalon().getAddress().getStreet();
-        bookedDate = "Ngày đến: " + listBooking.get(position).getBookingDate();
-        bookedTime = "Giờ đến: " + listBooking.get(position).getBookingTime();
+
+
+        String[] bookedDateArr = listBooking.get(position).getBookingDate().split("-");
+        bookedDate = "Ngày đến: " + bookedDateArr[2]+"/"+bookedDateArr[1]+"/"+bookedDateArr[0];
+
+        String[] bookedTimeArr = listBooking.get(position).getBookingTime().split(":");
+
+        bookedTime = "Giờ đến: " + bookedTimeArr[0]+":"+bookedTimeArr[1];
         imgUrl = listBooking.get(position).getBookingDetailsCollection().get(0).getSalonService().getSalon().getUrl();
 
 

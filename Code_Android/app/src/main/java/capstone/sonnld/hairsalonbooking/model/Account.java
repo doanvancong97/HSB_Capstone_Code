@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 
 public class Account implements Serializable {
-    private transient final String DEFAULT_AVATAR_URL = "https://firebasestorage.googleapis.com/v0/b/codeandroid-b6876.appspot.com/o/default%20logo.PNG?alt=media&token=6e06341b-d09c-4e08-8077-1022954a5858";
+    private transient final String DEFAULT_AVATAR_URL = "https://firebasestorage.googleapis.com/v0/b/codeandroid-b6876.appspot.com/o/AvatarImages%2Favatar-doi-dep-38_015656136.jpg?alt=media&token=0bcf00fd-b979-4958-9b61-6a4875e52de8";
 
     @SerializedName("address")
     @Expose
