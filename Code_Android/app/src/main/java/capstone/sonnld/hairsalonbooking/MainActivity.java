@@ -56,6 +56,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
+import static capstone.sonnld.hairsalonbooking.R.menu.navigation_menu;
+
 public class MainActivity extends AppCompatActivity {
 
     // api
@@ -65,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout lnWelcome;
     private TextView txtWelcome;
     private NavigationView navigationview;
+    MenuItem menuHistory;
 
     // recycler
     private RecyclerView recyclerView;
@@ -117,6 +120,9 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
+
+
+
         //setup menu sideBar
         mDrawerLayout = findViewById(R.id.drawerLayout);
         mActionBarDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
@@ -127,6 +133,7 @@ public class MainActivity extends AppCompatActivity {
         // User detail setup
         navigationview = findViewById(R.id.navigationview);
         View header = navigationview.getHeaderView(0);
+
 
         btn_ReLogin = header.findViewById(R.id.btn_ReLogin);
         lnWelcome = header.findViewById(R.id.lnWelcome);
@@ -145,6 +152,7 @@ public class MainActivity extends AppCompatActivity {
             lnWelcome.setVisibility(View.VISIBLE);
             initUserDetail();
             btn_ReLogin.setVisibility(View.GONE);
+
 
 
         }
@@ -175,9 +183,9 @@ public class MainActivity extends AppCompatActivity {
         getAllSalonServiceByDiscount();
 
         // recycler view for service by rating
-        recyclerViewBestService = findViewById(R.id.recycler_view_good_service);
-        recyclerViewBestService.setLayoutManager(new GridLayoutManager(MainActivity.this, 1));
-        getAllSalonServiceByRating();
+        //recyclerViewBestService = findViewById(R.id.recycler_view_good_service);
+        //recyclerViewBestService.setLayoutManager(new GridLayoutManager(MainActivity.this, 1));
+       // getAllSalonServiceByRating();
 
         // setup search filter
         recyclerViewFilterService = findViewById(R.id.recycler_view_filter_service);
@@ -266,6 +274,7 @@ public class MainActivity extends AppCompatActivity {
                     if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                         Intent intent = new Intent(MainActivity.this, MapsActivity.class);
                         intent.putExtra("salonServiceList", salonServiceArrayList);
+                        Toast.makeText(MainActivity.this, salonServiceArrayList.size() + "", Toast.LENGTH_SHORT).show();
                         startActivity(intent);
 
                     } else {
@@ -274,6 +283,8 @@ public class MainActivity extends AppCompatActivity {
                             public void onPermissionGranted(PermissionGrantedResponse response) {
                                 Intent intent = new Intent(MainActivity.this, MapsActivity.class);
                                 intent.putExtra("salonServiceList", salonServiceArrayList);
+                                Toast.makeText(MainActivity.this, salonServiceArrayList.size() + "", Toast.LENGTH_SHORT).show();
+
                                 startActivity(intent);
 
                             }

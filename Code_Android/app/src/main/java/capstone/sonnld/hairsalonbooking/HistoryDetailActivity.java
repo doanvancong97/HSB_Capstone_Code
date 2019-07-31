@@ -76,6 +76,9 @@ public class HistoryDetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String bookedDate = intent.getExtras().getString("BookedDate");
         String bookedTime = intent.getExtras().getString("BookedTime");
+        String[] bookedDateArr = bookedDate.split("-");
+        String[] bookedTimeArr = bookedTime.split(":");
+
         String address = intent.getExtras().getString("Address");
         ArrayList<BookingDetail> selectedService =
                 (ArrayList<BookingDetail>) intent.getSerializableExtra("SelectedService");
@@ -89,8 +92,8 @@ public class HistoryDetailActivity extends AppCompatActivity {
         }
 
         txtTotalPrice.setText("Tổng tiền là: " + totalPrice + "k");
-        txtBookedDate.setText(bookedDate);
-        txtBookedTime.setText(bookedTime);
+        txtBookedDate.setText(bookedDateArr[2]+"/"+bookedDateArr[1]+"/"+bookedDateArr[0]);
+        txtBookedTime.setText(bookedTimeArr[0]+":"+bookedTimeArr[1]);
         txtAddress.setText(address);
 
         recyclerView = findViewById(R.id.recycler_selected_service);

@@ -136,7 +136,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         }
         if (!isValidMobile(phone)) {
-            edtPhoneNumber.setError("Số điện thoại không tồn tại");
+            edtPhoneNumber.setError("Số điện thoại không đúng");
         }
 
 
@@ -183,18 +183,21 @@ public class RegisterActivity extends AppCompatActivity {
 
     private boolean isValidMail(String email) {
 
-//        String EMAIL_STRING = "^\\w+[@]\\w+";
-//
-//        return Pattern.compile(EMAIL_STRING).matcher(email).matches();
-        return true;
+        String EMAIL_STRING = "^[a-zA-Z0-9_+&*-]+(?:\\."+
+                "[a-zA-Z0-9_+&*-]+)*@" +
+                "(?:[a-zA-Z0-9-]+\\.)+[a-z" +
+                "A-Z]{2,7}$";
+
+        return Pattern.compile(EMAIL_STRING).matcher(email).matches();
+
 
     }
 
     private boolean isValidMobile(String phone) {
-//        String PHONE_STRING = "^[0-9]{9,15}";
-//
-//        return Pattern.compile(PHONE_STRING).matcher(phone).matches();
-        return true;
+        String PHONE_STRING = "^[0-9]{10}";
+
+        return Pattern.compile(PHONE_STRING).matcher(phone).matches();
+
     }
 
 }

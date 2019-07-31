@@ -59,11 +59,11 @@ public class RecyclerViewBookingHistoryAdapter extends RecyclerView.Adapter<Recy
 
 
         String[] bookedDateArr = listBooking.get(position).getBookingDate().split("-");
-        bookedDate = "Ngày đến: " + bookedDateArr[2]+"/"+bookedDateArr[1]+"/"+bookedDateArr[0];
+        bookedDate = ", ngày " + bookedDateArr[2]+"/"+bookedDateArr[1]+"/"+bookedDateArr[0];
 
         String[] bookedTimeArr = listBooking.get(position).getBookingTime().split(":");
 
-        bookedTime = "Giờ đến: " + bookedTimeArr[0]+":"+bookedTimeArr[1];
+        bookedTime = "Thời gian: " + bookedTimeArr[0]+":"+bookedTimeArr[1];
         imgUrl = listBooking.get(position).getBookingDetailsCollection().get(0).getSalonService().getSalon().getUrl();
 
 

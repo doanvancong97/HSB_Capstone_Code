@@ -42,7 +42,8 @@ public class BookingDetailActivity extends AppCompatActivity {
     private TextView txtBookedTime;
     private TextView txtTotalPrice;
     private TextView txtAddress;
-    private  TextView txtDirection;
+
+    String bookedDate;
 
     private ArrayList<BookingDetailsDTO> bookingDetailsDTOList = new ArrayList<>();
     private ArrayList<SalonService> salonServices;
@@ -60,7 +61,7 @@ public class BookingDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_booking_detail);
-        txtDirection = findViewById(R.id.txtDirection);
+
 
         //init api
         Retrofit retrofit = RetrofitClient.getInstance();
@@ -77,7 +78,10 @@ public class BookingDetailActivity extends AppCompatActivity {
         // get data from detail salon/ detail service activity
         Intent intent = getIntent();
         salonServices = (ArrayList<SalonService>) intent.getSerializableExtra("chkService");
-        String bookedDate = intent.getExtras().getString("bookedDate");
+         bookedDate = intent.getExtras().getString("bookedDate");
+
+        String[] bookedDateArr = bookedDate.split("-");
+
         String bookedTime = intent.getExtras().getString("bookedTime");
         String address = intent.getExtras().getString("salonAddress");
         String fullname = intent.getExtras().getString("fullname");
@@ -94,23 +98,14 @@ public class BookingDetailActivity extends AppCompatActivity {
             int salePrice = getSalePrice(price, discount);
             totalPrice += salePrice;
         }
-        txtTotalPrice.setText("Tổng tiền là: " + totalPrice + "k");
-        txtBookedDate.setText(bookedDate);
+        txtTotalPrice.setText("Tổng cộng: " + totalPrice + "K");
+        txtBookedDate.setText(bookedDateArr[2]+"/"+bookedDateArr[1]+"/"+bookedDateArr[0]);
         txtBookedTime.setText(bookedTime);
         txtAddress.setText(address);
         txtUsername.setText(fullname);
         txtDescription.setText(des);
 
-        txtDirection.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
 
-                Uri gmmIntentUri = Uri.parse("google.navigation:q="+txtAddress.getText().toString());
-                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-                mapIntent.setPackage("com.google.android.apps.maps");
-                startActivity(mapIntent);
-            }
-        });
 
 
         recyclerView = findViewById(R.id.recycler_selected_service);
@@ -142,7 +137,7 @@ public class BookingDetailActivity extends AppCompatActivity {
     public void submitBooking() {
         BookingDTO bookingDTO = new BookingDTO(userId,
                 txtUsername.getText().toString(), phone,
-                txtBookedDate.getText().toString(), txtBookedTime.getText().toString(),
+                bookedDate, txtBookedTime.getText().toString(),
                 "process", bookingDetailsDTOList);
 
         Call<BookingDTO> call = hairSalonAPI.postBooking(bookingDTO);
@@ -154,7 +149,7 @@ public class BookingDetailActivity extends AppCompatActivity {
                         "Cảm ơn quý khách đã sử dụng dịch vụ.", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(BookingDetailActivity.this, ReceiptActivity.class);
                 intent.putExtra("fullname",txtUsername.getText().toString());
-                intent.putExtra("bookedDate",txtBookedDate.getText().toString());
+                intent.putExtra("bookedDate",bookedDate);
                 intent.putExtra("bookedTime",txtBookedTime.getText().toString());
                 intent.putExtra("address",txtAddress.getText().toString());
                 intent.putExtra("salonServices",salonServices);

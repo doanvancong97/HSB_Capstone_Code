@@ -6,6 +6,7 @@
             <menu>
                 <item
                     android:id="@+id/menuHistory"
+
                     android:icon="@drawable/history"
                     android:title="Lịch sử đặt"
                     android:onClick="clickToViewHistory"/>

@@ -14,6 +14,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface HairSalonAPI {
 
@@ -41,7 +42,7 @@ public interface HairSalonAPI {
     @POST("sign-up")
     Call<String> registerUser(@Body Account account);
 
-    @GET("bookingHistory/{accountId}")
-    Call<ArrayList<Booking>> getBookingHistoryByUserID(@Path("accountId") int accountId);
+    @GET("bookingHistories/{id}")
+    Call<ArrayList<Booking>> getBookingHistoryByUserID(@Path("id") int accountId);
 
 }

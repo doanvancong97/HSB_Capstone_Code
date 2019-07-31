@@ -5,11 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".HistoryDetailActivity">
+    tools:context=".HistoryDetailActivity"
+
+    >
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@id/btn_cancel"
 
         >
         <LinearLayout
@@ -167,48 +170,35 @@
 
                 android:padding="5dp"
                 android:text="Total"
+                android:textSize="18dp"
                 android:textAllCaps="true"
                 android:textColor="@color/black"
-                android:textStyle="bold" />
+                android:textStyle="italic|bold" />
 
 
-            <LinearLayout
-                android:id="@+id/btn_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
 
-                <Button
-                    android:id="@+id/btn_cancel"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_gravity="center"
-                    android:layout_margin="10dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/button_cancel"
-                    android:text="Quay lại"
-                    android:textSize="18sp"
-                    android:fontFamily="sans-serif-condensed-medium"/>
 
-                <Button
-                    android:id="@+id/btn_accept"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_gravity="center"
-                    android:layout_margin="10dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/button_accept"
-                    android:text="Xác nhận"
-                    android:textSize="18sp"
-                    android:textColor="@color/white"
-                    android:fontFamily="sans-serif-condensed-medium"/>
-            </LinearLayout>
+
+
+
+
         </LinearLayout>
 
 
     </ScrollView>
+
+    <Button
+        android:id="@+id/btn_cancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="center"
+        android:layout_margin="5dp"
+
+        android:background="@drawable/button_cancel"
+        android:text="Hủy"
+        android:textSize="18sp"
+        android:fontFamily="sans-serif-condensed-medium"/>
 
 
 

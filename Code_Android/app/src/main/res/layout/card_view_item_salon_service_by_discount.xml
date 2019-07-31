@@ -150,7 +150,9 @@
             android:textColor="@color/black"
             android:textStyle="bold"
             android:paddingLeft="10dp"
-            android:drawableLeft="@drawable/locaton_icon"/>
+            android:drawableLeft="@drawable/locaton_icon"
+            android:maxLines="1"
+            android:ellipsize="end"/>
 
 
     </LinearLayout>
