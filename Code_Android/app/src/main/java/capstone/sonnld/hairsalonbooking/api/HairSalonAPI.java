@@ -45,4 +45,6 @@ public interface HairSalonAPI {
     @GET("bookingHistories/{id}")
     Call<ArrayList<Booking>> getBookingHistoryByUserID(@Path("id") int accountId);
 
+    @POST("cancelBooking/{id}")
+    Call<Booking> cancelBooking(@Path("id")int bookingId);
 }

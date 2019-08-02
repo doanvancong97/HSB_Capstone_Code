@@ -1,23 +1,29 @@
 package capstone.sonnld.hairsalonbooking;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import capstone.sonnld.hairsalonbooking.adapter.RecyclerViewBookedServiceAdapter;
-import capstone.sonnld.hairsalonbooking.adapter.RecyclerViewSelectedServiceAdapter;
 import capstone.sonnld.hairsalonbooking.api.HairSalonAPI;
 import capstone.sonnld.hairsalonbooking.api.RetrofitClient;
 import capstone.sonnld.hairsalonbooking.model.Account;
+import capstone.sonnld.hairsalonbooking.model.Booking;
 import capstone.sonnld.hairsalonbooking.model.BookingDetail;
 import capstone.sonnld.hairsalonbooking.model.SessionManager;
 import retrofit2.Call;
@@ -32,13 +38,12 @@ public class HistoryDetailActivity extends AppCompatActivity {
 
     // user detail
     private TextView txtUsername;
-    private int userId;
 
     private SessionManager sessionManager;
     private String mUserName;
 
     private RecyclerView recyclerView;
-    private Button btnAccept;
+    private Button btnCancel;
 
     private TextView txtBookedDate;
     private TextView txtBookedTime;
@@ -46,6 +51,8 @@ public class HistoryDetailActivity extends AppCompatActivity {
     private TextView txtAddress;
     private TextView txtDirection;
 
+    private int bookingId;
+    private int userID;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +64,7 @@ public class HistoryDetailActivity extends AppCompatActivity {
 
         txtDirection = findViewById(R.id.txtDirection);
         txtTotalPrice = findViewById(R.id.txt_total);
-        btnAccept = findViewById(R.id.btn_accept);
+        btnCancel = findViewById(R.id.btn_cancel);
         txtBookedDate = findViewById(R.id.txt_booked_date);
         txtBookedTime = findViewById(R.id.txt_booked_time);
         txtAddress = findViewById(R.id.txt_address);
@@ -76,6 +83,7 @@ public class HistoryDetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String bookedDate = intent.getExtras().getString("BookedDate");
         String bookedTime = intent.getExtras().getString("BookedTime");
+        bookingId = intent.getExtras().getInt("BookingId");
         String[] bookedDateArr = bookedDate.split("-");
         String[] bookedTimeArr = bookedTime.split(":");
 
@@ -96,12 +104,14 @@ public class HistoryDetailActivity extends AppCompatActivity {
         txtBookedTime.setText(bookedTimeArr[0]+":"+bookedTimeArr[1]);
         txtAddress.setText(address);
 
+        //recycler view setup
         recyclerView = findViewById(R.id.recycler_selected_service);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
         RecyclerViewBookedServiceAdapter serviceAdapter =
                 new RecyclerViewBookedServiceAdapter(this, selectedService);
         recyclerView.setAdapter(serviceAdapter);
 
+        // btn direction to salon
         txtDirection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -113,6 +123,45 @@ public class HistoryDetailActivity extends AppCompatActivity {
             }
         });
 
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(HistoryDetailActivity.this);
+                builder.setTitle("Hủy đơn đặt chỗ")
+                        .setMessage("Bạn có muốn hủy đơn đặt chỗ không?")
+                        .setPositiveButton("Có", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                cancelBooking();
+                            }
+                        })
+                        .setNegativeButton("Không", null);
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+            }
+        });
+    }
+
+    private void cancelBooking() {
+        Call<Booking> call = hairSalonAPI.cancelBooking(bookingId);
+        call.enqueue(new Callback<Booking>() {
+            @Override
+            public void onResponse(Call<Booking> call, Response<Booking> response) {
+                if(response.code() == 200){
+                    Toast.makeText(HistoryDetailActivity.this, "Hủy đơn đặt chỗ thành công",
+                            Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(HistoryDetailActivity.this, HistoryActivity.class);
+                    intent.putExtra("USER_ID",userID);
+                    startActivity(intent);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Booking> call, Throwable t) {
+
+            }
+        });
     }
 
     public int getSalePrice(String price, String discountValue) {
@@ -133,6 +182,7 @@ public class HistoryDetailActivity extends AppCompatActivity {
                 Account currentAcc = response.body();
                 String fullName = currentAcc.getFullname();
                 txtUsername.setText(fullName);
+                userID = currentAcc.getUserId();
             }
 
             @Override

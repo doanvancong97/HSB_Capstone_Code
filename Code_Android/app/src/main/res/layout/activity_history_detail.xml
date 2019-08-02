@@ -175,15 +175,7 @@
                 android:textColor="@color/black"
                 android:textStyle="italic|bold" />
 
-
-
-
-
-
-
-
         </LinearLayout>
-
 
     </ScrollView>
 
@@ -194,13 +186,10 @@
         android:layout_alignParentBottom="true"
         android:layout_gravity="center"
         android:layout_margin="5dp"
-
         android:background="@drawable/button_cancel"
         android:text="Hủy"
         android:textSize="18sp"
         android:fontFamily="sans-serif-condensed-medium"/>
-
-
 
 
 </RelativeLayout>

@@ -33,8 +33,9 @@ public class HistoryActivity extends AppCompatActivity {
         Retrofit retrofit = RetrofitClient.getInstance();
         hairSalonAPI = retrofit.create(HairSalonAPI.class);
 
+        //get data from HistoryDetailActivity/ MainActivity
         Intent intent = getIntent();
-        int userID= intent.getExtras().getInt("USER_ID");
+        int userID = intent.getExtras().getInt("USER_ID");
         Toast.makeText(this, "id="+userID, Toast.LENGTH_SHORT).show();
 
         recyclerViewHistory=findViewById(R.id.recycler_view_history);
