@@ -12,13 +12,18 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.anthonyfdev.dropdownview.DropDownView;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -56,7 +61,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private RippleBackground rp_bg;
     private HairSalonAPI hairSalonAPI;
-    Button btn5km;
+    //Button btn5km;
     //
     private ArrayList<SalonService> salonServices = new ArrayList<>();
 
@@ -72,8 +77,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     GeoPoint loc = null;
     LatLng point = null;
+    Spinner spRadius;
 
     LatLng you = null;
+    DropDownView drop_down_view_radius;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +91,20 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         lnDeatailOfMarker = findViewById(R.id.lnDeatailOfMarker);
         salon_address = findViewById(R.id.salon_address);
         cardViewSalonDetail = findViewById(R.id.card_view_salon_detail);
-        btn5km=findViewById(R.id.btn5km);
+
+        spRadius = findViewById(R.id.spRadius);
+        List<String> listRadius = new ArrayList<>();
+        listRadius.add("3000 m");
+        listRadius.add("4000 m");
+        listRadius.add("5000 m");
+        listRadius.add("6000 m");
+
+        ArrayAdapter<String> radiusAdapter = new ArrayAdapter<String>(MapsActivity.this,R.layout.spinner_item,listRadius);
+        radiusAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        spRadius.setAdapter(radiusAdapter);
+
+
+
 
 
         //init retro
@@ -199,7 +219,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     }
                 });
 
-                btn5km.setVisibility(View.VISIBLE);
+
 
 
             }
@@ -209,9 +229,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     .strokeColor(Color.GREEN));
 
 
-            btn5km.setOnClickListener(new View.OnClickListener() {
+            spRadius.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
-                public void onClick(View v) {
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                    String[] arrRadius = parent.getItemAtPosition(position).toString().split(" ");
+
+                   int r = Integer.parseInt(arrRadius[0]);
+
                     mMap.clear();
 
                     for (int i = 0; i < salonServices.size(); i++) {
@@ -252,7 +277,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         } catch (ExecutionException e) {
                             e.printStackTrace();
                         }
-                        if (getDistance(you, point) < 5000) {
+                        if (getDistance(you, point) < r) {
                             mMap.addMarker(markerOptions).setTag(address);
 
                         }
@@ -290,15 +315,118 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             }
                         });
 
-                        mMap.addCircle(new CircleOptions()
-                                .center(you)
-                                .radius(5000)
-                                .strokeColor(Color.GREEN));
+
 
 
                     }
+
+                    mMap.addCircle(new CircleOptions()
+                            .center(you)
+                            .radius(r)
+                            .strokeColor(Color.GREEN));
+
+
+
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
                 }
             });
+
+
+
+//            btn5km.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    mMap.clear();
+//
+//                    for (int i = 0; i < salonServices.size(); i++) {
+//                        address = salonServices.get(i).getSalon().getAddress().getStreetNumber() + ", "
+//                                + salonServices.get(i).getSalon().getAddress().getStreet();
+//                        String salonName = salonServices.get(i).getSalon().getName();
+//                        int salonId = salonServices.get(i).getSalon().getSalonId();
+//                        String logoUrl = salonServices.get(i).getSalon().getLogoUrl();
+//                        loc = getLocationFromAddress(address);
+//                        point = new LatLng(loc.getLat(), loc.getLng());
+//
+//                        MarkerOptions markerOptions = new MarkerOptions();
+//
+//                        markerOptions.position(point);
+//                        markerOptions.title(salonName);
+//                        markerOptions.snippet(salonId + "");
+//
+//
+//                        int height = 120;
+//                        int width = 120;
+////                BitmapDrawable bitmapdraw = (BitmapDrawable) getResources().getDrawable(R.drawable.logo_30_shine);
+////                Bitmap b = bitmapdraw.getBitmap();
+////                Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
+////
+////
+////
+////                markerOptions.icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
+//
+//                        try {
+//                            Bitmap bmImg = Ion.with(MapsActivity.this)
+//                                    .load(logoUrl).asBitmap().get();
+//
+//                            Bitmap smallMarker = Bitmap.createScaledBitmap(bmImg, width, height, false);
+//                            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
+//
+//                        } catch (InterruptedException e) {
+//                            e.printStackTrace();
+//                        } catch (ExecutionException e) {
+//                            e.printStackTrace();
+//                        }
+//                        if (getDistance(you, point) < 5000) {
+//                            mMap.addMarker(markerOptions).setTag(address);
+//
+//                        }
+//
+//
+//                        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+//                            @Override
+//                            public boolean onMarkerClick(final Marker marker) {
+//
+//
+//                                Toast.makeText(MapsActivity.this, marker.getSnippet(), Toast.LENGTH_SHORT).show();
+//                                int id = Integer.parseInt(marker.getSnippet());
+//
+//                                getSalonById(id);
+//
+//                                salon_service_name.setText(marker.getTitle());
+//                                salon_address.setText(marker.getTag().toString());
+//                                lnDeatailOfMarker.setVisibility(View.VISIBLE);
+//
+//                                cardViewSalonDetail.setOnClickListener(new View.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(View view) {
+//
+//                                        Toast.makeText(MapsActivity.this, "Đang chuyển tới trang chủ của " + marker.getTitle() + "...", Toast.LENGTH_SHORT).show();
+//                                        Intent intent = new Intent(MapsActivity.this, DetailSalonActivity.class);
+//                                        intent.putExtra("SalonId", Integer.parseInt(marker.getSnippet()));
+//                                        intent.putExtra("SalonName", marker.getTitle());
+//                                        startActivity(intent);
+//                                        finish();
+//                                    }
+//                                });
+//
+//                                return true;
+//
+//                            }
+//                        });
+//
+//                        mMap.addCircle(new CircleOptions()
+//                                .center(you)
+//                                .radius(5000)
+//                                .strokeColor(Color.GREEN));
+//
+//
+//                    }
+//                }
+//            });
 
 
 //            new Handler().postDelayed(new Runnable() {

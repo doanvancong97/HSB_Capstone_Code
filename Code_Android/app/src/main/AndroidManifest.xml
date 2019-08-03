@@ -9,9 +9,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/logo"
+        android:icon="@drawable/mylogo"
         android:label="HairSalonBooking"
-        android:roundIcon="@drawable/logo"
+        android:roundIcon="@drawable/mylogo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:label">

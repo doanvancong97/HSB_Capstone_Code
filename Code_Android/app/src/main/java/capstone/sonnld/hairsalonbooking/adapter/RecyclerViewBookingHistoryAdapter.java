@@ -26,9 +26,9 @@ public class RecyclerViewBookingHistoryAdapter extends RecyclerView.Adapter<Recy
     private Context mContext;
     private ArrayList<Booking> listBooking;
 
-    private final String CANCEL = "Đơn đặt chỗ đã bị hủy";
-    private final String PROCESS = "Đơn đặt chỗ đang được xử lý";
-    private final String FINISH = "Đơn đặt chỗ đã hoàn thành";
+    private final String CANCEL = "Đã hủy";
+    private final String PROCESS = "Đang xử lý";
+    private final String FINISH = "Hoàn thành";
     private String salonName;
     private String bookedDate;
     private String bookedTime;
