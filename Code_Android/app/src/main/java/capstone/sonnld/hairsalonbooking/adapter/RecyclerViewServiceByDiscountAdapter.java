@@ -18,12 +18,12 @@ import java.util.ArrayList;
 
 import capstone.sonnld.hairsalonbooking.DetailServiceActivity;
 import capstone.sonnld.hairsalonbooking.R;
-import capstone.sonnld.hairsalonbooking.model.SalonService;
+import capstone.sonnld.hairsalonbooking.model.ModelSalonService;
 
 public class RecyclerViewServiceByDiscountAdapter extends RecyclerView.Adapter<RecyclerViewServiceByDiscountAdapter.MyViewHolder> {
 
     private Context mContext;
-    private ArrayList<SalonService> salonServices;
+    private ArrayList<ModelSalonService> modelSalonServices;
 
     private String des;
     private String serviceName;
@@ -34,9 +34,9 @@ public class RecyclerViewServiceByDiscountAdapter extends RecyclerView.Adapter<R
     private String imgUrl;
 
 
-    public RecyclerViewServiceByDiscountAdapter(Context mContext, ArrayList<SalonService> salonServices) {
+    public RecyclerViewServiceByDiscountAdapter(Context mContext, ArrayList<ModelSalonService> modelSalonServices) {
         this.mContext = mContext;
-        this.salonServices = salonServices;
+        this.modelSalonServices = modelSalonServices;
     }
 
     @NonNull
@@ -52,15 +52,17 @@ public class RecyclerViewServiceByDiscountAdapter extends RecyclerView.Adapter<R
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
         //show item
-        des = salonServices.get(position).getSalon().getDescription();
-        serviceName = salonServices.get(position).getService().getServiceName();
-        salonAddress = salonServices.get(position).getSalon().getAddress().getStreetNumber() + ", "
-                + salonServices.get(position).getSalon().getAddress().getStreet();
-        saleValue = " - " + salonServices.get(position).getDiscount().getDiscountValue() + "%";
-        imgUrl = salonServices.get(position).getThumbUrl();
-        price = salonServices.get(position).getPrice();
-        discountValue = salonServices.get(position).getDiscount().getDiscountValue();
-        String salonName = salonServices.get(position).getSalon().getName();
+        des = modelSalonServices.get(position).getModelSalon().getDescription();
+        serviceName = modelSalonServices.get(position).getModelService().getServiceName();
+        salonAddress = modelSalonServices.get(position).getModelSalon().getModelAddress().getStreetNumber() + ", "
+                + modelSalonServices.get(position).getModelSalon().getModelAddress().getStreet() + ", "
+                + modelSalonServices.get(position).getModelSalon().getModelAddress().getModelDistrict().getDistrictName() + ", "
+                + modelSalonServices.get(position).getModelSalon().getModelAddress().getModelDistrict().getModelCity().getCityName();
+        saleValue = " - " + modelSalonServices.get(position).getModelDiscount().getDiscountValue() + "%";
+        imgUrl = modelSalonServices.get(position).getThumbUrl();
+        price = modelSalonServices.get(position).getPrice();
+        discountValue = modelSalonServices.get(position).getModelDiscount().getDiscountValue();
+        String salonName = modelSalonServices.get(position).getModelSalon().getName();
 
 
         holder.txtSalonName.setText(salonName);
@@ -80,17 +82,22 @@ public class RecyclerViewServiceByDiscountAdapter extends RecyclerView.Adapter<R
             public void onClick(View v) {
                 //pass data to Detail salon activity
                 Intent intent = new Intent(mContext, DetailServiceActivity.class);
-                intent.putExtra("SalonID",salonServices.get(position).getSalon().getSalonId());
-                intent.putExtra("SalonService", salonServices.get(position).getService().getServiceName());
-                intent.putExtra("SalonServicePrice", salonServices.get(position).getPrice());
-                intent.putExtra("DiscountValue", salonServices.get(position).getDiscount().getDiscountValue());
-                intent.putExtra("SalonName", salonServices.get(position).getSalon().getName());
+                intent.putExtra("SalonID", modelSalonServices.get(position).getModelSalon().getSalonId());
+                intent.putExtra("ModelSalonService", modelSalonServices.get(position).getModelService().getServiceName());
+                intent.putExtra("SalonServicePrice", modelSalonServices.get(position).getPrice());
+                intent.putExtra("DiscountValue", modelSalonServices.get(position).getModelDiscount().getDiscountValue());
+                intent.putExtra("SalonName", modelSalonServices.get(position).getModelSalon().getName());
                 intent.putExtra("Description", des);
-                intent.putExtra("Thumbnail", salonServices.get(position).getSalon().getUrl());
-                intent.putExtra("Logo", salonServices.get(position).getSalon().getLogoUrl());
-                intent.putExtra("Address", salonServices.get(position).getSalon().getAddress().getStreetNumber() + ", "
-                        + salonServices.get(position).getSalon().getAddress().getStreet());
-                // data need to be received in DetailSalonA
+                intent.putExtra("Thumbnail", modelSalonServices.get(position).getModelSalon().getUrl());
+                intent.putExtra("Logo", modelSalonServices.get(position).getModelSalon().getLogoUrl());
+                intent.putExtra("ModelAddress", modelSalonServices.get(position).getModelSalon().getModelAddress().getStreetNumber() + ", "
+                        + modelSalonServices.get(position).getModelSalon().getModelAddress().getStreet() + ", "
+                        + modelSalonServices.get(position).getModelSalon().getModelAddress().getModelDistrict().getDistrictName() + ", "
+                        + modelSalonServices.get(position).getModelSalon().getModelAddress().getModelDistrict().getModelCity().getCityName());
+                intent.putExtra("SalonStartTime",modelSalonServices.get(position).getModelSalon().getOpenTime());
+                intent.putExtra("SalonCloseTime",modelSalonServices.get(position).getModelSalon().getCloseTime());
+                intent.putExtra("SalonSlotTime",modelSalonServices.get(position).getModelSalon().getSlotTime());
+                intent.putExtra("SalonBookingDay",modelSalonServices.get(position).getModelSalon().getBookingDay());
                 mContext.startActivity(intent);
 
             }
@@ -114,7 +121,7 @@ public class RecyclerViewServiceByDiscountAdapter extends RecyclerView.Adapter<R
 
     @Override
     public int getItemCount() {
-        return salonServices.size();
+        return modelSalonServices.size();
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {

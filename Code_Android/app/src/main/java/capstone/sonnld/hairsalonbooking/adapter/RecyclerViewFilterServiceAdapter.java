@@ -23,13 +23,13 @@ import java.util.regex.Pattern;
 
 import capstone.sonnld.hairsalonbooking.DetailServiceActivity;
 import capstone.sonnld.hairsalonbooking.R;
-import capstone.sonnld.hairsalonbooking.model.SalonService;
+import capstone.sonnld.hairsalonbooking.model.ModelSalonService;
 
 public class RecyclerViewFilterServiceAdapter extends RecyclerView.Adapter<RecyclerViewFilterServiceAdapter.MyViewHolder> implements Filterable {
 
     private Context mContext;
-    private ArrayList<SalonService> salonServices;
-    private ArrayList<SalonService> salonServicesFilterList;
+    private ArrayList<ModelSalonService> modelSalonServices;
+    private ArrayList<ModelSalonService> modelSalonServicesFilterList;
     private String des;
     private String serviceName;
     private String discountValue;
@@ -39,10 +39,10 @@ public class RecyclerViewFilterServiceAdapter extends RecyclerView.Adapter<Recyc
     private String imgUrl;
 
 
-    public RecyclerViewFilterServiceAdapter(Context mContext, ArrayList<SalonService> salonServices) {
+    public RecyclerViewFilterServiceAdapter(Context mContext, ArrayList<ModelSalonService> modelSalonServices) {
         this.mContext = mContext;
-        this.salonServices = salonServices;
-        salonServicesFilterList = new ArrayList<>(salonServices);
+        this.modelSalonServices = modelSalonServices;
+        modelSalonServicesFilterList = new ArrayList<>(modelSalonServices);
     }
 
     @NonNull
@@ -58,14 +58,14 @@ public class RecyclerViewFilterServiceAdapter extends RecyclerView.Adapter<Recyc
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
         //show item
-        des = salonServices.get(position).getSalon().getDescription();
-        serviceName = salonServices.get(position).getService().getServiceName();
-        salonAddress = salonServices.get(position).getSalon().getAddress().getStreetNumber() + ", "
-                + salonServices.get(position).getSalon().getAddress().getStreet();
-        saleValue = " - " + salonServices.get(position).getDiscount().getDiscountValue() + "%";
-        imgUrl = salonServices.get(position).getThumbUrl();
-        price = salonServices.get(position).getPrice();
-        discountValue = salonServices.get(position).getDiscount().getDiscountValue();
+        des = modelSalonServices.get(position).getModelSalon().getDescription();
+        serviceName = modelSalonServices.get(position).getModelService().getServiceName();
+        salonAddress = modelSalonServices.get(position).getModelSalon().getModelAddress().getStreetNumber() + ", "
+                + modelSalonServices.get(position).getModelSalon().getModelAddress().getStreet();
+        saleValue = " - " + modelSalonServices.get(position).getModelDiscount().getDiscountValue() + "%";
+        imgUrl = modelSalonServices.get(position).getThumbUrl();
+        price = modelSalonServices.get(position).getPrice();
+        discountValue = modelSalonServices.get(position).getModelDiscount().getDiscountValue();
 
         holder.txtServicePrice.setText(price);
         holder.txtServiceSalePrice.setText(getSalePrice(price,discountValue));
@@ -83,14 +83,14 @@ public class RecyclerViewFilterServiceAdapter extends RecyclerView.Adapter<Recyc
             public void onClick(View v) {
                 //pass data to Detail salon activity
                 Intent intent = new Intent(mContext, DetailServiceActivity.class);
-                intent.putExtra("SalonID",salonServices.get(position).getSalon().getSalonId());
-                intent.putExtra("SalonService", salonServices.get(position).getService().getServiceName());
-                intent.putExtra("SalonServicePrice", salonServices.get(position).getPrice());
-                intent.putExtra("DiscountValue", salonServices.get(position).getDiscount().getDiscountValue());
-                intent.putExtra("SalonName", salonServices.get(position).getSalon().getName());
+                intent.putExtra("SalonID", modelSalonServices.get(position).getModelSalon().getSalonId());
+                intent.putExtra("ModelSalonService", modelSalonServices.get(position).getModelService().getServiceName());
+                intent.putExtra("SalonServicePrice", modelSalonServices.get(position).getPrice());
+                intent.putExtra("DiscountValue", modelSalonServices.get(position).getModelDiscount().getDiscountValue());
+                intent.putExtra("SalonName", modelSalonServices.get(position).getModelSalon().getName());
                 intent.putExtra("Description", des);
-                intent.putExtra("Thumbnail", salonServices.get(position).getSalon().getUrl());
-                intent.putExtra("Address", salonServices.get(position).getSalon().getAddress().getStreet());
+                intent.putExtra("Thumbnail", modelSalonServices.get(position).getModelSalon().getUrl());
+                intent.putExtra("ModelAddress", modelSalonServices.get(position).getModelSalon().getModelAddress().getStreet());
                 // data need to be received in DetailSalonA
                 mContext.startActivity(intent);
 
@@ -100,7 +100,7 @@ public class RecyclerViewFilterServiceAdapter extends RecyclerView.Adapter<Recyc
         holder.txtSalonServiceName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext,salonServices.get(position).getService().getServiceName(),Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, modelSalonServices.get(position).getModelService().getServiceName(),Toast.LENGTH_LONG).show();
             }
         });
 
@@ -123,7 +123,7 @@ public class RecyclerViewFilterServiceAdapter extends RecyclerView.Adapter<Recyc
 
     @Override
     public int getItemCount() {
-        return salonServices.size();
+        return modelSalonServices.size();
     }
 
     @Override
@@ -134,15 +134,15 @@ public class RecyclerViewFilterServiceAdapter extends RecyclerView.Adapter<Recyc
     private Filter serviceFilter = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
-            ArrayList<SalonService> filteredList = new ArrayList<>();
+            ArrayList<ModelSalonService> filteredList = new ArrayList<>();
 
             if (constraint == null || constraint.length() == 0) {
-                filteredList.addAll(salonServicesFilterList);
+                filteredList.addAll(modelSalonServicesFilterList);
             } else {
                 String filterPattern = constraint.toString().toLowerCase().trim();
 
-                for (SalonService item : salonServicesFilterList) {
-                    if (removeAccent(item.getService().getServiceName()).toLowerCase().contains(filterPattern)) {
+                for (ModelSalonService item : modelSalonServicesFilterList) {
+                    if (removeAccent(item.getModelService().getServiceName()).toLowerCase().contains(filterPattern)) {
                         filteredList.add(item);
                     }
                 }
@@ -156,8 +156,8 @@ public class RecyclerViewFilterServiceAdapter extends RecyclerView.Adapter<Recyc
 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-            salonServices.clear();
-            salonServices.addAll((ArrayList) results.values);
+            modelSalonServices.clear();
+            modelSalonServices.addAll((ArrayList) results.values);
             notifyDataSetChanged();
         }
     };

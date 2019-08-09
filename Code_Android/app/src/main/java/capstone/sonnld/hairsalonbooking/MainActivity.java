@@ -43,20 +43,14 @@ import capstone.sonnld.hairsalonbooking.adapter.RecyclerViewServiceByDiscountAda
 import capstone.sonnld.hairsalonbooking.adapter.RecyclerViewServiceByRatingAdapter;
 import capstone.sonnld.hairsalonbooking.api.HairSalonAPI;
 import capstone.sonnld.hairsalonbooking.api.RetrofitClient;
-import capstone.sonnld.hairsalonbooking.model.Account;
-import capstone.sonnld.hairsalonbooking.model.BookingDetail;
-import capstone.sonnld.hairsalonbooking.model.SalonService;
-import capstone.sonnld.hairsalonbooking.model.SessionManager;
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
+import capstone.sonnld.hairsalonbooking.model.ModelAccount;
+import capstone.sonnld.hairsalonbooking.model.ModelBookingDetail;
+import capstone.sonnld.hairsalonbooking.model.ModelSalonService;
+import capstone.sonnld.hairsalonbooking.support.SessionManager;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-
-import static capstone.sonnld.hairsalonbooking.R.menu.navigation_menu;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -94,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
 
     // list salon address, name
 
-    private ArrayList<SalonService> salonServiceArrayList = new ArrayList<>();
+    private ArrayList<ModelSalonService> modelSalonServiceArrayList = new ArrayList<>();
 
     // btn location
     private ImageView btnLocation;
@@ -273,8 +267,8 @@ public class MainActivity extends AppCompatActivity {
 
                     if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                         Intent intent = new Intent(MainActivity.this, MapsActivity.class);
-                        intent.putExtra("salonServiceList", salonServiceArrayList);
-                        Toast.makeText(MainActivity.this, salonServiceArrayList.size() + "", Toast.LENGTH_SHORT).show();
+                        intent.putExtra("salonServiceList", modelSalonServiceArrayList);
+                        Toast.makeText(MainActivity.this, modelSalonServiceArrayList.size() + "", Toast.LENGTH_SHORT).show();
                         startActivity(intent);
 
                     } else {
@@ -282,8 +276,8 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onPermissionGranted(PermissionGrantedResponse response) {
                                 Intent intent = new Intent(MainActivity.this, MapsActivity.class);
-                                intent.putExtra("salonServiceList", salonServiceArrayList);
-                                Toast.makeText(MainActivity.this, salonServiceArrayList.size() + "", Toast.LENGTH_SHORT).show();
+                                intent.putExtra("salonServiceList", modelSalonServiceArrayList);
+                                Toast.makeText(MainActivity.this, modelSalonServiceArrayList.size() + "", Toast.LENGTH_SHORT).show();
 
                                 startActivity(intent);
 
@@ -349,11 +343,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initUserDetail() {
-        Call<Account> call = hairSalonAPI.getUserDetail(mUserName);
-        call.enqueue(new Callback<Account>() {
+        Call<ModelAccount> call = hairSalonAPI.getUserDetail(mUserName);
+        call.enqueue(new Callback<ModelAccount>() {
             @Override
-            public void onResponse(Call<Account> call, Response<Account> response) {
-                Account currentAcc = response.body();
+            public void onResponse(Call<ModelAccount> call, Response<ModelAccount> response) {
+                ModelAccount currentAcc = response.body();
                 String avatarUrl = currentAcc.getAvatar();
                 String fullName = currentAcc.getFullname();
                 userID = currentAcc.getUserId();
@@ -362,7 +356,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<Account> call, Throwable t) {
+            public void onFailure(Call<ModelAccount> call, Throwable t) {
 
             }
         });
@@ -384,8 +378,8 @@ public class MainActivity extends AppCompatActivity {
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {
-                ArrayList<SalonService> salonServices = (ArrayList<SalonService>) response.body();
-                displayFilterService(salonServices);
+                ArrayList<ModelSalonService> modelSalonServices = (ArrayList<ModelSalonService>) response.body();
+                displayFilterService(modelSalonServices);
             }
 
             @Override
@@ -395,32 +389,32 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void displayFilterService(ArrayList<SalonService> services) {
+    private void displayFilterService(ArrayList<ModelSalonService> services) {
         filterServiceAdapter = new RecyclerViewFilterServiceAdapter(MainActivity.this, services);
         recyclerViewFilterService.setAdapter(filterServiceAdapter);
         searchResultLayout.setVisibility(View.GONE);
     }
 
-    private void getAllSalonServiceByRating() {
-        Call call = hairSalonAPI.getAllServiceByRating();
+//    private void getAllSalonServiceByRating() {
+//        Call call = hairSalonAPI.getAllServiceByRating();
+//
+//        call.enqueue(new Callback() {
+//            @Override
+//            public void onResponse(Call call, Response response) {
+//                ArrayList<ModelBookingDetail> bookingDetails = (ArrayList<ModelBookingDetail>) response.body();
+//                displayServiceByRating(bookingDetails);
+//            }
+//
+//            @Override
+//            public void onFailure(Call call, Throwable t) {
+//
+//            }
+//        });
+//    }
 
-        call.enqueue(new Callback() {
-            @Override
-            public void onResponse(Call call, Response response) {
-                ArrayList<BookingDetail> bookingDetails = (ArrayList<BookingDetail>) response.body();
-                displayServiceByRating(bookingDetails);
-            }
-
-            @Override
-            public void onFailure(Call call, Throwable t) {
-
-            }
-        });
-    }
-
-    private void displayServiceByRating(ArrayList<BookingDetail> bookingDetails) {
+    private void displayServiceByRating(ArrayList<ModelBookingDetail> modelBookingDetails) {
         RecyclerViewServiceByRatingAdapter viewNewestAdapter = new RecyclerViewServiceByRatingAdapter
-                (MainActivity.this, bookingDetails);
+                (MainActivity.this, modelBookingDetails);
         recyclerViewBestService.setAdapter(viewNewestAdapter);
     }
 
@@ -431,9 +425,9 @@ public class MainActivity extends AppCompatActivity {
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {
-                ArrayList<SalonService> salonServices = (ArrayList<SalonService>) response.body();
-                salonServiceArrayList = new ArrayList<>(salonServices);
-                displayServiceByDiscount(salonServices);
+                ArrayList<ModelSalonService> modelSalonServices = (ArrayList<ModelSalonService>) response.body();
+                modelSalonServiceArrayList = new ArrayList<>(modelSalonServices);
+                displayServiceByDiscount(modelSalonServices);
             }
 
             @Override
@@ -444,9 +438,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void displayServiceByDiscount(ArrayList<SalonService> salonServices) {
+    private void displayServiceByDiscount(ArrayList<ModelSalonService> modelSalonServices) {
         RecyclerViewServiceByDiscountAdapter viewAdapter
-                = new RecyclerViewServiceByDiscountAdapter(MainActivity.this, salonServices);
+                = new RecyclerViewServiceByDiscountAdapter(MainActivity.this, modelSalonServices);
         recyclerView.setAdapter(viewAdapter);
     }
 

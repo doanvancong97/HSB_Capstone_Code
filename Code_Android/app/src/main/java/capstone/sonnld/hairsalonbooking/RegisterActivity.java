@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 
 import capstone.sonnld.hairsalonbooking.api.HairSalonAPI;
 import capstone.sonnld.hairsalonbooking.api.RetrofitClient;
-import capstone.sonnld.hairsalonbooking.model.Account;
+import capstone.sonnld.hairsalonbooking.model.ModelAccount;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -57,9 +57,9 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
 
-    private void registerUser(Account account){
+    private void registerUser(ModelAccount modelAccount){
 
-        Call<String> call = hairSalonAPI.registerUser(account);
+        Call<String> call = hairSalonAPI.registerUser(modelAccount);
 
         call.enqueue(new Callback<String>() {
             @Override
@@ -79,11 +79,11 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void checkDuplicateUsername(String username) {
-        Call<Account> call = hairSalonAPI.getUserDetail(username);
+        Call<ModelAccount> call = hairSalonAPI.getUserDetail(username);
 
-        call.enqueue(new Callback<Account>() {
+        call.enqueue(new Callback<ModelAccount>() {
             @Override
-            public void onResponse(Call<Account> call, Response<Account> response) {
+            public void onResponse(Call<ModelAccount> call, Response<ModelAccount> response) {
                 if(response.code() == 200){
                     edtUsername.setError("Tên đăng nhập đã tồn tại");
 
@@ -92,7 +92,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<Account> call, Throwable t) {
+            public void onFailure(Call<ModelAccount> call, Throwable t) {
 
             }
         });
@@ -160,8 +160,8 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             }, 3000);
 
-            Account account = new Account(username,password,fullname,email,phone);
-            registerUser(account);
+            ModelAccount modelAccount = new ModelAccount(username,password,fullname,email,phone);
+            registerUser(modelAccount);
 
             Toast.makeText(this, "Đăng kí thành công", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);

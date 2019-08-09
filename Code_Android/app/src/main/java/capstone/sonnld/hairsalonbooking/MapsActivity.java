@@ -12,11 +12,9 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -31,7 +29,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.koushikdutta.ion.Ion;
@@ -45,12 +42,8 @@ import java.util.concurrent.ExecutionException;
 
 import capstone.sonnld.hairsalonbooking.api.HairSalonAPI;
 import capstone.sonnld.hairsalonbooking.api.RetrofitClient;
-import capstone.sonnld.hairsalonbooking.model.GeoPoint;
-import capstone.sonnld.hairsalonbooking.model.SalonService;
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
+import capstone.sonnld.hairsalonbooking.model.ModelSalonService;
+import capstone.sonnld.hairsalonbooking.support.GeoPoint;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -63,13 +56,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private HairSalonAPI hairSalonAPI;
     //Button btn5km;
     //
-    private ArrayList<SalonService> salonServices = new ArrayList<>();
+    private ArrayList<ModelSalonService> modelSalonServices = new ArrayList<>();
 
     private TextView salon_service_name;
     private LinearLayout lnDeatailOfMarker;
     private TextView salon_address;
     private ImageView salon_img;
-    private final int  RADIUS = 3000;
+    private final int RADIUS = 3000;
 
     private String address;
 
@@ -99,12 +92,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         listRadius.add("5000 m");
         listRadius.add("6000 m");
 
-        ArrayAdapter<String> radiusAdapter = new ArrayAdapter<String>(MapsActivity.this,R.layout.spinner_item,listRadius);
+        ArrayAdapter<String> radiusAdapter = new ArrayAdapter<String>(MapsActivity.this, R.layout.spinner_item, listRadius);
         radiusAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         spRadius.setAdapter(radiusAdapter);
-
-
-
 
 
         //init retro
@@ -114,7 +104,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         // get data from main activity
         Intent intent = getIntent();
-        salonServices = (ArrayList<SalonService>) intent.getSerializableExtra("salonServiceList");
+        modelSalonServices = (ArrayList<ModelSalonService>) intent.getSerializableExtra("salonServiceList");
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
 
@@ -135,7 +125,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
 
-
         if (location != null) {
             you = new LatLng(location.getLatitude(), location.getLongitude());
 
@@ -143,12 +132,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(you, 13));
 
 
-            for (int i = 0; i < salonServices.size(); i++) {
-                address = salonServices.get(i).getSalon().getAddress().getStreetNumber() + ", "
-                        + salonServices.get(i).getSalon().getAddress().getStreet();
-                String salonName = salonServices.get(i).getSalon().getName();
-                int salonId = salonServices.get(i).getSalon().getSalonId();
-                String logoUrl = salonServices.get(i).getSalon().getLogoUrl();
+            for (int i = 0; i < modelSalonServices.size(); i++) {
+                address = modelSalonServices.get(i).getModelSalon().getModelAddress().getStreetNumber() + ", "
+                        + modelSalonServices.get(i).getModelSalon().getModelAddress().getStreet() + ", "
+                        + modelSalonServices.get(i).getModelSalon().getModelAddress().getModelDistrict().getDistrictName() + ", "
+                        + modelSalonServices.get(i).getModelSalon().getModelAddress().getModelDistrict().getModelCity().getCityName();
+
+
+                String salonName = modelSalonServices.get(i).getModelSalon().getName();
+                int salonId = modelSalonServices.get(i).getModelSalon().getSalonId();
+                String logoUrl = modelSalonServices.get(i).getModelSalon().getLogoUrl();
                 loc = getLocationFromAddress(address);
                 point = new LatLng(loc.getLat(), loc.getLng());
 
@@ -220,8 +213,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 });
 
 
-
-
             }
             mMap.addCircle(new CircleOptions()
                     .center(you)
@@ -235,16 +226,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                     String[] arrRadius = parent.getItemAtPosition(position).toString().split(" ");
 
-                   int r = Integer.parseInt(arrRadius[0]);
+                    int r = Integer.parseInt(arrRadius[0]);
 
                     mMap.clear();
 
-                    for (int i = 0; i < salonServices.size(); i++) {
-                        address = salonServices.get(i).getSalon().getAddress().getStreetNumber() + ", "
-                                + salonServices.get(i).getSalon().getAddress().getStreet();
-                        String salonName = salonServices.get(i).getSalon().getName();
-                        int salonId = salonServices.get(i).getSalon().getSalonId();
-                        String logoUrl = salonServices.get(i).getSalon().getLogoUrl();
+                    for (int i = 0; i < modelSalonServices.size(); i++) {
+                        address = modelSalonServices.get(i).getModelSalon().getModelAddress().getStreetNumber() + ", "
+                                + modelSalonServices.get(i).getModelSalon().getModelAddress().getStreet();
+                        String salonName = modelSalonServices.get(i).getModelSalon().getName();
+                        int salonId = modelSalonServices.get(i).getModelSalon().getSalonId();
+                        String logoUrl = modelSalonServices.get(i).getModelSalon().getLogoUrl();
                         loc = getLocationFromAddress(address);
                         point = new LatLng(loc.getLat(), loc.getLng());
 
@@ -254,16 +245,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         markerOptions.title(salonName);
                         markerOptions.snippet(salonId + "");
 
-
                         int height = 120;
                         int width = 120;
-//                BitmapDrawable bitmapdraw = (BitmapDrawable) getResources().getDrawable(R.drawable.logo_30_shine);
-//                Bitmap b = bitmapdraw.getBitmap();
-//                Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
-//
-//
-//
-//                markerOptions.icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
 
                         try {
                             Bitmap bmImg = Ion.with(MapsActivity.this)
@@ -316,16 +299,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         });
 
 
-
-
                     }
 
                     mMap.addCircle(new CircleOptions()
                             .center(you)
                             .radius(r)
                             .strokeColor(Color.GREEN));
-
-
 
                 }
 
@@ -335,140 +314,23 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }
             });
 
-
-
-//            btn5km.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    mMap.clear();
-//
-//                    for (int i = 0; i < salonServices.size(); i++) {
-//                        address = salonServices.get(i).getSalon().getAddress().getStreetNumber() + ", "
-//                                + salonServices.get(i).getSalon().getAddress().getStreet();
-//                        String salonName = salonServices.get(i).getSalon().getName();
-//                        int salonId = salonServices.get(i).getSalon().getSalonId();
-//                        String logoUrl = salonServices.get(i).getSalon().getLogoUrl();
-//                        loc = getLocationFromAddress(address);
-//                        point = new LatLng(loc.getLat(), loc.getLng());
-//
-//                        MarkerOptions markerOptions = new MarkerOptions();
-//
-//                        markerOptions.position(point);
-//                        markerOptions.title(salonName);
-//                        markerOptions.snippet(salonId + "");
-//
-//
-//                        int height = 120;
-//                        int width = 120;
-////                BitmapDrawable bitmapdraw = (BitmapDrawable) getResources().getDrawable(R.drawable.logo_30_shine);
-////                Bitmap b = bitmapdraw.getBitmap();
-////                Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
-////
-////
-////
-////                markerOptions.icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
-//
-//                        try {
-//                            Bitmap bmImg = Ion.with(MapsActivity.this)
-//                                    .load(logoUrl).asBitmap().get();
-//
-//                            Bitmap smallMarker = Bitmap.createScaledBitmap(bmImg, width, height, false);
-//                            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
-//
-//                        } catch (InterruptedException e) {
-//                            e.printStackTrace();
-//                        } catch (ExecutionException e) {
-//                            e.printStackTrace();
-//                        }
-//                        if (getDistance(you, point) < 5000) {
-//                            mMap.addMarker(markerOptions).setTag(address);
-//
-//                        }
-//
-//
-//                        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-//                            @Override
-//                            public boolean onMarkerClick(final Marker marker) {
-//
-//
-//                                Toast.makeText(MapsActivity.this, marker.getSnippet(), Toast.LENGTH_SHORT).show();
-//                                int id = Integer.parseInt(marker.getSnippet());
-//
-//                                getSalonById(id);
-//
-//                                salon_service_name.setText(marker.getTitle());
-//                                salon_address.setText(marker.getTag().toString());
-//                                lnDeatailOfMarker.setVisibility(View.VISIBLE);
-//
-//                                cardViewSalonDetail.setOnClickListener(new View.OnClickListener() {
-//                                    @Override
-//                                    public void onClick(View view) {
-//
-//                                        Toast.makeText(MapsActivity.this, "Đang chuyển tới trang chủ của " + marker.getTitle() + "...", Toast.LENGTH_SHORT).show();
-//                                        Intent intent = new Intent(MapsActivity.this, DetailSalonActivity.class);
-//                                        intent.putExtra("SalonId", Integer.parseInt(marker.getSnippet()));
-//                                        intent.putExtra("SalonName", marker.getTitle());
-//                                        startActivity(intent);
-//                                        finish();
-//                                    }
-//                                });
-//
-//                                return true;
-//
-//                            }
-//                        });
-//
-//                        mMap.addCircle(new CircleOptions()
-//                                .center(you)
-//                                .radius(5000)
-//                                .strokeColor(Color.GREEN));
-//
-//
-//                    }
-//                }
-//            });
-
-
-//            new Handler().postDelayed(new Runnable() {
-//                @Override
-//                public void run() {
-//                    rp_bg.startRippleAnimation();
-//
-//                }
-//            }, 1000);
-//
-//
-//            new Handler().postDelayed(new Runnable() {
-//                @Override
-//                public void run() {
-//                    rp_bg.stopRippleAnimation();
-//
-//                }
-//            }, 2500);
-
-
         }
-
-
-
-
-
     }
 
 
     private void getSalonById(int salonId) {
-        Call<ArrayList<SalonService>> call = hairSalonAPI.getSalonServiceBySalonId(salonId);
+        Call<ArrayList<ModelSalonService>> call = hairSalonAPI.getSalonServiceBySalonId(salonId);
 
-        call.enqueue(new Callback<ArrayList<SalonService>>() {
+        call.enqueue(new Callback<ArrayList<ModelSalonService>>() {
             @Override
-            public void onResponse(Call<ArrayList<SalonService>> call, Response<ArrayList<SalonService>> response) {
-                ArrayList<SalonService> salonServices = response.body();
-                String imgUrl = salonServices.get(0).getSalon().getUrl();
+            public void onResponse(Call<ArrayList<ModelSalonService>> call, Response<ArrayList<ModelSalonService>> response) {
+                ArrayList<ModelSalonService> modelSalonServices = response.body();
+                String imgUrl = modelSalonServices.get(0).getModelSalon().getUrl();
                 Picasso.with(MapsActivity.this).load(imgUrl).into(salon_img);
             }
 
             @Override
-            public void onFailure(Call<ArrayList<SalonService>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<ModelSalonService>> call, Throwable t) {
 
             }
         });

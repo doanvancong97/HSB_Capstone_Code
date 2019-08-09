@@ -16,15 +16,14 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-import capstone.sonnld.hairsalonbooking.DetailServiceActivity;
 import capstone.sonnld.hairsalonbooking.HistoryDetailActivity;
 import capstone.sonnld.hairsalonbooking.R;
-import capstone.sonnld.hairsalonbooking.model.Booking;
+import capstone.sonnld.hairsalonbooking.model.ModelBooking;
 
 public class RecyclerViewBookingHistoryAdapter extends RecyclerView.Adapter<RecyclerViewBookingHistoryAdapter.MyViewHolder> {
 
     private Context mContext;
-    private ArrayList<Booking> listBooking;
+    private ArrayList<ModelBooking> listModelBooking;
 
     private final String CANCEL = "Đã hủy";
     private final String PROCESS = "Đang xử lý";
@@ -36,9 +35,9 @@ public class RecyclerViewBookingHistoryAdapter extends RecyclerView.Adapter<Recy
     private String salonAddress;
     private String imgUrl;
 
-    public RecyclerViewBookingHistoryAdapter(Context mContext, ArrayList<Booking> listBooking) {
+    public RecyclerViewBookingHistoryAdapter(Context mContext, ArrayList<ModelBooking> listModelBooking) {
         this.mContext = mContext;
-        this.listBooking = listBooking;
+        this.listModelBooking = listModelBooking;
     }
 
     @NonNull
@@ -55,21 +54,21 @@ public class RecyclerViewBookingHistoryAdapter extends RecyclerView.Adapter<Recy
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
         //show item
 
-        salonName = listBooking.get(position).getBookingDetailsCollection().get(0).getSalonService()
-                .getSalon().getName();
-        salonAddress = listBooking.get(position).getBookingDetailsCollection().get(0).getSalonService()
-                .getSalon().getAddress().getStreetNumber() +","+
-                listBooking.get(position).getBookingDetailsCollection().get(0).getSalonService()
-                        .getSalon().getAddress().getStreet();
-        status = listBooking.get(position).getStatus();
+        salonName = listModelBooking.get(position).getModelBookingDetailsCollection().get(0).getModelSalonService()
+                .getModelSalon().getName();
+        salonAddress = listModelBooking.get(position).getModelBookingDetailsCollection().get(0).getModelSalonService()
+                .getModelSalon().getModelAddress().getStreetNumber() +","+
+                listModelBooking.get(position).getModelBookingDetailsCollection().get(0).getModelSalonService()
+                        .getModelSalon().getModelAddress().getStreet();
+        status = listModelBooking.get(position).getStatus();
 
-        String[] bookedDateArr = listBooking.get(position).getBookingDate().split("-");
+        String[] bookedDateArr = listModelBooking.get(position).getBookingDate().split("-");
         bookedDate = ", ngày " + bookedDateArr[2]+"/"+bookedDateArr[1]+"/"+bookedDateArr[0];
 
-        String[] bookedTimeArr = listBooking.get(position).getBookingTime().split(":");
+        String[] bookedTimeArr = listModelBooking.get(position).getBookingTime().split(":");
 
         bookedTime = "Thời gian: " + bookedTimeArr[0]+":"+bookedTimeArr[1];
-        imgUrl = listBooking.get(position).getBookingDetailsCollection().get(0).getSalonService().getSalon().getUrl();
+        imgUrl = listModelBooking.get(position).getModelBookingDetailsCollection().get(0).getModelSalonService().getModelSalon().getUrl();
 
         if(status.equals("process")){
             holder.txtStatus.setTextColor(Color.BLUE);
@@ -97,14 +96,14 @@ public class RecyclerViewBookingHistoryAdapter extends RecyclerView.Adapter<Recy
             public void onClick(View v) {
                 //pass data to HistoryDetailActivity
                 Intent intent = new Intent(mContext, HistoryDetailActivity.class);
-                intent.putExtra("BookedTime",listBooking.get(position).getBookingTime());
-                intent.putExtra("BookedDate", listBooking.get(position).getBookingDate());
-                intent.putExtra("Address", listBooking.get(position).getBookingDetailsCollection().get(0).getSalonService()
-                        .getSalon().getAddress().getStreetNumber() +
-                        listBooking.get(position).getBookingDetailsCollection().get(0).getSalonService()
-                                .getSalon().getAddress().getStreet());
-                intent.putExtra("SelectedService", listBooking.get(position).getBookingDetailsCollection());
-                intent.putExtra("BookingId", listBooking.get(position).getBookingId());
+                intent.putExtra("BookedTime", listModelBooking.get(position).getBookingTime());
+                intent.putExtra("BookedDate", listModelBooking.get(position).getBookingDate());
+                intent.putExtra("ModelAddress", listModelBooking.get(position).getModelBookingDetailsCollection().get(0).getModelSalonService()
+                        .getModelSalon().getModelAddress().getStreetNumber() +
+                        listModelBooking.get(position).getModelBookingDetailsCollection().get(0).getModelSalonService()
+                                .getModelSalon().getModelAddress().getStreet());
+                intent.putExtra("SelectedService", listModelBooking.get(position).getModelBookingDetailsCollection());
+                intent.putExtra("BookingId", listModelBooking.get(position).getBookingId());
 
                 mContext.startActivity(intent);
 
@@ -129,7 +128,7 @@ public class RecyclerViewBookingHistoryAdapter extends RecyclerView.Adapter<Recy
 
     @Override
     public int getItemCount() {
-        return listBooking.size();
+        return listModelBooking.size();
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {

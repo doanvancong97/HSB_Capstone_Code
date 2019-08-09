@@ -4,7 +4,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -14,18 +13,16 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.squareup.picasso.Picasso;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import capstone.sonnld.hairsalonbooking.adapter.RecyclerViewBookedServiceAdapter;
 import capstone.sonnld.hairsalonbooking.api.HairSalonAPI;
 import capstone.sonnld.hairsalonbooking.api.RetrofitClient;
-import capstone.sonnld.hairsalonbooking.model.Account;
-import capstone.sonnld.hairsalonbooking.model.Booking;
-import capstone.sonnld.hairsalonbooking.model.BookingDetail;
-import capstone.sonnld.hairsalonbooking.model.SessionManager;
+import capstone.sonnld.hairsalonbooking.model.ModelAccount;
+import capstone.sonnld.hairsalonbooking.model.ModelBooking;
+import capstone.sonnld.hairsalonbooking.model.ModelBookingDetail;
+import capstone.sonnld.hairsalonbooking.support.SessionManager;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -87,14 +84,14 @@ public class HistoryDetailActivity extends AppCompatActivity {
         String[] bookedDateArr = bookedDate.split("-");
         String[] bookedTimeArr = bookedTime.split(":");
 
-        String address = intent.getExtras().getString("Address");
-        ArrayList<BookingDetail> selectedService =
-                (ArrayList<BookingDetail>) intent.getSerializableExtra("SelectedService");
+        String address = intent.getExtras().getString("ModelAddress");
+        ArrayList<ModelBookingDetail> selectedService =
+                (ArrayList<ModelBookingDetail>) intent.getSerializableExtra("SelectedService");
 
         int totalPrice = 0;
         for (int i = 0; i < selectedService.size(); i++) {
-            String price = selectedService.get(i).getSalonService().getPrice();
-            String discount = selectedService.get(i).getSalonService().getDiscount().getDiscountValue();
+            String price = selectedService.get(i).getModelSalonService().getPrice();
+            String discount = selectedService.get(i).getModelSalonService().getModelDiscount().getDiscountValue();
             int salePrice = getSalePrice(price, discount);
             totalPrice += salePrice;
         }
@@ -144,10 +141,10 @@ public class HistoryDetailActivity extends AppCompatActivity {
     }
 
     private void cancelBooking() {
-        Call<Booking> call = hairSalonAPI.cancelBooking(bookingId);
-        call.enqueue(new Callback<Booking>() {
+        Call<ModelBooking> call = hairSalonAPI.cancelBooking(bookingId);
+        call.enqueue(new Callback<ModelBooking>() {
             @Override
-            public void onResponse(Call<Booking> call, Response<Booking> response) {
+            public void onResponse(Call<ModelBooking> call, Response<ModelBooking> response) {
                 if(response.code() == 200){
                     Toast.makeText(HistoryDetailActivity.this, "Hủy đơn đặt chỗ thành công",
                             Toast.LENGTH_SHORT).show();
@@ -158,7 +155,7 @@ public class HistoryDetailActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<Booking> call, Throwable t) {
+            public void onFailure(Call<ModelBooking> call, Throwable t) {
 
             }
         });
@@ -175,18 +172,18 @@ public class HistoryDetailActivity extends AppCompatActivity {
     }
 
     private void initUserDetail() {
-        Call<Account> call = hairSalonAPI.getUserDetail(mUserName);
-        call.enqueue(new Callback<Account>() {
+        Call<ModelAccount> call = hairSalonAPI.getUserDetail(mUserName);
+        call.enqueue(new Callback<ModelAccount>() {
             @Override
-            public void onResponse(Call<Account> call, Response<Account> response) {
-                Account currentAcc = response.body();
+            public void onResponse(Call<ModelAccount> call, Response<ModelAccount> response) {
+                ModelAccount currentAcc = response.body();
                 String fullName = currentAcc.getFullname();
                 txtUsername.setText(fullName);
                 userID = currentAcc.getUserId();
             }
 
             @Override
-            public void onFailure(Call<Account> call, Throwable t) {
+            public void onFailure(Call<ModelAccount> call, Throwable t) {
 
             }
         });

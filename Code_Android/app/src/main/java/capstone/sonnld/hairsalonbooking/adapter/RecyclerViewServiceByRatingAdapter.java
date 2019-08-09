@@ -18,12 +18,12 @@ import java.util.ArrayList;
 
 import capstone.sonnld.hairsalonbooking.DetailServiceActivity;
 import capstone.sonnld.hairsalonbooking.R;
-import capstone.sonnld.hairsalonbooking.model.BookingDetail;
+import capstone.sonnld.hairsalonbooking.model.ModelBookingDetail;
 
 public class RecyclerViewServiceByRatingAdapter extends RecyclerView.Adapter<RecyclerViewServiceByRatingAdapter.MyViewHolder> {
 
     private Context mContext;
-    private ArrayList<BookingDetail> bookingDetailList;
+    private ArrayList<ModelBookingDetail> modelBookingDetailList;
     private String des;
     private String serviceName;
     private String salonName;
@@ -34,9 +34,9 @@ public class RecyclerViewServiceByRatingAdapter extends RecyclerView.Adapter<Rec
     private String discountValue;
     private String price;
 
-    public RecyclerViewServiceByRatingAdapter(Context mContext, ArrayList<BookingDetail> bookingDetailList) {
+    public RecyclerViewServiceByRatingAdapter(Context mContext, ArrayList<ModelBookingDetail> modelBookingDetailList) {
         this.mContext = mContext;
-        this.bookingDetailList = bookingDetailList;
+        this.modelBookingDetailList = modelBookingDetailList;
     }
 
 
@@ -76,15 +76,15 @@ public class RecyclerViewServiceByRatingAdapter extends RecyclerView.Adapter<Rec
                 "- Khách hàng được phép đến sớm hoặc muộn hơn 15 phút so với giờ hẹn đến \n" +
                 "- Mã giảm giá không có giá trị quy đổi thành tiền mặt ";
 
-         serviceName = bookingDetailList.get(position).getSalonService().getService().getServiceName();
-         salonName = bookingDetailList.get(position).getSalonService().getSalon().getName();
-         salonAddress = bookingDetailList.get(position).getSalonService().getSalon().getAddress().getStreetNumber()+", "
-                 +bookingDetailList.get(position).getSalonService().getSalon().getAddress().getStreet();
-         saleValue = " - " + bookingDetailList.get(position).getSalonService().getDiscount().getDiscountValue()+"%";
-         //rate = bookingDetailList.get(position).getRating() + "";
-         imgUrl = bookingDetailList.get(position).getSalonService().getSalon().getUrl();
-         price = bookingDetailList.get(position).getSalonService().getPrice();
-         discountValue = bookingDetailList.get(position).getSalonService().getDiscount().getDiscountValue();
+         serviceName = modelBookingDetailList.get(position).getModelSalonService().getModelService().getServiceName();
+         salonName = modelBookingDetailList.get(position).getModelSalonService().getModelSalon().getName();
+         salonAddress = modelBookingDetailList.get(position).getModelSalonService().getModelSalon().getModelAddress().getStreetNumber()+", "
+                 + modelBookingDetailList.get(position).getModelSalonService().getModelSalon().getModelAddress().getStreet();
+         saleValue = " - " + modelBookingDetailList.get(position).getModelSalonService().getModelDiscount().getDiscountValue()+"%";
+         //rate = modelBookingDetailList.get(position).getRating() + "";
+         imgUrl = modelBookingDetailList.get(position).getModelSalonService().getModelSalon().getUrl();
+         price = modelBookingDetailList.get(position).getModelSalonService().getPrice();
+         discountValue = modelBookingDetailList.get(position).getModelSalonService().getModelDiscount().getDiscountValue();
 
         holder.txtServiceName.setText(uppercaseFirstLetter(serviceName));
         holder.txtPrice.setText(price);
@@ -102,14 +102,14 @@ public class RecyclerViewServiceByRatingAdapter extends RecyclerView.Adapter<Rec
             public void onClick(View v) {
                 //pass data to Detail salon activity
                 Intent intent = new Intent(mContext, DetailServiceActivity.class);
-                intent.putExtra("SalonID",bookingDetailList.get(position).getSalonService().getSalon().getSalonId());
-                intent.putExtra("SalonService", bookingDetailList.get(position).getSalonService().getService().getServiceName());
-                intent.putExtra("SalonServicePrice", bookingDetailList.get(position).getSalonService().getPrice());
-                intent.putExtra("DiscountValue", bookingDetailList.get(position).getSalonService().getDiscount().getDiscountValue());
-                intent.putExtra("SalonName", bookingDetailList.get(position).getSalonService().getSalon().getName());
+                intent.putExtra("SalonID", modelBookingDetailList.get(position).getModelSalonService().getModelSalon().getSalonId());
+                intent.putExtra("ModelSalonService", modelBookingDetailList.get(position).getModelSalonService().getModelService().getServiceName());
+                intent.putExtra("SalonServicePrice", modelBookingDetailList.get(position).getModelSalonService().getPrice());
+                intent.putExtra("DiscountValue", modelBookingDetailList.get(position).getModelSalonService().getModelDiscount().getDiscountValue());
+                intent.putExtra("SalonName", modelBookingDetailList.get(position).getModelSalonService().getModelSalon().getName());
                 intent.putExtra("Description", des);
-                intent.putExtra("Thumbnail", bookingDetailList.get(position).getSalonService().getSalon().getUrl());
-                intent.putExtra("Address", bookingDetailList.get(position).getSalonService().getSalon().getAddress().getStreet());
+                intent.putExtra("Thumbnail", modelBookingDetailList.get(position).getModelSalonService().getModelSalon().getUrl());
+                intent.putExtra("ModelAddress", modelBookingDetailList.get(position).getModelSalonService().getModelSalon().getModelAddress().getStreet());
                 // data need to be received in DetailSalonA
                 mContext.startActivity(intent);
 
@@ -133,7 +133,7 @@ public class RecyclerViewServiceByRatingAdapter extends RecyclerView.Adapter<Rec
 
     @Override
     public int getItemCount() {
-        return bookingDetailList.size();
+        return modelBookingDetailList.size();
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{

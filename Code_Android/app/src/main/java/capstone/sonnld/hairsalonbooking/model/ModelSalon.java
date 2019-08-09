@@ -7,10 +7,7 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.List;
 
-public class Salon implements Serializable {
-    @SerializedName("address")
-    @Expose
-    private Address address;
+public class ModelSalon implements Serializable {
     @SerializedName("close_time")
     @Expose
     private String closeTime;
@@ -23,6 +20,9 @@ public class Salon implements Serializable {
     @SerializedName("manager_id")
     @Expose
     private Integer managerId;
+    @SerializedName("modelAddress")
+    @Expose
+    private ModelAddress modelAddress;
     @SerializedName("name")
     @Expose
     private String name;
@@ -32,6 +32,9 @@ public class Salon implements Serializable {
     @SerializedName("phone_number")
     @Expose
     private String phoneNumber;
+    @SerializedName("description")
+    @Expose
+    private String description;
     @SerializedName("salon_id")
     @Expose
     private Integer salonId;
@@ -41,15 +44,19 @@ public class Salon implements Serializable {
     @SerializedName("status")
     @Expose
     private String status;
-    @SerializedName("description")
-    @Expose
-    private String description;
     @SerializedName("url")
     @Expose
     private String url;
+    @SerializedName("bookingDay")
+    @Expose
+    private int bookingDay;
 
-    public Address getAddress() {
-        return address;
+    public int getBookingDay() {
+        return bookingDay;
+    }
+
+    public void setBookingDay(int bookingDay) {
+        this.bookingDay = bookingDay;
     }
 
     public String getDescription() {
@@ -58,10 +65,6 @@ public class Salon implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
     }
 
     public String getCloseTime() {
@@ -94,6 +97,14 @@ public class Salon implements Serializable {
 
     public void setManagerId(Integer managerId) {
         this.managerId = managerId;
+    }
+
+    public ModelAddress getModelAddress() {
+        return modelAddress;
+    }
+
+    public void setModelAddress(ModelAddress modelAddress) {
+        this.modelAddress = modelAddress;
     }
 
     public String getName() {

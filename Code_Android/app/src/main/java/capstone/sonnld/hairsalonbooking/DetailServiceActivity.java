@@ -9,7 +9,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -36,9 +35,9 @@ import capstone.sonnld.hairsalonbooking.adapter.RecyclerViewExtraServiceAdapter;
 import capstone.sonnld.hairsalonbooking.api.HairSalonAPI;
 import capstone.sonnld.hairsalonbooking.api.RetrofitClient;
 import capstone.sonnld.hairsalonbooking.dto.BookingDetailsDTO;
-import capstone.sonnld.hairsalonbooking.model.Account;
-import capstone.sonnld.hairsalonbooking.model.SalonService;
-import capstone.sonnld.hairsalonbooking.model.SessionManager;
+import capstone.sonnld.hairsalonbooking.model.ModelAccount;
+import capstone.sonnld.hairsalonbooking.model.ModelSalonService;
+import capstone.sonnld.hairsalonbooking.support.SessionManager;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -49,8 +48,6 @@ import static capstone.sonnld.hairsalonbooking.R.drawable.button_time;
 
 public class DetailServiceActivity extends AppCompatActivity implements DatePickerListener {
 
-
-    private Toolbar mToolbar;
 
     private TextView txtSalonName;
     private TextView txtSalonService;
@@ -65,11 +62,16 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
 
     private LinearLayout linearTimePiker;
 
-    //Button time
+    //Setup time
     private boolean isChoose = false;
     private int slotIDisChoose = 0;
     private int slotID = 0;
     private String bookedTime = "";
+
+    private String salonStartTime ;
+    private String salonEndTime ;
+    private int salonSlotTime ;
+    private int salonBookingDay ;
 
 
     private RecyclerView recyclerViewTimeSlot;
@@ -77,7 +79,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
     private HairSalonAPI hairSalonAPI;
     private RecyclerViewExtraServiceAdapter extraServiceAdapter;
     private String bookedDate = "";
-    private ArrayList<SalonService> chkService = new ArrayList<>();
+    private ArrayList<ModelSalonService> chkService = new ArrayList<>();
     private ArrayList<BookingDetailsDTO> bookingDetailsDTOList = new ArrayList<>();
 
     // user detail
@@ -91,16 +93,9 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_service);
-
-        // setup spinner address
-//        ArrayAdapter<String> addressAdapter = new ArrayAdapter<String>(this,
-//                android.R.layout.simple_spinner_item, listAddress);
-//
-//        spAddress = findViewById(R.id.spAddress);
-//
-//
-//        addressAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        spAddress.setAdapter(addressAdapter);
+        // intit retro
+        Retrofit retrofit = RetrofitClient.getInstance();
+        hairSalonAPI = retrofit.create(HairSalonAPI.class);
 
         // find view
         txtAddress = findViewById(R.id.txt_address);
@@ -115,33 +110,23 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
         imgLogo = findViewById(R.id.img_logo);
 
 
-        HorizontalPicker picker = (HorizontalPicker) findViewById(R.id.datePicker);
-
-        // initialize it and attach a listener
-
-        // at init time
-        picker
-                .setListener(this)
-                .setTodayDateTextColor(R.color.red2)
-                .setDays(7)
-                .setOffset(0)
-                .showTodayButton(false)
-                .init();
-
-        picker.setDate(new DateTime());
 
 
-        //Receive data from view adapter
+        //Receive data from RecyclerViewServiceByDiscountAdapter
         Intent intent = getIntent();
         int salonId = intent.getExtras().getInt("SalonID");
         String salonName = intent.getExtras().getString("SalonName");
-        String salonServiceName = intent.getExtras().getString("SalonService");
+        String salonServiceName = intent.getExtras().getString("ModelSalonService");
         String description = intent.getExtras().getString("Description");
         String imgUrl = intent.getExtras().getString("Thumbnail");
         String salonServicePrice = intent.getExtras().getString("SalonServicePrice");
         String discountValue = intent.getExtras().getString("DiscountValue");
-        String address = intent.getExtras().getString("Address");
+        String address = intent.getExtras().getString("ModelAddress");
         String logoUrl = intent.getExtras().getString("Logo");
+        salonStartTime = intent.getExtras().getString("SalonStartTime");
+        salonEndTime = intent.getExtras().getString("SalonCloseTime");
+        salonSlotTime = intent.getExtras().getInt("SalonSlotTime");
+        salonBookingDay = intent.getExtras().getInt("SalonBookingDay");
 
 
         //set new value for view
@@ -155,13 +140,19 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
         Picasso.with(this).load(imgUrl).into(imgThumb);
         Picasso.with(this).load(logoUrl).into(imgLogo);
 
+        //  init time
+        HorizontalPicker picker = (HorizontalPicker) findViewById(R.id.datePicker);
+        picker.setListener(this)
+                .setTodayDateTextColor(R.color.red2)
+                .setDays(salonBookingDay)
+                .setOffset(0)
+                .showTodayButton(false)
+                .init();
+        picker.setDate(new DateTime());
 
         recyclerViewTimeSlot = findViewById(R.id.recycler_view_time_slot);
         recyclerViewTimeSlot.setHasFixedSize(true);
 
-        // intit retro
-        Retrofit retrofit = RetrofitClient.getInstance();
-        hairSalonAPI = retrofit.create(HairSalonAPI.class);
 
         // recycler for extra service
         recyclerView = findViewById(R.id.recycler_view_more_service);
@@ -183,7 +174,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
             public void onClick(View v) {
                 // setup data for booking
 
-                chkService = extraServiceAdapter.getCheckedSalonServices();
+                chkService = extraServiceAdapter.getCheckedModelSalonServices();
 
                 if (fullName == null) {
                     Toast.makeText(DetailServiceActivity.this,
@@ -216,18 +207,18 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
     }
 
     private void initUserDetail() {
-        Call<Account> call = hairSalonAPI.getUserDetail(mUserName);
-        call.enqueue(new Callback<Account>() {
+        Call<ModelAccount> call = hairSalonAPI.getUserDetail(mUserName);
+        call.enqueue(new Callback<ModelAccount>() {
             @Override
-            public void onResponse(Call<Account> call, Response<Account> response) {
-                Account currentAcc = response.body();
+            public void onResponse(Call<ModelAccount> call, Response<ModelAccount> response) {
+                ModelAccount currentAcc = response.body();
                 fullName = currentAcc.getFullname();
                 userId = currentAcc.getUserId();
                 phone = currentAcc.getPhoneNumber();
             }
 
             @Override
-            public void onFailure(Call<Account> call, Throwable t) {
+            public void onFailure(Call<ModelAccount> call, Throwable t) {
 
             }
         });
@@ -274,7 +265,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {
-                ArrayList<SalonService> services = (ArrayList<SalonService>) response.body();
+                ArrayList<ModelSalonService> services = (ArrayList<ModelSalonService>) response.body();
                 displayExtraService(services);
             }
 
@@ -285,8 +276,8 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
         });
     }
 
-    private void displayExtraService(ArrayList<SalonService> salonServices) {
-        extraServiceAdapter = new RecyclerViewExtraServiceAdapter(DetailServiceActivity.this, salonServices);
+    private void displayExtraService(ArrayList<ModelSalonService> modelSalonServices) {
+        extraServiceAdapter = new RecyclerViewExtraServiceAdapter(DetailServiceActivity.this, modelSalonServices);
         recyclerView.setAdapter(extraServiceAdapter);
     }
 
@@ -310,13 +301,13 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
 //        Calendar calendar = GregorianCalendar.getInstance(); // creates a new calendar instance
 //        calendar.setTime(date);   // assigns calendar to given date
 //        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        String maxHour = "23:00";
+        String maxHour = salonEndTime;
         String[] splitMaxHour = maxHour.split(":");
         int maxH = Integer.parseInt(splitMaxHour[0]);
-        String minHour = "08:00";
+        String minHour = salonStartTime;
         String[] splitMinHour = minHour.split(":");
         int minH = Integer.parseInt(splitMinHour[0]);
-        double step = 30;
+        double step = salonSlotTime;
 
         double run = (maxH - minH) / (step / 60) + Integer.parseInt(splitMaxHour[1]) / step - Integer.parseInt(splitMinHour[1]) / step;
 
@@ -395,15 +386,14 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
 //        Calendar calendar = GregorianCalendar.getInstance(); // creates a new calendar instance
 //        calendar.setTime(date);   // assigns calendar to given date
 //        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        double step = 30; //30 mins
+        double step = salonSlotTime; //30 mins
         DateFormat dateFormat = new SimpleDateFormat("HH:mm");
         Date date = new Date();
         String currentHour = dateFormat.format(date);
         String[] spliCurrentHour = currentHour.split(":");
 
-
-        String maxSlot = "23:00";
-        String minSlot = "08:00";
+        String maxSlot = salonEndTime;
+        String minSlot = salonStartTime;
         String[] splitMaxSlot = maxSlot.split(":");
         String[] splitMinSlot = minSlot.split(":");
 

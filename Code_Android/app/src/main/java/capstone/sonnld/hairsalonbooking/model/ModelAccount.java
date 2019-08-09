@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-public class Account implements Serializable {
+public class ModelAccount implements Serializable {
     private transient final String DEFAULT_AVATAR_URL = "https://firebasestorage.googleapis.com/v0/b/codeandroid-b6876.appspot.com/o/AvatarImages%2Favatar-doi-dep-38_015656136.jpg?alt=media&token=0bcf00fd-b979-4958-9b61-6a4875e52de8";
 
     @SerializedName("address")
@@ -51,12 +51,12 @@ public class Account implements Serializable {
     @Expose
     private String username;
 
-    public Account(String username, String password) {
+    public ModelAccount(String username, String password) {
         this.username = username;
         this.password = password;
     }
 
-    public Account(String username, String password, String fullname, String email, String phoneNumber) {
+    public ModelAccount(String username, String password, String fullname, String email, String phoneNumber) {
         this.username = username;
         this.password = password;
         this.fullname = fullname;
@@ -65,20 +65,20 @@ public class Account implements Serializable {
         this.avatar = DEFAULT_AVATAR_URL;
     }
 
-    public Account(String fullname, String email, String phoneNumber, String avatar) {
+    public ModelAccount(String fullname, String email, String phoneNumber, String avatar) {
         this.fullname = fullname;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.avatar = avatar;
     }
 
-    public Account(String fullname, String email, String phoneNumber) {
+    public ModelAccount(String fullname, String email, String phoneNumber) {
         this.fullname = fullname;
         this.email = email;
         this.phoneNumber = phoneNumber;
     }
 
-    public Account(String password) {
+    public ModelAccount(String password) {
         this.password = password;
     }
 

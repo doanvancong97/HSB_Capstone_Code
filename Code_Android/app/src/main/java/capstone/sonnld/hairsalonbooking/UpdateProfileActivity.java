@@ -27,7 +27,7 @@ import com.squareup.picasso.Picasso;
 
 import capstone.sonnld.hairsalonbooking.api.HairSalonAPI;
 import capstone.sonnld.hairsalonbooking.api.RetrofitClient;
-import capstone.sonnld.hairsalonbooking.model.Account;
+import capstone.sonnld.hairsalonbooking.model.ModelAccount;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -45,7 +45,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
     private ProgressBar progressBar;
 
     // user detail
-    private Account account;
+    private ModelAccount modelAccount;
 
     // api
     private HairSalonAPI hairSalonAPI;
@@ -84,13 +84,13 @@ public class UpdateProfileActivity extends AppCompatActivity {
 
         // get data from UserDetailActivity
         Intent intent = getIntent();
-        account = (Account) intent.getSerializableExtra("UserDetail");
+        modelAccount = (ModelAccount) intent.getSerializableExtra("UserDetail");
 
         // set data to fields
-        String username = account.getFullname();
-        String email = account.getEmail();
-        String phone = account.getPhoneNumber();
-        String avatarUrl = account.getAvatar();
+        String username = modelAccount.getFullname();
+        String email = modelAccount.getEmail();
+        String phone = modelAccount.getPhoneNumber();
+        String avatarUrl = modelAccount.getAvatar();
         edtUsername.setText(username);
         edtEmail.setText(email);
         edtPhoneNumber.setText(phone);
@@ -115,22 +115,22 @@ public class UpdateProfileActivity extends AppCompatActivity {
                                 "Đang tải hình ảnh, xin vui lòng chờ đợi", Toast.LENGTH_SHORT).show();
                     }else{
 
-                        Account newAccount = new Account(fullName, email, phone, imgUrl);
-                        updateUserDetail(newAccount);
+                        ModelAccount newModelAccount = new ModelAccount(fullName, email, phone, imgUrl);
+                        updateUserDetail(newModelAccount);
                         Toast.makeText(UpdateProfileActivity.this,
                                 "Cập nhật profile thành công", Toast.LENGTH_SHORT).show();
                         Intent saveIntent = new Intent(UpdateProfileActivity.this,UserDetailActivity.class);
-                        saveIntent.putExtra("username",account.getUsername());
+                        saveIntent.putExtra("username", modelAccount.getUsername());
                         startActivity(saveIntent);
                         finish();
                     }
                 }else {
-                    Account newAccount = new Account(fullName, email, phone);
-                    updateUserDetail(newAccount);
+                    ModelAccount newModelAccount = new ModelAccount(fullName, email, phone);
+                    updateUserDetail(newModelAccount);
                     Toast.makeText(UpdateProfileActivity.this,
                             "Cập nhật profile thành công", Toast.LENGTH_SHORT).show();
                     Intent saveIntent = new Intent(UpdateProfileActivity.this,UserDetailActivity.class);
-                    saveIntent.putExtra("username",account.getUsername());
+                    saveIntent.putExtra("username", modelAccount.getUsername());
                     startActivity(saveIntent);
                     finish();
                 }
@@ -143,7 +143,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent saveIntent = new Intent(UpdateProfileActivity.this,UserDetailActivity.class);
-                saveIntent.putExtra("username",account.getUsername());
+                saveIntent.putExtra("username", modelAccount.getUsername());
                 startActivity(saveIntent);
                 finish();
             }
@@ -152,9 +152,9 @@ public class UpdateProfileActivity extends AppCompatActivity {
 
     }
 
-    private void updateUserDetail(Account newAccount) {
-        int userId = account.getUserId();
-        Call<Void> call = hairSalonAPI.updateUser(userId, newAccount);
+    private void updateUserDetail(ModelAccount newModelAccount) {
+        int userId = modelAccount.getUserId();
+        Call<Void> call = hairSalonAPI.updateUser(userId, newModelAccount);
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
@@ -222,7 +222,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
                     });
         } else {
 //            Toast.makeText(UpdateProfileActivity.this, "No file is selected", Toast.LENGTH_LONG).show();
-//            imgUrl = account.getAvatar();
+//            imgUrl = modelAccount.getAvatar();
         }
     }
 

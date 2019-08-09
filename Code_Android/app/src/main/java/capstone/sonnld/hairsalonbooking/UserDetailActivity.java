@@ -3,7 +3,6 @@ package capstone.sonnld.hairsalonbooking;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -12,8 +11,8 @@ import com.squareup.picasso.Picasso;
 
 import capstone.sonnld.hairsalonbooking.api.HairSalonAPI;
 import capstone.sonnld.hairsalonbooking.api.RetrofitClient;
-import capstone.sonnld.hairsalonbooking.model.Account;
-import capstone.sonnld.hairsalonbooking.model.SessionManager;
+import capstone.sonnld.hairsalonbooking.model.ModelAccount;
+import capstone.sonnld.hairsalonbooking.support.SessionManager;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -31,7 +30,7 @@ public class UserDetailActivity extends AppCompatActivity {
     private TextView txtUsername;
     private TextView txtEmail;
     private TextView txtPhone;
-    private Account currentAcc;
+    private ModelAccount currentAcc;
 
     // session
     private SessionManager sessionManager;
@@ -62,10 +61,10 @@ public class UserDetailActivity extends AppCompatActivity {
     }
 
     private void initUserDetail(String username){
-        Call<Account> accountCall = hairSalonAPI.getUserDetail(username);
-        accountCall.enqueue(new Callback<Account>() {
+        Call<ModelAccount> accountCall = hairSalonAPI.getUserDetail(username);
+        accountCall.enqueue(new Callback<ModelAccount>() {
             @Override
-            public void onResponse(Call<Account> call, Response<Account> response) {
+            public void onResponse(Call<ModelAccount> call, Response<ModelAccount> response) {
                 currentAcc = response.body();
                 String avatarUrl = currentAcc.getAvatar();
                 String email = currentAcc.getEmail();
@@ -78,7 +77,7 @@ public class UserDetailActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<Account> call, Throwable t) {
+            public void onFailure(Call<ModelAccount> call, Throwable t) {
 
             }
         });

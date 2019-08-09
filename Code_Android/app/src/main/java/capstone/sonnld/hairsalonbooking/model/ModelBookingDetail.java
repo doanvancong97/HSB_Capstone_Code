@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-public class BookingDetail implements Serializable {
+public class ModelBookingDetail implements Serializable {
     @SerializedName("booking_details_id")
     @Expose
     private Integer bookingDetailsId;
@@ -18,9 +18,9 @@ public class BookingDetail implements Serializable {
     @SerializedName("review_id")
     @Expose
     private Integer reviewId;
-    @SerializedName("salonService")
+    @SerializedName("modelSalonService")
     @Expose
-    private SalonService salonService;
+    private ModelSalonService modelSalonService;
     @SerializedName("salon_service_id")
     @Expose
     private Integer salonServiceId;
@@ -60,12 +60,12 @@ public class BookingDetail implements Serializable {
         this.reviewId = reviewId;
     }
 
-    public SalonService getSalonService() {
-        return salonService;
+    public ModelSalonService getModelSalonService() {
+        return modelSalonService;
     }
 
-    public void setSalonService(SalonService salonService) {
-        this.salonService = salonService;
+    public void setModelSalonService(ModelSalonService modelSalonService) {
+        this.modelSalonService = modelSalonService;
     }
 
     public Integer getSalonServiceId() {

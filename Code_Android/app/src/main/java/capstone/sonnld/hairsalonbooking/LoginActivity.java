@@ -1,7 +1,6 @@
 package capstone.sonnld.hairsalonbooking;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,9 +12,8 @@ import android.widget.Toast;
 
 import capstone.sonnld.hairsalonbooking.api.HairSalonAPI;
 import capstone.sonnld.hairsalonbooking.api.RetrofitClient;
-import capstone.sonnld.hairsalonbooking.dto.BookingDTO;
-import capstone.sonnld.hairsalonbooking.model.Account;
-import capstone.sonnld.hairsalonbooking.model.SessionManager;
+import capstone.sonnld.hairsalonbooking.model.ModelAccount;
+import capstone.sonnld.hairsalonbooking.support.SessionManager;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -32,7 +30,7 @@ public class LoginActivity extends AppCompatActivity {
 
     //login
 
-    private Account account;
+    private ModelAccount modelAccount;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,7 +53,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public void checkLogin(){
 
-        Call<Void> call = hairSalonAPI.checkLogin(account);
+        Call<Void> call = hairSalonAPI.checkLogin(modelAccount);
 
         call.enqueue(new Callback<Void>() {
             @Override
@@ -109,7 +107,7 @@ public class LoginActivity extends AppCompatActivity {
 
             String username = edtUsername.getText().toString();
             String password = edtPassword.getText().toString();
-            account = new Account(username,password);
+            modelAccount = new ModelAccount(username,password);
             checkLogin();
 
 //            if (check == true) {

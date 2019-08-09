@@ -7,29 +7,26 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 import capstone.sonnld.hairsalonbooking.R;
-import capstone.sonnld.hairsalonbooking.model.BookingDetail;
+import capstone.sonnld.hairsalonbooking.model.ModelBookingDetail;
 
 public class RecyclerViewBookedServiceAdapter extends RecyclerView.Adapter<RecyclerViewBookedServiceAdapter.MyViewHolder> {
 
     private Context mContext;
-    private ArrayList<BookingDetail> bookingDetails;
+    private ArrayList<ModelBookingDetail> modelBookingDetails;
     private String serviceName;
     private String discountValue;
     private String price;
     private String salePrice;
 
 
-    public RecyclerViewBookedServiceAdapter(Context mContext, ArrayList<BookingDetail> bookingDetails) {
+    public RecyclerViewBookedServiceAdapter(Context mContext, ArrayList<ModelBookingDetail> modelBookingDetails) {
         this.mContext = mContext;
-        this.bookingDetails = bookingDetails;
+        this.modelBookingDetails = modelBookingDetails;
     }
 
     @NonNull
@@ -45,9 +42,9 @@ public class RecyclerViewBookedServiceAdapter extends RecyclerView.Adapter<Recyc
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
         //show item
-        serviceName = bookingDetails.get(position).getSalonService().getService().getServiceName();
-        price = bookingDetails.get(position).getSalonService().getPrice();
-        discountValue = bookingDetails.get(position).getSalonService().getDiscount().getDiscountValue();
+        serviceName = modelBookingDetails.get(position).getModelSalonService().getModelService().getServiceName();
+        price = modelBookingDetails.get(position).getModelSalonService().getPrice();
+        discountValue = modelBookingDetails.get(position).getModelSalonService().getModelDiscount().getDiscountValue();
         salePrice = getSalePrice(price, discountValue);
 
         holder.txtSalonServiceName.setText(uppercaseFirstLetter(serviceName));
@@ -71,7 +68,7 @@ public class RecyclerViewBookedServiceAdapter extends RecyclerView.Adapter<Recyc
 
     @Override
     public int getItemCount() {
-        return bookingDetails.size();
+        return modelBookingDetails.size();
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {

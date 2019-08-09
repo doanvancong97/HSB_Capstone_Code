@@ -10,15 +10,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.borjabravo.readmoretextview.ReadMoreTextView;
-
 import java.util.ArrayList;
 
 import capstone.sonnld.hairsalonbooking.adapter.RecyclerViewSelectedServiceAdapter;
 import capstone.sonnld.hairsalonbooking.api.HairSalonAPI;
 import capstone.sonnld.hairsalonbooking.api.RetrofitClient;
 import capstone.sonnld.hairsalonbooking.dto.BookingDetailsDTO;
-import capstone.sonnld.hairsalonbooking.model.SalonService;
+import capstone.sonnld.hairsalonbooking.model.ModelSalonService;
 import retrofit2.Retrofit;
 
 public class ReceiptActivity extends AppCompatActivity {
@@ -41,7 +39,7 @@ public class ReceiptActivity extends AppCompatActivity {
     // user detail
     private TextView txtUsername;
 
-    private ArrayList<SalonService> salonServices;
+    private ArrayList<ModelSalonService> modelSalonServices;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,7 +58,7 @@ public class ReceiptActivity extends AppCompatActivity {
         txtUsername = findViewById(R.id.txt_username);
 
         Intent intent = getIntent();
-        salonServices = (ArrayList<SalonService>) intent.getSerializableExtra("salonServices");
+        modelSalonServices = (ArrayList<ModelSalonService>) intent.getSerializableExtra("modelSalonServices");
         String fullName = intent.getExtras().getString("fullname");
         String bookedTime = intent.getExtras().getString("bookedTime");
         String bookedDate = intent.getExtras().getString("bookedDate");
@@ -76,7 +74,7 @@ public class ReceiptActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recycler_selected_service);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
         RecyclerViewSelectedServiceAdapter serviceAdapter =
-                new RecyclerViewSelectedServiceAdapter(this, salonServices);
+                new RecyclerViewSelectedServiceAdapter(this, modelSalonServices);
         recyclerView.setAdapter(serviceAdapter);
 
         btnAccept.setOnClickListener(new View.OnClickListener() {

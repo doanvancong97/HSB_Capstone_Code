@@ -9,7 +9,7 @@ import android.widget.EditText;
 
 import capstone.sonnld.hairsalonbooking.api.HairSalonAPI;
 import capstone.sonnld.hairsalonbooking.api.RetrofitClient;
-import capstone.sonnld.hairsalonbooking.model.Account;
+import capstone.sonnld.hairsalonbooking.model.ModelAccount;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -24,7 +24,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
     private Button btnCancel;
 
     // user detail
-    private Account account;
+    private ModelAccount modelAccount;
 
     // api
     private HairSalonAPI hairSalonAPI;
@@ -46,7 +46,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
 
         // get data from UserDetailActivity
         Intent intent = getIntent();
-        account = (Account) intent.getSerializableExtra("UserDetail");
+        modelAccount = (ModelAccount) intent.getSerializableExtra("UserDetail");
 
 
 
@@ -56,15 +56,15 @@ public class ChangePasswordActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String password = edtNewPass.getText().toString();
-                Account newAccount = new Account(password);
-                updateUserDetail(newAccount);
+                ModelAccount newModelAccount = new ModelAccount(password);
+                updateUserDetail(newModelAccount);
             }
         });
     }
 
-    private void updateUserDetail(Account newAccount) {
-        int userId = account.getUserId();
-        Call<Void> call = hairSalonAPI.updateUser(userId, newAccount);
+    private void updateUserDetail(ModelAccount newModelAccount) {
+        int userId = modelAccount.getUserId();
+        Call<Void> call = hairSalonAPI.updateUser(userId, newModelAccount);
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {

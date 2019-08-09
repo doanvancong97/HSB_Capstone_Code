@@ -5,16 +5,13 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-public class Category implements Serializable {
+public class ModelCategory implements Serializable {
     @SerializedName("category_id")
     @Expose
     private Integer categoryId;
     @SerializedName("category_name")
     @Expose
     private String categoryName;
-    @SerializedName("status")
-    @Expose
-    private String status;
 
     public Integer getCategoryId() {
         return categoryId;
@@ -32,12 +29,5 @@ public class Category implements Serializable {
         this.categoryName = categoryName;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
 
 }

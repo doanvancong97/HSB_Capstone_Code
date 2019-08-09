@@ -1,4 +1,4 @@
-package capstone.sonnld.hairsalonbooking.model;
+package capstone.sonnld.hairsalonbooking.support;
 
 public class GeoPoint {
     private double lat;

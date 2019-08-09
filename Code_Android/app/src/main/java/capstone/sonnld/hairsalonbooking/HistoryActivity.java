@@ -12,8 +12,7 @@ import java.util.ArrayList;
 import capstone.sonnld.hairsalonbooking.adapter.RecyclerViewBookingHistoryAdapter;
 import capstone.sonnld.hairsalonbooking.api.HairSalonAPI;
 import capstone.sonnld.hairsalonbooking.api.RetrofitClient;
-import capstone.sonnld.hairsalonbooking.model.Booking;
-import capstone.sonnld.hairsalonbooking.model.BookingDetail;
+import capstone.sonnld.hairsalonbooking.model.ModelBooking;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -46,24 +45,24 @@ public class HistoryActivity extends AppCompatActivity {
     }
 
     private void getAllBookingHistory( int userID) {
-        Call<ArrayList<Booking>> call = hairSalonAPI.getBookingHistoryByUserID(userID);
+        Call<ArrayList<ModelBooking>> call = hairSalonAPI.getBookingHistoryByUserID(userID);
 
-        call.enqueue(new Callback<ArrayList<Booking>>() {
+        call.enqueue(new Callback<ArrayList<ModelBooking>>() {
             @Override
-            public void onResponse(Call<ArrayList<Booking>> call, Response<ArrayList<Booking>> response) {
+            public void onResponse(Call<ArrayList<ModelBooking>> call, Response<ArrayList<ModelBooking>> response) {
                 displayBookingByUserID(response.body());
             }
 
             @Override
-            public void onFailure(Call<ArrayList<Booking>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<ModelBooking>> call, Throwable t) {
 
             }
         });
     }
 
-    private void displayBookingByUserID( ArrayList<Booking> listBookingHistory) {
+    private void displayBookingByUserID( ArrayList<ModelBooking> listModelBookingHistory) {
         RecyclerViewBookingHistoryAdapter adapter
-                = new RecyclerViewBookingHistoryAdapter(HistoryActivity.this,listBookingHistory);
+                = new RecyclerViewBookingHistoryAdapter(HistoryActivity.this, listModelBookingHistory);
         recyclerViewHistory.setAdapter(adapter);
 
     }

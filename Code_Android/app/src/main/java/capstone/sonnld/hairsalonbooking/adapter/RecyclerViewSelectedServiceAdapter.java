@@ -7,29 +7,26 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 import capstone.sonnld.hairsalonbooking.R;
-import capstone.sonnld.hairsalonbooking.model.SalonService;
+import capstone.sonnld.hairsalonbooking.model.ModelSalonService;
 
 public class RecyclerViewSelectedServiceAdapter extends RecyclerView.Adapter<RecyclerViewSelectedServiceAdapter.MyViewHolder> {
 
     private Context mContext;
-    private ArrayList<SalonService> salonServices;
+    private ArrayList<ModelSalonService> modelSalonServices;
     private String serviceName;
     private String discountValue;
     private String price;
     private String salePrice;
 
 
-    public RecyclerViewSelectedServiceAdapter(Context mContext, ArrayList<SalonService> salonServices) {
+    public RecyclerViewSelectedServiceAdapter(Context mContext, ArrayList<ModelSalonService> modelSalonServices) {
         this.mContext = mContext;
-        this.salonServices = salonServices;
+        this.modelSalonServices = modelSalonServices;
     }
 
     @NonNull
@@ -45,11 +42,10 @@ public class RecyclerViewSelectedServiceAdapter extends RecyclerView.Adapter<Rec
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
         //show item
-        serviceName = salonServices.get(position).getService().getServiceName();
-        price = salonServices.get(position).getPrice();
-        discountValue = salonServices.get(position).getDiscount().getDiscountValue();
+        serviceName = modelSalonServices.get(position).getModelService().getServiceName();
+        price = modelSalonServices.get(position).getPrice();
+        discountValue = modelSalonServices.get(position).getModelDiscount().getDiscountValue();
         salePrice = getSalePrice(price,discountValue);
-        String serviceIcon = salonServices.get(position).getIconUrl();
 
         holder.txtSalonServiceName.setText(uppercaseFirstLetter(serviceName));
         holder.txtServicePrice.setText(salePrice);
@@ -80,7 +76,7 @@ public class RecyclerViewSelectedServiceAdapter extends RecyclerView.Adapter<Rec
 
     @Override
     public int getItemCount() {
-        return salonServices.size();
+        return modelSalonServices.size();
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {

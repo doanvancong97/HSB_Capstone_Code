@@ -1,9 +1,6 @@
 package capstone.sonnld.hairsalonbooking;
 
 import android.content.Intent;
-import android.location.Address;
-import android.location.Geocoder;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -15,18 +12,14 @@ import android.widget.Toast;
 
 import com.borjabravo.readmoretextview.ReadMoreTextView;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import capstone.sonnld.hairsalonbooking.adapter.RecyclerViewSelectedServiceAdapter;
 import capstone.sonnld.hairsalonbooking.api.HairSalonAPI;
 import capstone.sonnld.hairsalonbooking.api.RetrofitClient;
 import capstone.sonnld.hairsalonbooking.dto.BookingDTO;
 import capstone.sonnld.hairsalonbooking.dto.BookingDetailsDTO;
-import capstone.sonnld.hairsalonbooking.model.GeoPoint;
-import capstone.sonnld.hairsalonbooking.model.SalonService;
-import capstone.sonnld.hairsalonbooking.model.SessionManager;
+import capstone.sonnld.hairsalonbooking.model.ModelSalonService;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -46,7 +39,7 @@ public class BookingDetailActivity extends AppCompatActivity {
     String bookedDate;
 
     private ArrayList<BookingDetailsDTO> bookingDetailsDTOList = new ArrayList<>();
-    private ArrayList<SalonService> salonServices;
+    private ArrayList<ModelSalonService> modelSalonServices;
 
     // api
     private HairSalonAPI hairSalonAPI;
@@ -77,8 +70,8 @@ public class BookingDetailActivity extends AppCompatActivity {
 
         // get data from detail salon/ detail service activity
         Intent intent = getIntent();
-        salonServices = (ArrayList<SalonService>) intent.getSerializableExtra("chkService");
-         bookedDate = intent.getExtras().getString("bookedDate");
+        modelSalonServices = (ArrayList<ModelSalonService>) intent.getSerializableExtra("chkService");
+        bookedDate = intent.getExtras().getString("bookedDate");
 
         String[] bookedDateArr = bookedDate.split("-");
 
@@ -92,9 +85,9 @@ public class BookingDetailActivity extends AppCompatActivity {
 
         // setup value
         int totalPrice = 0;
-        for (int i = 0; i < salonServices.size(); i++) {
-            String price = salonServices.get(i).getPrice();
-            String discount = salonServices.get(i).getDiscount().getDiscountValue();
+        for (int i = 0; i < modelSalonServices.size(); i++) {
+            String price = modelSalonServices.get(i).getPrice();
+            String discount = modelSalonServices.get(i).getModelDiscount().getDiscountValue();
             int salePrice = getSalePrice(price, discount);
             totalPrice += salePrice;
         }
@@ -111,13 +104,13 @@ public class BookingDetailActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recycler_selected_service);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
         RecyclerViewSelectedServiceAdapter serviceAdapter =
-                new RecyclerViewSelectedServiceAdapter(this, salonServices);
+                new RecyclerViewSelectedServiceAdapter(this, modelSalonServices);
         recyclerView.setAdapter(serviceAdapter);
 
-        for (int i = 0; i < salonServices.size(); i++) {
-            int salonServiceID = salonServices.get(i).getSalonServiceId();
+        for (int i = 0; i < modelSalonServices.size(); i++) {
+            int salonServiceID = modelSalonServices.get(i).getSalonServiceId();
             int reviewId = 6;
-            String serviceName = salonServices.get(i).getService().getServiceName();
+            String serviceName = modelSalonServices.get(i).getModelService().getServiceName();
             String status = "process";
             BookingDetailsDTO bookingDetailsDTO = new BookingDetailsDTO(salonServiceID, reviewId, serviceName, status);
             bookingDetailsDTOList.add(bookingDetailsDTO);
@@ -152,7 +145,7 @@ public class BookingDetailActivity extends AppCompatActivity {
                 intent.putExtra("bookedDate",bookedDate);
                 intent.putExtra("bookedTime",txtBookedTime.getText().toString());
                 intent.putExtra("address",txtAddress.getText().toString());
-                intent.putExtra("salonServices",salonServices);
+                intent.putExtra("modelSalonServices", modelSalonServices);
                 intent.putExtra("totalPrice",txtTotalPrice.getText().toString());
                 startActivity(intent);
                 finish();

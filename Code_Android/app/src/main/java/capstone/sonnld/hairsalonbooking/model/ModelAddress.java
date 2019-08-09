@@ -5,14 +5,14 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-public class Address implements Serializable {
+public class ModelAddress implements Serializable {
 
     @SerializedName("address_id")
     @Expose
     private Integer addressId;
-    @SerializedName("district_id")
+    @SerializedName("modelDistrict")
     @Expose
-    private String districtId;
+    private ModelDistrict modelDistrict;
     @SerializedName("street")
     @Expose
     private String street;
@@ -28,12 +28,12 @@ public class Address implements Serializable {
         this.addressId = addressId;
     }
 
-    public String getDistrictId() {
-        return districtId;
+    public ModelDistrict getModelDistrict() {
+        return modelDistrict;
     }
 
-    public void setDistrictId(String districtId) {
-        this.districtId = districtId;
+    public void setModelDistrict(ModelDistrict modelDistrict) {
+        this.modelDistrict = modelDistrict;
     }
 
     public String getStreet() {

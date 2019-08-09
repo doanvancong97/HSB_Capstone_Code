@@ -1,4 +1,4 @@
-package capstone.sonnld.hairsalonbooking.model;
+package capstone.sonnld.hairsalonbooking.support;
 
 import com.google.gson.annotations.SerializedName;
 

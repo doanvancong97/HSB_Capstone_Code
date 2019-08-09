@@ -5,26 +5,23 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-public class SalonService implements Serializable {
+public class ModelSalonService implements Serializable {
 
-    @SerializedName("discount")
+    @SerializedName("modelDiscount")
     @Expose
-    private Discount discount;
-    @SerializedName("icon_url")
+    private ModelDiscount modelDiscount;
+    @SerializedName("modelSalon")
     @Expose
-    private String iconUrl;
+    private ModelSalon modelSalon;
+    @SerializedName("modelService")
+    @Expose
+    private ModelService modelService;
     @SerializedName("price")
     @Expose
     private String price;
-    @SerializedName("salon")
-    @Expose
-    private Salon salon;
     @SerializedName("salon_service_id")
     @Expose
     private Integer salonServiceId;
-    @SerializedName("service")
-    @Expose
-    private Service service;
     @SerializedName("status")
     @Expose
     private String status;
@@ -32,20 +29,28 @@ public class SalonService implements Serializable {
     @Expose
     private String thumbUrl;
 
-    public Discount getDiscount() {
-        return discount;
+    public ModelDiscount getModelDiscount() {
+        return modelDiscount;
     }
 
-    public void setDiscount(Discount discount) {
-        this.discount = discount;
+    public void setModelDiscount(ModelDiscount modelDiscount) {
+        this.modelDiscount = modelDiscount;
     }
 
-    public String getIconUrl() {
-        return iconUrl;
+    public ModelSalon getModelSalon() {
+        return modelSalon;
     }
 
-    public void setIconUrl(String iconUrl) {
-        this.iconUrl = iconUrl;
+    public void setModelSalon(ModelSalon modelSalon) {
+        this.modelSalon = modelSalon;
+    }
+
+    public ModelService getModelService() {
+        return modelService;
+    }
+
+    public void setModelService(ModelService modelService) {
+        this.modelService = modelService;
     }
 
     public String getPrice() {
@@ -56,28 +61,12 @@ public class SalonService implements Serializable {
         this.price = price;
     }
 
-    public Salon getSalon() {
-        return salon;
-    }
-
-    public void setSalon(Salon salon) {
-        this.salon = salon;
-    }
-
     public Integer getSalonServiceId() {
         return salonServiceId;
     }
 
     public void setSalonServiceId(Integer salonServiceId) {
         this.salonServiceId = salonServiceId;
-    }
-
-    public Service getService() {
-        return service;
-    }
-
-    public void setService(Service service) {
-        this.service = service;
     }
 
     public String getStatus() {

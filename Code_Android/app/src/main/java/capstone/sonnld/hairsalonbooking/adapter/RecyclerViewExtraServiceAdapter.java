@@ -8,35 +8,31 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
-
 import java.util.ArrayList;
-import java.util.List;
 
 import capstone.sonnld.hairsalonbooking.R;
-import capstone.sonnld.hairsalonbooking.model.SalonService;
+import capstone.sonnld.hairsalonbooking.model.ModelSalonService;
 
 public class RecyclerViewExtraServiceAdapter extends RecyclerView.Adapter<RecyclerViewExtraServiceAdapter.MyViewHolder> {
 
     private Context mContext;
-    private ArrayList<SalonService> salonServices;
-    private ArrayList<SalonService> checkedSalonServices = new ArrayList<>();
+    private ArrayList<ModelSalonService> modelSalonServices;
+    private ArrayList<ModelSalonService> checkedModelSalonServices = new ArrayList<>();
     private String serviceName;
 
     private String discountValue;
     private String serviceSalePrice;
     private String price;
 
-    public RecyclerViewExtraServiceAdapter(Context mContext, ArrayList<SalonService> salonServices) {
+    public RecyclerViewExtraServiceAdapter(Context mContext, ArrayList<ModelSalonService> modelSalonServices) {
         this.mContext = mContext;
-        this.salonServices = salonServices;
+        this.modelSalonServices = modelSalonServices;
     }
 
-    public ArrayList<SalonService> getCheckedSalonServices() {
-        return checkedSalonServices;
+    public ArrayList<ModelSalonService> getCheckedModelSalonServices() {
+        return checkedModelSalonServices;
     }
 
 
@@ -54,11 +50,10 @@ public class RecyclerViewExtraServiceAdapter extends RecyclerView.Adapter<Recycl
     public void onBindViewHolder( MyViewHolder holder, int position) {
         //show item
 
-        serviceName = salonServices.get(position).getService().getServiceName();
-        discountValue = salonServices.get(position).getDiscount().getDiscountValue();
-        price = salonServices.get(position).getPrice();
+        serviceName = modelSalonServices.get(position).getModelService().getServiceName();
+        discountValue = modelSalonServices.get(position).getModelDiscount().getDiscountValue();
+        price = modelSalonServices.get(position).getPrice();
         serviceSalePrice = getSalePrice(price,discountValue);
-        String serviceImg = salonServices.get(position).getIconUrl();
 
         holder.txtSalonServiceName.setText(uppercaseFirstLetter(serviceName) + " (-" + discountValue + "%)" );
         holder.txtPrice.setText(price);
@@ -69,9 +64,9 @@ public class RecyclerViewExtraServiceAdapter extends RecyclerView.Adapter<Recycl
             public void onItemClick(View view, int pos) {
                 CheckBox chk = (CheckBox) view;
                 if(chk.isChecked()){
-                    checkedSalonServices.add(salonServices.get(pos));
+                    checkedModelSalonServices.add(modelSalonServices.get(pos));
                 }else if(!chk.isChecked()){
-                    checkedSalonServices.remove(salonServices.get(pos));
+                    checkedModelSalonServices.remove(modelSalonServices.get(pos));
                 }
             }
         });
@@ -97,7 +92,7 @@ public class RecyclerViewExtraServiceAdapter extends RecyclerView.Adapter<Recycl
     }
     @Override
     public int getItemCount() {
-        return salonServices.size();
+        return modelSalonServices.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{

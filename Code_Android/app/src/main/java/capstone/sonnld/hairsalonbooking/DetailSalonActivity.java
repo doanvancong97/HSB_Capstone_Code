@@ -33,13 +33,9 @@ import java.util.HashMap;
 import capstone.sonnld.hairsalonbooking.adapter.RecyclerViewExtraServiceAdapter;
 import capstone.sonnld.hairsalonbooking.api.HairSalonAPI;
 import capstone.sonnld.hairsalonbooking.api.RetrofitClient;
-import capstone.sonnld.hairsalonbooking.model.Account;
-import capstone.sonnld.hairsalonbooking.model.SalonService;
-import capstone.sonnld.hairsalonbooking.model.SessionManager;
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
+import capstone.sonnld.hairsalonbooking.model.ModelAccount;
+import capstone.sonnld.hairsalonbooking.model.ModelSalonService;
+import capstone.sonnld.hairsalonbooking.support.SessionManager;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -72,7 +68,7 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
 
     private RecyclerViewExtraServiceAdapter extraServiceAdapter;
     private String bookedDate = "";
-    private ArrayList<SalonService> chkService = new ArrayList<>();
+    private ArrayList<ModelSalonService> chkService = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -199,7 +195,7 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
             public void onClick(View v) {
                 // setup data for booking
 
-                chkService = extraServiceAdapter.getCheckedSalonServices();
+                chkService = extraServiceAdapter.getCheckedModelSalonServices();
                 if (fullName == null) {
                     Toast.makeText(DetailSalonActivity.this,
                             "Hãy đăng nhập để tiếp tục đặt lịch!", Toast.LENGTH_LONG).show();
@@ -228,17 +224,17 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
     }
 
     private void initUserDetail() {
-        Call<Account> call = hairSalonAPI.getUserDetail(mUserName);
-        call.enqueue(new Callback<Account>() {
+        Call<ModelAccount> call = hairSalonAPI.getUserDetail(mUserName);
+        call.enqueue(new Callback<ModelAccount>() {
             @Override
-            public void onResponse(Call<Account> call, Response<Account> response) {
-                Account currentAcc = response.body();
+            public void onResponse(Call<ModelAccount> call, Response<ModelAccount> response) {
+                ModelAccount currentAcc = response.body();
                 fullName = currentAcc.getFullname();
 
             }
 
             @Override
-            public void onFailure(Call<Account> call, Throwable t) {
+            public void onFailure(Call<ModelAccount> call, Throwable t) {
 
             }
         });
@@ -249,12 +245,12 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {
-                ArrayList<SalonService> services = (ArrayList<SalonService>) response.body();
-                String imgUrl = services.get(0).getSalon().getUrl();
-                        String address = services.get(0).getSalon().getAddress().getStreetNumber() + ", "
-                                + services.get(0).getSalon().getAddress().getStreet();
-                        String logUrl = services.get(0).getSalon().getLogoUrl();
-                        String des = services.get(0).getSalon().getDescription();
+                ArrayList<ModelSalonService> services = (ArrayList<ModelSalonService>) response.body();
+                String imgUrl = services.get(0).getModelSalon().getUrl();
+                        String address = services.get(0).getModelSalon().getModelAddress().getStreetNumber() + ", "
+                                + services.get(0).getModelSalon().getModelAddress().getStreet();
+                        String logUrl = services.get(0).getModelSalon().getLogoUrl();
+                        String des = services.get(0).getModelSalon().getDescription();
 
                         txtDescription.setText(des);
                         txtAddress.setText(address);
@@ -309,8 +305,8 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
     }
 
 
-    private void displayExtraService(ArrayList<SalonService> salonServices) {
-        extraServiceAdapter = new RecyclerViewExtraServiceAdapter(DetailSalonActivity.this, salonServices);
+    private void displayExtraService(ArrayList<ModelSalonService> modelSalonServices) {
+        extraServiceAdapter = new RecyclerViewExtraServiceAdapter(DetailSalonActivity.this, modelSalonServices);
         recyclerView.setAdapter(extraServiceAdapter);
     }
 

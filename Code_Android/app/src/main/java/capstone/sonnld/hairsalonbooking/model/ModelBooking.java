@@ -6,15 +6,14 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 
-public class Booking implements Serializable {
-    @SerializedName("account")
+public class ModelBooking implements Serializable {
+    @SerializedName("modelAccount")
     @Expose
-    private Account account;
-    @SerializedName("bookingDetailsCollection")
+    private ModelAccount modelAccount;
+    @SerializedName("modelBookingDetailsCollection")
     @Expose
-    private ArrayList<BookingDetail> bookingDetailsCollection = null;
+    private ArrayList<ModelBookingDetail> modelBookingDetailsCollection = null;
     @SerializedName("booking_date")
     @Expose
     private String bookingDate;
@@ -31,20 +30,20 @@ public class Booking implements Serializable {
     @Expose
     private String status;
 
-    public Account getAccount() {
-        return account;
+    public ModelAccount getModelAccount() {
+        return modelAccount;
     }
 
-    public void setAccount(Account account) {
-        this.account = account;
+    public void setModelAccount(ModelAccount modelAccount) {
+        this.modelAccount = modelAccount;
     }
 
-    public ArrayList<BookingDetail> getBookingDetailsCollection() {
-        return bookingDetailsCollection;
+    public ArrayList<ModelBookingDetail> getModelBookingDetailsCollection() {
+        return modelBookingDetailsCollection;
     }
 
-    public void setBookingDetailsCollection(ArrayList<BookingDetail> bookingDetailsCollection) {
-        this.bookingDetailsCollection = bookingDetailsCollection;
+    public void setModelBookingDetailsCollection(ArrayList<ModelBookingDetail> modelBookingDetailsCollection) {
+        this.modelBookingDetailsCollection = modelBookingDetailsCollection;
     }
 
     public String getBookingDate() {

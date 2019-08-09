@@ -5,10 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-public class Discount implements Serializable {
-    @SerializedName("couponCode")
-    @Expose
-    private String couponCode;
+public class ModelDiscount implements Serializable {
     @SerializedName("createDate")
     @Expose
     private String createDate;
@@ -33,14 +30,6 @@ public class Discount implements Serializable {
     @SerializedName("validUntil")
     @Expose
     private String validUntil;
-
-    public String getCouponCode() {
-        return couponCode;
-    }
-
-    public void setCouponCode(String couponCode) {
-        this.couponCode = couponCode;
-    }
 
     public String getCreateDate() {
         return createDate;
