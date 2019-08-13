@@ -22,7 +22,7 @@
             android:layout_height="200dp"
             android:layout_gravity="center_horizontal"
 
-            android:src="@drawable/mylogo" />
+            android:src="@drawable/my_logo" />
 
         <!-- Name Label -->
         <android.support.design.widget.TextInputLayout

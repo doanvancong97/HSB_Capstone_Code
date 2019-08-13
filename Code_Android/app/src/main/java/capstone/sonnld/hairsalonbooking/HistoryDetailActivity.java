@@ -76,7 +76,7 @@ public class HistoryDetailActivity extends AppCompatActivity {
             initUserDetail();
         }
 
-
+        // get data from RecyclerViewBookingHistoryAdapter
         Intent intent = getIntent();
         String bookedDate = intent.getExtras().getString("BookedDate");
         String bookedTime = intent.getExtras().getString("BookedTime");
@@ -84,6 +84,7 @@ public class HistoryDetailActivity extends AppCompatActivity {
         String[] bookedDateArr = bookedDate.split("-");
         String[] bookedTimeArr = bookedTime.split(":");
 
+        String status = intent.getExtras().getString("BookingStatus");
         String address = intent.getExtras().getString("ModelAddress");
         ArrayList<ModelBookingDetail> selectedService =
                 (ArrayList<ModelBookingDetail>) intent.getSerializableExtra("SelectedService");
@@ -120,6 +121,10 @@ public class HistoryDetailActivity extends AppCompatActivity {
             }
         });
 
+
+        if(!status.equals("process")){
+            btnCancel.setVisibility(View.GONE);
+        }
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -151,6 +156,7 @@ public class HistoryDetailActivity extends AppCompatActivity {
                     Intent intent = new Intent(HistoryDetailActivity.this, HistoryActivity.class);
                     intent.putExtra("USER_ID",userID);
                     startActivity(intent);
+                    finish();
                 }
             }
 

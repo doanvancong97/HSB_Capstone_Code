@@ -90,7 +90,15 @@ public class RecyclerViewFilterServiceAdapter extends RecyclerView.Adapter<Recyc
                 intent.putExtra("SalonName", modelSalonServices.get(position).getModelSalon().getName());
                 intent.putExtra("Description", des);
                 intent.putExtra("Thumbnail", modelSalonServices.get(position).getModelSalon().getUrl());
-                intent.putExtra("ModelAddress", modelSalonServices.get(position).getModelSalon().getModelAddress().getStreet());
+                intent.putExtra("Logo", modelSalonServices.get(position).getModelSalon().getLogoUrl());
+                intent.putExtra("ModelAddress", modelSalonServices.get(position).getModelSalon().getModelAddress().getStreetNumber() + ", "
+                        + modelSalonServices.get(position).getModelSalon().getModelAddress().getStreet() + ", "
+                        + modelSalonServices.get(position).getModelSalon().getModelAddress().getModelDistrict().getDistrictName() + ", "
+                        + modelSalonServices.get(position).getModelSalon().getModelAddress().getModelDistrict().getModelCity().getCityName());
+                intent.putExtra("SalonStartTime",modelSalonServices.get(position).getModelSalon().getOpenTime());
+                intent.putExtra("SalonCloseTime",modelSalonServices.get(position).getModelSalon().getCloseTime());
+                intent.putExtra("SalonSlotTime",modelSalonServices.get(position).getModelSalon().getSlotTime());
+                intent.putExtra("SalonBookingDay",modelSalonServices.get(position).getModelSalon().getBookingDay());
                 // data need to be received in DetailSalonA
                 mContext.startActivity(intent);
 

@@ -5,9 +5,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import capstone.sonnld.hairsalonbooking.adapter.RecyclerViewBookingHistoryAdapter;
 import capstone.sonnld.hairsalonbooking.api.HairSalonAPI;
@@ -21,8 +23,9 @@ import retrofit2.Retrofit;
 public class HistoryActivity extends AppCompatActivity {
 
     private HairSalonAPI hairSalonAPI;
-    RecyclerView recyclerViewHistory;
+    private RecyclerView recyclerViewHistory;
 
+    private int userID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +37,7 @@ public class HistoryActivity extends AppCompatActivity {
 
         //get data from HistoryDetailActivity/ MainActivity
         Intent intent = getIntent();
-        int userID = intent.getExtras().getInt("USER_ID");
+        userID = intent.getExtras().getInt("USER_ID");
         Toast.makeText(this, "id="+userID, Toast.LENGTH_SHORT).show();
 
         recyclerViewHistory=findViewById(R.id.recycler_view_history);
@@ -65,5 +68,11 @@ public class HistoryActivity extends AppCompatActivity {
                 = new RecyclerViewBookingHistoryAdapter(HistoryActivity.this, listModelBookingHistory);
         recyclerViewHistory.setAdapter(adapter);
 
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        getAllBookingHistory(userID);
     }
 }

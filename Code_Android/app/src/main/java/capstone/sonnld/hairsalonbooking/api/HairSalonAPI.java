@@ -14,11 +14,8 @@ import retrofit2.http.Path;
 
 public interface HairSalonAPI {
 
-    @GET("salonservice")
+    @GET("salonservice/getAllActiveSalonService")
     Call<ArrayList<ModelSalonService>> getAllServiceByDiscountValue();
-
-//    @GET("booking-details")
-//    Call<ArrayList<ModelBookingDetail>> getAllServiceByRating();
 
     @GET("salonservice/{id}")
     Call<ArrayList<ModelSalonService>> getSalonServiceBySalonId(@Path("id") int id);

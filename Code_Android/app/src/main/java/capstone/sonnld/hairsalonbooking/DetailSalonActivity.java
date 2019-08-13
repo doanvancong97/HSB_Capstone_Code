@@ -59,12 +59,20 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
     private String mUserName;
     private SessionManager sessionManager;
     private String fullName;
+    private int userId;
+    private String phone;
 
     //Button time
     private boolean isChoose = false;
     private int slotIDisChoose = 0;
     private int slotID = 0;
     private String bookedTime = "";
+
+    private String salonStartTime ;
+    private String salonEndTime ;
+    private int salonSlotTime ;
+    private int salonBookingDay ;
+
 
     private RecyclerViewExtraServiceAdapter extraServiceAdapter;
     private String bookedDate = "";
@@ -182,8 +190,12 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
         Intent intent = getIntent();
         int salonId = intent.getExtras().getInt("SalonId");
         String salonName = intent.getExtras().getString("SalonName");
-        txtSalonName.setText(salonName);
+        salonStartTime = intent.getExtras().getString("SalonStartTime");
+        salonEndTime = intent.getExtras().getString("SalonEndTime");
+        salonSlotTime = intent.getExtras().getInt("SalonSlotTime");
+        salonBookingDay = intent.getExtras().getInt("SalonBookingDay");
 
+        txtSalonName.setText(salonName);
         // recycler for extra service
         recyclerView = findViewById(R.id.recycler_view_salon_service);
         recyclerView.setLayoutManager(new GridLayoutManager(DetailSalonActivity.this, 1));
@@ -215,6 +227,8 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
                     sendDataToBooking.putExtra("bookedTime", bookedTime);
                     sendDataToBooking.putExtra("salonAddress", txtAddress.getText());
                     sendDataToBooking.putExtra("fullname", fullName);
+                    sendDataToBooking.putExtra("userId", userId);
+                    sendDataToBooking.putExtra("phoneNum", phone);
                     sendDataToBooking.putExtra("description", txtDescription.getText().toString());
                     startActivity(sendDataToBooking);
                 }
@@ -230,7 +244,8 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
             public void onResponse(Call<ModelAccount> call, Response<ModelAccount> response) {
                 ModelAccount currentAcc = response.body();
                 fullName = currentAcc.getFullname();
-
+                userId = currentAcc.getUserId();
+                phone = currentAcc.getPhoneNumber();
             }
 
             @Override
@@ -300,7 +315,7 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
 
             generateSlot();
         }
-
+        bookedDate = year + "-" + monthOfYear + "-" + dayOfMonth;
 
     }
 
@@ -326,17 +341,13 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
 
     public void generateSlot() {
 
-//        Date date = new Date();   // given date
-//        Calendar calendar = GregorianCalendar.getInstance(); // creates a new calendar instance
-//        calendar.setTime(date);   // assigns calendar to given date
-//        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        String maxHour = "23:00";
+        String maxHour = salonEndTime;
         String[] splitMaxHour = maxHour.split(":");
         int maxH = Integer.parseInt(splitMaxHour[0]);
-        String minHour = "08:00";
+        String minHour = salonStartTime;
         String[] splitMinHour = minHour.split(":");
         int minH = Integer.parseInt(splitMinHour[0]);
-        double step = 30;
+        double step = salonSlotTime;
 
         double run = (maxH - minH) / (step / 60) + Integer.parseInt(splitMaxHour[1]) / step - Integer.parseInt(splitMinHour[1]) / step;
 
@@ -374,6 +385,8 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
 
                 linearTimePiker.addView(slot);
                 calendar.add(Calendar.MINUTE, (int) step);
+
+                // onclick select time
                 slot.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -390,8 +403,6 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
                             Button b = findViewById(slotIDisChoose);
                             b.setBackgroundResource(button_time);
                             b.setTextColor(Color.parseColor("#DB1507"));
-
-
                             slot.setBackgroundResource(R.drawable.button_time_choose);
                             slot.setTextColor(Color.WHITE);
                             isChoose = true;
@@ -415,31 +426,50 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
 //        Calendar calendar = GregorianCalendar.getInstance(); // creates a new calendar instance
 //        calendar.setTime(date);   // assigns calendar to given date
 //        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        double step = 30;
+        double step = salonSlotTime; //30 mins
         DateFormat dateFormat = new SimpleDateFormat("HH:mm");
         Date date = new Date();
         String currentHour = dateFormat.format(date);
-        String[] currentHourArr = currentHour.split(":");
+        String[] spliCurrentHour = currentHour.split(":");
+
+        String maxSlot = salonEndTime;
+        String minSlot = salonStartTime;
+        String[] splitMaxSlot = maxSlot.split(":");
+        String[] splitMinSlot = minSlot.split(":");
+
+        int maxSlotHour = Integer.parseInt(splitMaxSlot[0]);
+        int minSlotHour = Integer.parseInt(splitMinSlot[0]);
 
 
-        String maxHour = "23:00";
-        String minHour = "";
-        String[] splitMaxHour = maxHour.split(":");
-        int maxH = Integer.parseInt(splitMaxHour[0]);
+        if (minSlotHour <= Integer.parseInt(spliCurrentHour[0])) {
+            if (Integer.parseInt(spliCurrentHour[1]) + step >= 60) {
+                minSlot = (Integer.parseInt(spliCurrentHour[0]) + 1) + ":00";
+                minSlotHour = Integer.parseInt(spliCurrentHour[0]);
+                splitMinSlot = spliCurrentHour;
 
-        if (Integer.parseInt(currentHourArr[1]) + step >= 60) {
-            minHour = (Integer.parseInt(currentHourArr[0]) + 1) + ":00";
+            } else {
+                minSlot = (Integer.parseInt(spliCurrentHour[0]) + ":" + (int) step);
+                minSlotHour = Integer.parseInt(spliCurrentHour[0]);
+
+
+            }
+
 
         } else {
-            minHour = (Integer.parseInt(currentHourArr[0]) + ":" + (int) step);
+
+            if (Integer.parseInt(splitMinSlot[1]) + step >= 60) {
+                minSlot = (minSlotHour + 1) + ":00";
+
+            } else {
+                minSlot = (minSlotHour + ":00");
+
+            }
 
         }
 
-        String[] splitMinHour = minHour.split(":");
-        int minH = Integer.parseInt(splitMinHour[0]);
 
-
-        double run = (maxH - minH) / (step / 60) + Integer.parseInt(splitMaxHour[1]) / step - Integer.parseInt(splitMinHour[1]) / step;
+// number of button will generate
+        double run = (maxSlotHour - minSlotHour) / (step / 60) + Integer.parseInt(splitMaxSlot[1]) / step - Integer.parseInt(splitMinSlot[1]) / step -1;
 
         Calendar calendar = Calendar.getInstance();
         Calendar calendar2 = Calendar.getInstance();
@@ -447,8 +477,8 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
         SimpleDateFormat format = new SimpleDateFormat("HH:mm");
         try {
 
-            Date start = format.parse(minHour);
-            Date end = format.parse(maxHour);
+            Date start = format.parse(minSlot);
+            Date end = format.parse(maxSlot);
 
 
             calendar.setTime(start);

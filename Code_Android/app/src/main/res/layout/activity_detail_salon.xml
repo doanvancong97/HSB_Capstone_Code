@@ -105,23 +105,25 @@
                         />
 
                     <LinearLayout
+                        android:layout_margin="10dp"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:orientation="horizontal"
                         android:weightSum="3"
                         android:background="@drawable/my_text_view_bg"
-                        android:layout_margin="10dp"
                         >
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
+
                             android:layout_weight="1"
                             android:gravity="center|left"
+                            android:padding="5dp"
                             android:text="Địa chỉ áp dụng: "
-                            android:textSize="15dp"
                             android:textColor="@color/black"
-                            />
+                            android:textSize="15dp"
+                            android:textStyle="bold" />
 
                         <!--<Spinner-->
 

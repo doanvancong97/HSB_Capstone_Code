@@ -278,7 +278,6 @@ public class MainActivity extends AppCompatActivity {
                                 Intent intent = new Intent(MainActivity.this, MapsActivity.class);
                                 intent.putExtra("salonServiceList", modelSalonServiceArrayList);
                                 Toast.makeText(MainActivity.this, modelSalonServiceArrayList.size() + "", Toast.LENGTH_SHORT).show();
-
                                 startActivity(intent);
 
                             }
@@ -395,22 +394,6 @@ public class MainActivity extends AppCompatActivity {
         searchResultLayout.setVisibility(View.GONE);
     }
 
-//    private void getAllSalonServiceByRating() {
-//        Call call = hairSalonAPI.getAllServiceByRating();
-//
-//        call.enqueue(new Callback() {
-//            @Override
-//            public void onResponse(Call call, Response response) {
-//                ArrayList<ModelBookingDetail> bookingDetails = (ArrayList<ModelBookingDetail>) response.body();
-//                displayServiceByRating(bookingDetails);
-//            }
-//
-//            @Override
-//            public void onFailure(Call call, Throwable t) {
-//
-//            }
-//        });
-//    }
 
     private void displayServiceByRating(ArrayList<ModelBookingDetail> modelBookingDetails) {
         RecyclerViewServiceByRatingAdapter viewNewestAdapter = new RecyclerViewServiceByRatingAdapter

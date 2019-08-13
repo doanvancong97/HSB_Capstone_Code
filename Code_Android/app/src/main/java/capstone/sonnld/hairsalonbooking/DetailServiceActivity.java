@@ -297,10 +297,6 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
 
     public void generateSlot() {
 
-//        Date date = new Date();   // given date
-//        Calendar calendar = GregorianCalendar.getInstance(); // creates a new calendar instance
-//        calendar.setTime(date);   // assigns calendar to given date
-//        int hour = calendar.get(Calendar.HOUR_OF_DAY);
         String maxHour = salonEndTime;
         String[] splitMaxHour = maxHour.split(":");
         int maxH = Integer.parseInt(splitMaxHour[0]);
@@ -402,17 +398,17 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
 
 
         if (minSlotHour <= Integer.parseInt(spliCurrentHour[0])) {
-            if (Integer.parseInt(spliCurrentHour[1]) + step >= 60) {
-                minSlot = (Integer.parseInt(spliCurrentHour[0]) + 1) + ":00";
-                minSlotHour = Integer.parseInt(spliCurrentHour[0]);
-                splitMinSlot = spliCurrentHour;
+                       if (Integer.parseInt(spliCurrentHour[1]) + step >= 60) {
+                    minSlot = (Integer.parseInt(spliCurrentHour[0]) + 1) + ":00";
+                    minSlotHour = Integer.parseInt(spliCurrentHour[0]);
+                    splitMinSlot = spliCurrentHour;
 
-            } else {
-                minSlot = (Integer.parseInt(spliCurrentHour[0]) + ":" + (int) step);
-                minSlotHour = Integer.parseInt(spliCurrentHour[0]);
+                } else {
+                    minSlot = (Integer.parseInt(spliCurrentHour[0]) + ":" + (int) step);
+                    minSlotHour = Integer.parseInt(spliCurrentHour[0]);
 
 
-            }
+                }
 
 
         } else {
@@ -429,7 +425,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
 
 
 // number of button will generate
-        double run = (maxSlotHour - minSlotHour) / (step / 60) + Integer.parseInt(splitMaxSlot[1]) / step - Integer.parseInt(splitMinSlot[1]) / step;
+        double run = (maxSlotHour - minSlotHour) / (step / 60) + Integer.parseInt(splitMaxSlot[1]) / step - Integer.parseInt(splitMinSlot[1]) / step -1;
 
         Calendar calendar = Calendar.getInstance();
         Calendar calendar2 = Calendar.getInstance();

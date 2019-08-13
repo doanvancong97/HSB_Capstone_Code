@@ -104,6 +104,7 @@ public class RecyclerViewBookingHistoryAdapter extends RecyclerView.Adapter<Recy
                                 .getModelSalon().getModelAddress().getStreet());
                 intent.putExtra("SelectedService", listModelBooking.get(position).getModelBookingDetailsCollection());
                 intent.putExtra("BookingId", listModelBooking.get(position).getBookingId());
+                intent.putExtra("BookingStatus", listModelBooking.get(position).getStatus());
 
                 mContext.startActivity(intent);
 

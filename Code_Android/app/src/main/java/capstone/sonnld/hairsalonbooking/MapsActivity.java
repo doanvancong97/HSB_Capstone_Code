@@ -68,12 +68,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private CardView cardViewSalonDetail;
 
-    GeoPoint loc = null;
-    LatLng point = null;
-    Spinner spRadius;
+    private GeoPoint loc = null;
+    private LatLng point = null;
+    private Spinner spRadius;
+    private LatLng you = null;
 
-    LatLng you = null;
-    DropDownView drop_down_view_radius;
+
+    private String salonStartTime ;
+    private String salonEndTime ;
+    private int salonSlotTime ;
+    private int salonBookingDay ;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,9 +110,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         // get data from main activity
         Intent intent = getIntent();
         modelSalonServices = (ArrayList<ModelSalonService>) intent.getSerializableExtra("salonServiceList");
-
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-
         mapFragment.getMapAsync(this);
     }
 
@@ -202,6 +205,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 Intent intent = new Intent(MapsActivity.this, DetailSalonActivity.class);
                                 intent.putExtra("SalonId", Integer.parseInt(marker.getSnippet()));
                                 intent.putExtra("SalonName", marker.getTitle());
+
                                 startActivity(intent);
                                 finish();
                             }
@@ -288,6 +292,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                         Intent intent = new Intent(MapsActivity.this, DetailSalonActivity.class);
                                         intent.putExtra("SalonId", Integer.parseInt(marker.getSnippet()));
                                         intent.putExtra("SalonName", marker.getTitle());
+                                        intent.putExtra("SalonStartTime",salonStartTime);
+                                        intent.putExtra("SalonEndTime",salonEndTime);
+                                        intent.putExtra("SalonSlotTime",salonSlotTime);
+                                        intent.putExtra("SalonBookingDay",salonBookingDay);
                                         startActivity(intent);
                                         finish();
                                     }
@@ -327,6 +335,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 ArrayList<ModelSalonService> modelSalonServices = response.body();
                 String imgUrl = modelSalonServices.get(0).getModelSalon().getUrl();
                 Picasso.with(MapsActivity.this).load(imgUrl).into(salon_img);
+                salonStartTime = modelSalonServices.get(0).getModelSalon().getOpenTime();
+                salonEndTime = modelSalonServices.get(0).getModelSalon().getCloseTime();
+                salonSlotTime =  modelSalonServices.get(0).getModelSalon().getSlotTime();
+                salonBookingDay =  modelSalonServices.get(0).getModelSalon().getBookingDay();
             }
 
             @Override
