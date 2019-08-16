@@ -12,9 +12,9 @@ public class ModelBookingDetail implements Serializable {
     @SerializedName("booking_id")
     @Expose
     private Integer bookingId;
-    @SerializedName("review")
+    @SerializedName("modelReview")
     @Expose
-    private Review review;
+    private ModelReview modelReview;
     @SerializedName("review_id")
     @Expose
     private Integer reviewId;
@@ -44,12 +44,12 @@ public class ModelBookingDetail implements Serializable {
         this.bookingId = bookingId;
     }
 
-    public Review getReview() {
-        return review;
+    public ModelReview getModelReview() {
+        return modelReview;
     }
 
-    public void setReview(Review review) {
-        this.review = review;
+    public void setModelReview(ModelReview modelReview) {
+        this.modelReview = modelReview;
     }
 
     public Integer getReviewId() {

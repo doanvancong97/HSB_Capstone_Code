@@ -5,14 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".HistoryDetailActivity"
-
-    >
+    tools:context=".HistoryDetailActivity">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/btn_cancel"
 
         >
         <LinearLayout
@@ -98,11 +95,11 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp">
+                android:layout_height="60dp">
 
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_height="fill_parent"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:paddingLeft="20dp"
                     android:text="Địa chỉ" />
@@ -110,7 +107,7 @@
                 <TextView
                     android:id="@+id/txt_address"
                     android:layout_width="0dp"
-                    android:layout_height="fill_parent"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:paddingLeft="40dp"
                     android:text="XXX"
@@ -118,6 +115,7 @@
 
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
@@ -137,13 +135,7 @@
                     android:drawablePadding="10dp"
                     />
 
-
-
-
             </LinearLayout>
-
-
-
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -166,30 +158,80 @@
                 android:id="@+id/txt_total"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+
 
                 android:padding="5dp"
                 android:text="Total"
-                android:textSize="18dp"
                 android:textAllCaps="true"
                 android:textColor="@color/black"
-                android:textStyle="italic|bold" />
+                android:textStyle="bold"
+                android:textSize="18dp"/>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/my_text_view_bg"
+                android:padding="5dp"
+                android:text="Điều kiện áp dụng:"
+                android:textAllCaps="true"
+                android:textColor="@color/black"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+            <com.borjabravo.readmoretextview.ReadMoreTextView
+                android:id="@+id/txt_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
+                app:colorClickableText="#2644EB"
+                app:trimLines="6" />
+
+
+
+
+
+
+            <LinearLayout
+                android:id="@+id/btn_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_cancel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_gravity="center"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_cancel"
+                    android:text="Hủy đặt chỗ"
+                    android:textSize="18sp"
+                    android:fontFamily="sans-serif-condensed-medium"/>
+
+                <Button
+                    android:id="@+id/btn_review"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_gravity="center"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_accept"
+                    android:text="Đánh giá salon"
+                    android:textSize="18sp"
+                    android:textColor="@color/white"
+                    android:fontFamily="sans-serif-condensed-medium"/>
+            </LinearLayout>
         </LinearLayout>
+
 
     </ScrollView>
 
-    <Button
-        android:id="@+id/btn_cancel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_gravity="center"
-        android:layout_margin="5dp"
-        android:background="@drawable/button_cancel"
-        android:text="Hủy"
-        android:textSize="18sp"
-        android:fontFamily="sans-serif-condensed-medium"/>
+
 
 
 </RelativeLayout>

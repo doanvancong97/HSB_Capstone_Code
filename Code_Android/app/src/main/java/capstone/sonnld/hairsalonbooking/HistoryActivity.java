@@ -43,8 +43,7 @@ public class HistoryActivity extends AppCompatActivity {
         recyclerViewHistory=findViewById(R.id.recycler_view_history);
         recyclerViewHistory.setLayoutManager(new GridLayoutManager(this, 1));
         getAllBookingHistory(userID);
-
-
+        
     }
 
     private void getAllBookingHistory( int userID) {

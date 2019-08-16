@@ -50,6 +50,17 @@ public class ModelSalon implements Serializable {
     @SerializedName("bookingDay")
     @Expose
     private int bookingDay;
+    @SerializedName("averageRating")
+    @Expose
+    private float averageRating;
+
+    public float getAverageRating() {
+        return averageRating;
+    }
+
+    public void setAverageRating(float averageRating) {
+        this.averageRating = averageRating;
+    }
 
     public int getBookingDay() {
         return bookingDay;

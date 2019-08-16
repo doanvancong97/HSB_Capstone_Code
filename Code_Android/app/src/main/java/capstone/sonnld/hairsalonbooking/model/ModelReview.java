@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-public class Review implements Serializable {
+public class ModelReview implements Serializable {
     @SerializedName("comment")
     @Expose
     private String comment;

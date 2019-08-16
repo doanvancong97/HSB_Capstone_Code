@@ -41,6 +41,7 @@ public class HistoryDetailActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private Button btnCancel;
+    private Button btnReview;
 
     private TextView txtBookedDate;
     private TextView txtBookedTime;
@@ -66,18 +67,18 @@ public class HistoryDetailActivity extends AppCompatActivity {
         txtBookedTime = findViewById(R.id.txt_booked_time);
         txtAddress = findViewById(R.id.txt_address);
         txtUsername = findViewById(R.id.txt_username);
+        btnReview = findViewById(R.id.btn_review);
 
         // get session
         sessionManager = new SessionManager(getApplicationContext());
         if (sessionManager.isLogin()) {
-
             HashMap<String, String> user = sessionManager.getUserDetail();
             mUserName = user.get(sessionManager.getUSERNAME());
             initUserDetail();
         }
 
         // get data from RecyclerViewBookingHistoryAdapter
-        Intent intent = getIntent();
+        final Intent intent = getIntent();
         String bookedDate = intent.getExtras().getString("BookedDate");
         String bookedTime = intent.getExtras().getString("BookedTime");
         bookingId = intent.getExtras().getInt("BookingId");
@@ -121,7 +122,7 @@ public class HistoryDetailActivity extends AppCompatActivity {
             }
         });
 
-
+        // setup btn cancel
         if(!status.equals("process")){
             btnCancel.setVisibility(View.GONE);
         }
@@ -141,6 +142,18 @@ public class HistoryDetailActivity extends AppCompatActivity {
                 AlertDialog dialog = builder.create();
                 dialog.show();
 
+            }
+        });
+
+        // setup btn review
+        btnReview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent openReviewActivity = new Intent(HistoryDetailActivity.this, ReviewActivity.class);
+                openReviewActivity.putExtra("userId",userID);
+                openReviewActivity.putExtra("bookingId",bookingId);
+
+                startActivity(openReviewActivity);
             }
         });
     }

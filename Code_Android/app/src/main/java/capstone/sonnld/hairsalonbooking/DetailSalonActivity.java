@@ -186,7 +186,7 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
             initUserDetail();
         }
 
-        // get data from map activity
+        // get data from map activity/ RecyclerViewSalonByRatingAdapter
         Intent intent = getIntent();
         int salonId = intent.getExtras().getInt("SalonId");
         String salonName = intent.getExtras().getString("SalonName");

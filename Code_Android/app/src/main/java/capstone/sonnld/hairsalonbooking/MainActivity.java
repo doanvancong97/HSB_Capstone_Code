@@ -39,12 +39,12 @@ import java.util.HashMap;
 import java.util.regex.Pattern;
 
 import capstone.sonnld.hairsalonbooking.adapter.RecyclerViewFilterServiceAdapter;
+import capstone.sonnld.hairsalonbooking.adapter.RecyclerViewSalonByRatingAdapter;
 import capstone.sonnld.hairsalonbooking.adapter.RecyclerViewServiceByDiscountAdapter;
-import capstone.sonnld.hairsalonbooking.adapter.RecyclerViewServiceByRatingAdapter;
 import capstone.sonnld.hairsalonbooking.api.HairSalonAPI;
 import capstone.sonnld.hairsalonbooking.api.RetrofitClient;
 import capstone.sonnld.hairsalonbooking.model.ModelAccount;
-import capstone.sonnld.hairsalonbooking.model.ModelBookingDetail;
+import capstone.sonnld.hairsalonbooking.model.ModelSalon;
 import capstone.sonnld.hairsalonbooking.model.ModelSalonService;
 import capstone.sonnld.hairsalonbooking.support.SessionManager;
 import retrofit2.Call;
@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
 
     // recycler
     private RecyclerView recyclerView;
-    private RecyclerView recyclerViewBestService;
+    private RecyclerView recyclerViewSalonByRating;
     private RecyclerView recyclerViewFilterService;
 
     // menu and toolbar
@@ -114,9 +114,6 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-
-
-
         //setup menu sideBar
         mDrawerLayout = findViewById(R.id.drawerLayout);
         mActionBarDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
@@ -127,7 +124,6 @@ public class MainActivity extends AppCompatActivity {
         // User detail setup
         navigationview = findViewById(R.id.navigationview);
         View header = navigationview.getHeaderView(0);
-
 
         btn_ReLogin = header.findViewById(R.id.btn_ReLogin);
         lnWelcome = header.findViewById(R.id.lnWelcome);
@@ -177,9 +173,9 @@ public class MainActivity extends AppCompatActivity {
         getAllSalonServiceByDiscount();
 
         // recycler view for service by rating
-        //recyclerViewBestService = findViewById(R.id.recycler_view_good_service);
-        //recyclerViewBestService.setLayoutManager(new GridLayoutManager(MainActivity.this, 1));
-       // getAllSalonServiceByRating();
+        recyclerViewSalonByRating = findViewById(R.id.recycler_view_salon_by_rating);
+        recyclerViewSalonByRating.setLayoutManager(new GridLayoutManager(MainActivity.this,1));
+        getAllSalonByRating();
 
         // setup search filter
         recyclerViewFilterService = findViewById(R.id.recycler_view_filter_service);
@@ -187,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
         getSearchItems();
 
 
-        // setup search view
+        // setup search view 1
 
         mSearchView = findViewById(R.id.search_view);
         mSearchView.setIconifiedByDefault(true);
@@ -200,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
         homeLayout.requestFocus();
         searchResultLayout = findViewById(R.id.show_search_result_layout);
 
-
+        // setup search view 2
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -296,8 +292,6 @@ public class MainActivity extends AppCompatActivity {
                         }).check();
                     }
 //
-
-
                 }
             }
         });
@@ -305,6 +299,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+    // function when reload page
     @Override
     protected void onRestart() {
         super.onRestart();
@@ -394,14 +390,7 @@ public class MainActivity extends AppCompatActivity {
         searchResultLayout.setVisibility(View.GONE);
     }
 
-
-    private void displayServiceByRating(ArrayList<ModelBookingDetail> modelBookingDetails) {
-        RecyclerViewServiceByRatingAdapter viewNewestAdapter = new RecyclerViewServiceByRatingAdapter
-                (MainActivity.this, modelBookingDetails);
-        recyclerViewBestService.setAdapter(viewNewestAdapter);
-    }
-
-
+    // api call for list service by discount
     private void getAllSalonServiceByDiscount() {
         Call call = hairSalonAPI.getAllServiceByDiscountValue();
 
@@ -420,11 +409,34 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
     private void displayServiceByDiscount(ArrayList<ModelSalonService> modelSalonServices) {
         RecyclerViewServiceByDiscountAdapter viewAdapter
                 = new RecyclerViewServiceByDiscountAdapter(MainActivity.this, modelSalonServices);
         recyclerView.setAdapter(viewAdapter);
+    }
+
+    // api call for list salon by rating
+    private void getAllSalonByRating() {
+        Call<ArrayList<ModelSalon>> listCall = hairSalonAPI.getAllSalonByRating();
+
+        listCall.enqueue(new Callback<ArrayList<ModelSalon>>() {
+            @Override
+            public void onResponse(Call<ArrayList<ModelSalon>> call, Response<ArrayList<ModelSalon>> response) {
+                ArrayList<ModelSalon> modelSalons = response.body();
+                displaySalonByRating(modelSalons);
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<ModelSalon>> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void displaySalonByRating(ArrayList<ModelSalon> modelSalons) {
+        RecyclerViewSalonByRatingAdapter recyclerViewSalonByRatingAdapter =
+                new RecyclerViewSalonByRatingAdapter(MainActivity.this,modelSalons);
+        recyclerViewSalonByRating.setAdapter(recyclerViewSalonByRatingAdapter);
     }
 
     public void clickToRedirectToLogin(View view) {
