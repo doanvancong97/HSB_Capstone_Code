@@ -51,6 +51,7 @@ public class HistoryDetailActivity extends AppCompatActivity {
 
     private int bookingId;
     private int userID;
+    private String salonName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,6 +83,7 @@ public class HistoryDetailActivity extends AppCompatActivity {
         String bookedDate = intent.getExtras().getString("BookedDate");
         String bookedTime = intent.getExtras().getString("BookedTime");
         bookingId = intent.getExtras().getInt("BookingId");
+        salonName = intent.getExtras().getString("SalonName");
         String[] bookedDateArr = bookedDate.split("-");
         String[] bookedTimeArr = bookedTime.split(":");
 
@@ -151,6 +153,7 @@ public class HistoryDetailActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent openReviewActivity = new Intent(HistoryDetailActivity.this, ReviewActivity.class);
                 openReviewActivity.putExtra("userId",userID);
+                openReviewActivity.putExtra("salonName",salonName);
                 openReviewActivity.putExtra("bookingId",bookingId);
 
                 startActivity(openReviewActivity);

@@ -9,6 +9,7 @@
     tools:context=".ReviewActivity">
 
     <TextView
+        android:id="@+id/txt_heading"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Đánh giá dịch vụ tại Liem barber shop"

@@ -32,10 +32,12 @@ import java.util.Date;
 import java.util.HashMap;
 
 import capstone.sonnld.hairsalonbooking.adapter.RecyclerViewExtraServiceAdapter;
+import capstone.sonnld.hairsalonbooking.adapter.RecyclerViewReviewAdapter;
 import capstone.sonnld.hairsalonbooking.api.HairSalonAPI;
 import capstone.sonnld.hairsalonbooking.api.RetrofitClient;
 import capstone.sonnld.hairsalonbooking.dto.BookingDetailsDTO;
 import capstone.sonnld.hairsalonbooking.model.ModelAccount;
+import capstone.sonnld.hairsalonbooking.model.ModelReview;
 import capstone.sonnld.hairsalonbooking.model.ModelSalonService;
 import capstone.sonnld.hairsalonbooking.support.SessionManager;
 import retrofit2.Call;
@@ -57,6 +59,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
     private TextView txtAddress;
     private Button btnConfirm;
     private RecyclerView recyclerView;
+    private RecyclerView recyclerViewReview;
     private ImageView imgThumb;
     private ImageView imgLogo;
 
@@ -78,6 +81,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
 
     private HairSalonAPI hairSalonAPI;
     private RecyclerViewExtraServiceAdapter extraServiceAdapter;
+    private RecyclerViewReviewAdapter viewReviewAdapter;
     private String bookedDate = "";
     private ArrayList<ModelSalonService> chkService = new ArrayList<>();
     private ArrayList<BookingDetailsDTO> bookingDetailsDTOList = new ArrayList<>();
@@ -109,9 +113,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
         linearTimePiker = findViewById(R.id.linearTimePicker);
         imgLogo = findViewById(R.id.img_logo);
 
-
-
-
+        
         //Receive data from RecyclerViewServiceByDiscountAdapter
         Intent intent = getIntent();
         int salonId = intent.getExtras().getInt("SalonID");
@@ -159,7 +161,10 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
         recyclerView.setLayoutManager(new GridLayoutManager(DetailServiceActivity.this, 1));
         getAllExtraService(salonId);
 
-
+        // recycler for review
+        recyclerViewReview = findViewById(R.id.recycler_view_review);
+        recyclerViewReview.setLayoutManager(new GridLayoutManager(DetailServiceActivity.this, 1));
+        getAllReview(salonId);
         // setup user
         sessionManager = new SessionManager(getApplicationContext());
         if (sessionManager.isLogin()) {
@@ -204,6 +209,27 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
             }
         });
 
+    }
+
+    private void getAllReview(int salonId) {
+        Call<ArrayList<ModelReview>> listCall = hairSalonAPI.getAllReviewBySalonId(salonId);
+        listCall.enqueue(new Callback<ArrayList<ModelReview>>() {
+            @Override
+            public void onResponse(Call<ArrayList<ModelReview>> call, Response<ArrayList<ModelReview>> response) {
+                ArrayList<ModelReview> modelReviews = response.body();
+                displayAllReview(modelReviews);
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<ModelReview>> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public void displayAllReview(ArrayList<ModelReview> modelReviews){
+        viewReviewAdapter = new RecyclerViewReviewAdapter(this,modelReviews);
+        recyclerViewReview.setAdapter(viewReviewAdapter);
     }
 
     private void initUserDetail() {

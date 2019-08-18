@@ -1,11 +1,16 @@
 package capstone.sonnld.hairsalonbooking.model;
 
+import android.accounts.Account;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
 public class ModelReview implements Serializable {
+    @SerializedName("account")
+    @Expose
+    private ModelAccount account;
     @SerializedName("comment")
     @Expose
     private String comment;
@@ -21,9 +26,14 @@ public class ModelReview implements Serializable {
     @SerializedName("status")
     @Expose
     private String status;
-    @SerializedName("user_id")
-    @Expose
-    private String userId;
+
+    public ModelAccount getAccount() {
+        return account;
+    }
+
+    public void setAccount(ModelAccount account) {
+        this.account = account;
+    }
 
     public String getComment() {
         return comment;
@@ -63,14 +73,6 @@ public class ModelReview implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
     }
 
 }

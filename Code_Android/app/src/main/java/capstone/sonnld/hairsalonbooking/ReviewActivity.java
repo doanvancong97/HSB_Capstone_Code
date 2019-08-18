@@ -28,6 +28,7 @@ public class ReviewActivity extends AppCompatActivity {
     private RatingBar ratingBar;
     private Button btnSubmit;
     private TextView txtScore;
+    private TextView txtHeading;
     private EditText edtComment;
 
     // value to submit
@@ -53,11 +54,15 @@ public class ReviewActivity extends AppCompatActivity {
         btnSubmit = findViewById(R.id.btn_submit);
         txtScore = findViewById(R.id.txt_rating);
         edtComment = findViewById(R.id.edt_comment);
+        txtHeading = findViewById(R.id.txt_heading);
 
         // get value from HistoryDetailActivity
         Intent intent = getIntent();
         bookingId = intent.getExtras().getInt("bookingId");
         userId = intent.getExtras().getInt("userId");
+        String salonName = intent.getExtras().getString("salonName");
+
+        txtHeading.setText(salonName);
 
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override

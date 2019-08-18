@@ -1,11 +1,13 @@
 package capstone.sonnld.hairsalonbooking.api;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import capstone.sonnld.hairsalonbooking.dto.BookingDTO;
 import capstone.sonnld.hairsalonbooking.dto.RatingDTO;
 import capstone.sonnld.hairsalonbooking.model.ModelAccount;
 import capstone.sonnld.hairsalonbooking.model.ModelBooking;
+import capstone.sonnld.hairsalonbooking.model.ModelReview;
 import capstone.sonnld.hairsalonbooking.model.ModelSalon;
 import capstone.sonnld.hairsalonbooking.model.ModelSalonService;
 import retrofit2.Call;
@@ -56,4 +58,7 @@ public interface HairSalonAPI {
 
     @GET("salon/getSalonIdByBookingId/{id}")
     Call<Integer> getSalonIdByBookingId(@Path("id") int bookingId);
+
+    @GET("review/getAllReviewBySalonId/{id}")
+    Call<ArrayList<ModelReview>> getAllReviewBySalonId(@Path("id") int salonId);
 }

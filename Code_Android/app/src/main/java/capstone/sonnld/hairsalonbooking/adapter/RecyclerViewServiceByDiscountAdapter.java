@@ -52,7 +52,6 @@ public class RecyclerViewServiceByDiscountAdapter extends RecyclerView.Adapter<R
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
         //show item
-        des = modelSalonServices.get(position).getModelSalon().getDescription();
         serviceName = modelSalonServices.get(position).getModelService().getServiceName();
         salonAddress = modelSalonServices.get(position).getModelSalon().getModelAddress().getStreetNumber() + ", "
                 + modelSalonServices.get(position).getModelSalon().getModelAddress().getStreet() + ", "
@@ -87,7 +86,7 @@ public class RecyclerViewServiceByDiscountAdapter extends RecyclerView.Adapter<R
                 intent.putExtra("SalonServicePrice", modelSalonServices.get(position).getPrice());
                 intent.putExtra("DiscountValue", modelSalonServices.get(position).getModelDiscount().getDiscountValue());
                 intent.putExtra("SalonName", modelSalonServices.get(position).getModelSalon().getName());
-                intent.putExtra("Description", des);
+                intent.putExtra("Description", modelSalonServices.get(position).getModelSalon().getDescription());
                 intent.putExtra("Thumbnail", modelSalonServices.get(position).getModelSalon().getUrl());
                 intent.putExtra("Logo", modelSalonServices.get(position).getModelSalon().getLogoUrl());
                 intent.putExtra("ModelAddress", modelSalonServices.get(position).getModelSalon().getModelAddress().getStreetNumber() + ", "
