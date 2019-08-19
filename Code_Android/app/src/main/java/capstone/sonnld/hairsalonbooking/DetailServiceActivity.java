@@ -57,6 +57,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
     private TextView txtServicePrice;
     private TextView txtServiceSalePrice;
     private TextView txtAddress;
+    private TextView txtAvgRating;
     private Button btnConfirm;
     private RecyclerView recyclerView;
     private RecyclerView recyclerViewReview;
@@ -112,6 +113,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
         btnConfirm = findViewById(R.id.btn_confirm);
         linearTimePiker = findViewById(R.id.linearTimePicker);
         imgLogo = findViewById(R.id.img_logo);
+        txtAvgRating = findViewById(R.id.txt_avg_rating);
 
         
         //Receive data from RecyclerViewServiceByDiscountAdapter
@@ -129,6 +131,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
         salonEndTime = intent.getExtras().getString("SalonCloseTime");
         salonSlotTime = intent.getExtras().getInt("SalonSlotTime");
         salonBookingDay = intent.getExtras().getInt("SalonBookingDay");
+        float avgRating = intent.getExtras().getFloat("AvgRating");
 
 
         //set new value for view
@@ -139,6 +142,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
         txtServiceSalePrice.setText(getSalePrice(salonServicePrice, discountValue));
         txtDescription.setText(description);
         txtAddress.setText(address);
+        txtAvgRating.setText("Đánh giá trung bình: " + avgRating);
         Picasso.with(this).load(imgUrl).into(imgThumb);
         Picasso.with(this).load(logoUrl).into(imgLogo);
 

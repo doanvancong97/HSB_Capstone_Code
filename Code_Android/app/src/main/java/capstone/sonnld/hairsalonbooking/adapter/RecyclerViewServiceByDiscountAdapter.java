@@ -97,6 +97,7 @@ public class RecyclerViewServiceByDiscountAdapter extends RecyclerView.Adapter<R
                 intent.putExtra("SalonCloseTime",modelSalonServices.get(position).getModelSalon().getCloseTime());
                 intent.putExtra("SalonSlotTime",modelSalonServices.get(position).getModelSalon().getSlotTime());
                 intent.putExtra("SalonBookingDay",modelSalonServices.get(position).getModelSalon().getBookingDay());
+                intent.putExtra("AvgRating",modelSalonServices.get(position).getModelSalon().getAverageRating());
                 mContext.startActivity(intent);
 
             }
