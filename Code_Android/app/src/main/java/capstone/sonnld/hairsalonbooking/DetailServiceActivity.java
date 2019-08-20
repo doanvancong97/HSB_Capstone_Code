@@ -45,6 +45,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
+import static capstone.sonnld.hairsalonbooking.R.drawable.button_full;
 import static capstone.sonnld.hairsalonbooking.R.drawable.button_time;
 
 
@@ -93,6 +94,9 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
     private String fullName;
     private int userId;
     private String phone;
+
+
+    int numberOfPeopleBooked=5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -366,10 +370,23 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
 
                     minute = "0" + calendar.getTime().getMinutes();
                 else minute = calendar.getTime().getMinutes() + "";
+
                 slot.setText(calendar.getTime().getHours() + ":" + minute);
 
 
                 linearTimePiker.addView(slot);
+
+                numberOfPeopleBooked=getNumberOfPeopleBooked(bookedDate,slot.getText().toString());
+
+                if(numberOfPeopleBooked>=5){
+                    slot.setEnabled(false);
+                    slot.setBackgroundResource(button_full);
+                    slot.setText("Hết chỗ");
+                }
+
+
+
+
                 calendar.add(Calendar.MINUTE, (int) step);
 
                 // onclick select time
@@ -490,6 +507,16 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
 
 
                 linearTimePiker.addView(slot);
+
+                numberOfPeopleBooked=getNumberOfPeopleBooked(bookedDate,slot.getText().toString());
+
+                if(numberOfPeopleBooked>=5){
+                    slot.setEnabled(false);
+                    slot.setBackgroundResource(button_full);
+                    slot.setText("Hết chỗ");
+                }
+
+
                 calendar.add(Calendar.MINUTE, (int) step);
                 slot.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -523,6 +550,14 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
         } catch (ParseException e) {
             e.printStackTrace();
         }
+    }
+
+
+    public int getNumberOfPeopleBooked(String bookedDate, String bookedTime){
+        if((bookedDate.equals("24/08/2019") && bookedTime.equals("9:30")) || (bookedDate.equals("24/08/2019") && bookedTime.equals("10:30")))
+            return 4;
+
+        return 5;
     }
 
 
