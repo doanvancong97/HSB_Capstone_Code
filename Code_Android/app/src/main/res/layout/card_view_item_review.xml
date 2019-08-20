@@ -56,12 +56,14 @@
 
             <RatingBar
                 android:id="@+id/rating_bar"
-                android:layout_width="wrap_content"
+                android:layout_width="250dp"
                 android:layout_height="0dp"
-                android:layout_weight="3"
+                android:layout_weight="5"
                 android:numStars="5"
                 android:stepSize="0.1"
                 android:isIndicator="true"
+                android:progressTint="#FFEB3B"
+
                 />
 
             <LinearLayout
@@ -79,7 +81,7 @@
                     android:drawablePadding="10dp"
                     android:gravity="center|left"
                     android:paddingLeft="10dp"
-                    android:text="Đã sử dụng dịch vụ tại salon"
+                    android:text="Đã sử dụng dịch vụ"
                     android:textColor="@color/green"
                     android:textSize="12dp"
                     android:textStyle="bold" />

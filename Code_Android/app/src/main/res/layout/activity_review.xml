@@ -13,6 +13,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Đánh giá dịch vụ tại Liem barber shop"
+        android:gravity="center"
+        android:textColor="@color/red2"
+        android:textSize="25sp"
         />
 
     <RatingBar
@@ -21,14 +24,12 @@
         android:layout_height="wrap_content"
         android:numStars="5"
         android:stepSize="1"
+        android:layout_gravity="center"
+        android:progressTint="#FFEB3B"
+
 
         />
-    <TextView
-        android:id="@+id/txt_rating"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Đánh giá của bạn là : 5 điểm"
-        />
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -44,6 +45,7 @@
         android:id="@+id/btn_submit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="submit"
+        android:text="Gửi đánh giá"
+        android:background="@drawable/button_accept"
         />
 </LinearLayout>

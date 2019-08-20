@@ -1,6 +1,7 @@
 package capstone.sonnld.hairsalonbooking;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -27,7 +28,7 @@ public class ReviewActivity extends AppCompatActivity {
     //view value
     private RatingBar ratingBar;
     private Button btnSubmit;
-    private TextView txtScore;
+
     private TextView txtHeading;
     private EditText edtComment;
 
@@ -51,8 +52,9 @@ public class ReviewActivity extends AppCompatActivity {
 
         // init view
         ratingBar = findViewById(R.id.rating_bar);
+
         btnSubmit = findViewById(R.id.btn_submit);
-        txtScore = findViewById(R.id.txt_rating);
+
         edtComment = findViewById(R.id.edt_comment);
         txtHeading = findViewById(R.id.txt_heading);
 
@@ -62,12 +64,12 @@ public class ReviewActivity extends AppCompatActivity {
         userId = intent.getExtras().getInt("userId");
         String salonName = intent.getExtras().getString("salonName");
 
-        txtHeading.setText(salonName);
+        txtHeading.setText("Đánh giá dịch vụ tại: "+salonName);
 
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                txtScore.setText("Bạn đánh giá salon này: " + ratingBar.getRating() + "điểm");
+
                 submitReview();
             }
         });
