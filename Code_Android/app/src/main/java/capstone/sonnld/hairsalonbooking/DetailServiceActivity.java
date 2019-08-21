@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -37,6 +38,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 
 import capstone.sonnld.hairsalonbooking.adapter.RecyclerViewExtraServiceAdapter;
 import capstone.sonnld.hairsalonbooking.adapter.RecyclerViewReviewAdapter;
@@ -109,6 +111,12 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
 
     int countB = 0;
     double step;
+//countdown
+    private CountDownTimer countDownTimer;
+    private  TextView txtCountDown;
+    private long timeLeft=259200000;
+    Date now = new Date();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,6 +138,12 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
         linearTimePiker = findViewById(R.id.linearTimePicker);
         imgLogo = findViewById(R.id.img_logo);
         txtAvgRating = findViewById(R.id.txt_avg_rating);
+
+        // countdown
+
+        txtCountDown=findViewById(R.id.txtCountDown);
+
+        startCountDown();
 
 
         //Receive data from RecyclerViewServiceByDiscountAdapter
@@ -228,6 +242,39 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
 
             }
         });
+
+    }
+
+    private void startCountDown() {
+
+        countDownTimer = new CountDownTimer(timeLeft,1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                timeLeft=millisUntilFinished;
+                updateCountDownText();
+
+
+            }
+
+            @Override
+            public void onFinish() {
+
+            }
+        }.start();
+    }
+
+    private void updateCountDownText() {
+
+        int hour = (int) (timeLeft/1000/60/60);
+
+        int day = hour/24;
+        int h = hour-day*24;
+
+        int minute = (int) ((timeLeft/1000-hour*60*60)/60);
+        int second = (int) ((timeLeft/1000)%60);
+        String timeLeftFormat = String.format(Locale.getDefault(),"%d:%02d:%02d",h,minute,second);
+        txtCountDown.setText(day+" ngày "+timeLeftFormat);
+
 
     }
 
