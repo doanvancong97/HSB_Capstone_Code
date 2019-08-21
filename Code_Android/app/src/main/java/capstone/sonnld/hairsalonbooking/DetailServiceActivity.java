@@ -143,6 +143,24 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
 
         txtCountDown=findViewById(R.id.txtCountDown);
 
+        String endDate = "2019-08-23 00:00:00";
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        Date date = null;
+        try {
+            date = sdf.parse(endDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        long millis = date.getTime();
+
+
+
+        timeLeft=millis-now.getTime();
+
+
+
+
         startCountDown();
 
 
