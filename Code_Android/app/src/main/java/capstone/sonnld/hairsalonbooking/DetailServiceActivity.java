@@ -108,7 +108,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
     private int salonId;
 
     private int numberOfPeopleBooked = 5;
-
+    int bookingPerSlot = 0;
     int countB = 0;
     double step;
 //countdown
@@ -149,6 +149,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
         //Receive data from RecyclerViewServiceByDiscountAdapter
         Intent intent = getIntent();
         salonId = intent.getExtras().getInt("SalonID");
+        bookingPerSlot = intent.getExtras().getInt("BookingPerSlot");
         String salonName = intent.getExtras().getString("SalonName");
         String salonServiceName = intent.getExtras().getString("ModelSalonService");
         String description = intent.getExtras().getString("Description");
@@ -437,7 +438,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
 
                 numberOfPeopleBooked = getNumberOfPeopleBooked(bookedDate, slot.getText().toString());
 
-                if (numberOfPeopleBooked >= 5) {
+                if (numberOfPeopleBooked >= bookingPerSlot) {
                     slot.setEnabled(false);
                     slot.setBackgroundResource(button_full);
                     slot.setText("Hết chỗ");
@@ -562,12 +563,11 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
                 else minute = calendar.getTime().getMinutes() + "";
                 slot.setText(calendar.getTime().getHours() + ":" + minute);
 
-
                 linearTimePiker.addView(slot);
 
 
                 numberOfPeopleBooked = getNumberOfPeopleBooked(bookedDate, slot.getText().toString());
-                if (numberOfPeopleBooked >= 3) {
+                if (numberOfPeopleBooked >= bookingPerSlot) {
                     slot.setEnabled(false);
                     slot.setBackgroundResource(button_full);
                     slot.setText("Hết chỗ");
@@ -590,8 +590,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
                             Button b = findViewById(slotIDisChoose);
                             b.setBackgroundResource(button_time);
                             b.setTextColor(Color.parseColor("#DB1507"));
-
-
+                            
                             slot.setBackgroundResource(R.drawable.button_time_choose);
                             slot.setTextColor(Color.WHITE);
                             isChoose = true;
