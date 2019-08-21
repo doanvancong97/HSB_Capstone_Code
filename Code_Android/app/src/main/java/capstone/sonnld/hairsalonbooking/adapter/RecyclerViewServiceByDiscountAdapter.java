@@ -79,7 +79,7 @@ public class RecyclerViewServiceByDiscountAdapter extends RecyclerView.Adapter<R
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //pass data to Detail salon activity
+                //pass data to DetailServiceActivity
                 Intent intent = new Intent(mContext, DetailServiceActivity.class);
                 intent.putExtra("SalonID", modelSalonServices.get(position).getModelSalon().getSalonId());
                 intent.putExtra("ModelSalonService", modelSalonServices.get(position).getModelService().getServiceName());
@@ -97,6 +97,7 @@ public class RecyclerViewServiceByDiscountAdapter extends RecyclerView.Adapter<R
                 intent.putExtra("SalonCloseTime",modelSalonServices.get(position).getModelSalon().getCloseTime());
                 intent.putExtra("SalonSlotTime",modelSalonServices.get(position).getModelSalon().getSlotTime());
                 intent.putExtra("SalonBookingDay",modelSalonServices.get(position).getModelSalon().getBookingDay());
+                intent.putExtra("BookingPerSlot",modelSalonServices.get(position).getModelSalon().getBookingPerSlot());
                 intent.putExtra("AvgRating",modelSalonServices.get(position).getModelSalon().getAverageRating());
                 mContext.startActivity(intent);
 

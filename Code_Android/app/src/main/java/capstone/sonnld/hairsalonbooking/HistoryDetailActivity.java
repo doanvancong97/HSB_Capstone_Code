@@ -147,7 +147,13 @@ public class HistoryDetailActivity extends AppCompatActivity {
             }
         });
 
+
         // setup btn review
+        btnReview.setVisibility(View.GONE);
+        if(status.equals("finish")){
+            btnReview.setVisibility(View.VISIBLE);
+        }
+
         btnReview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
