@@ -4,7 +4,9 @@ package capstone.sonnld.hairsalonbooking;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -23,6 +25,11 @@ import com.squareup.picasso.Picasso;
 
 import org.joda.time.DateTime;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -52,6 +59,7 @@ import static capstone.sonnld.hairsalonbooking.R.drawable.button_time;
 public class DetailServiceActivity extends AppCompatActivity implements DatePickerListener {
 
 
+    //views
     private TextView txtSalonName;
     private TextView txtSalonService;
     private TextView txtDescription;
@@ -73,10 +81,10 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
     private int slotID = 0;
     private String bookedTime = "";
 
-    private String salonStartTime ;
-    private String salonEndTime ;
-    private int salonSlotTime ;
-    private int salonBookingDay ;
+    private String salonStartTime;
+    private String salonEndTime;
+    private int salonSlotTime;
+    private int salonBookingDay;
 
 
     private RecyclerView recyclerViewTimeSlot;
@@ -95,8 +103,12 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
     private int userId;
     private String phone;
 
+    private int salonId;
 
-    int numberOfPeopleBooked=5;
+    private int numberOfPeopleBooked = 5;
+
+    int countB = 0;
+    double step;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,10 +131,10 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
         imgLogo = findViewById(R.id.img_logo);
         txtAvgRating = findViewById(R.id.txt_avg_rating);
 
-        
+
         //Receive data from RecyclerViewServiceByDiscountAdapter
         Intent intent = getIntent();
-        int salonId = intent.getExtras().getInt("SalonID");
+        salonId = intent.getExtras().getInt("SalonID");
         String salonName = intent.getExtras().getString("SalonName");
         String salonServiceName = intent.getExtras().getString("ModelSalonService");
         String description = intent.getExtras().getString("Description");
@@ -235,8 +247,8 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
         });
     }
 
-    public void displayAllReview(ArrayList<ModelReview> modelReviews){
-        viewReviewAdapter = new RecyclerViewReviewAdapter(this,modelReviews);
+    public void displayAllReview(ArrayList<ModelReview> modelReviews) {
+        viewReviewAdapter = new RecyclerViewReviewAdapter(this, modelReviews);
         recyclerViewReview.setAdapter(viewReviewAdapter);
     }
 
@@ -376,15 +388,13 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
 
                 linearTimePiker.addView(slot);
 
-                numberOfPeopleBooked=getNumberOfPeopleBooked(bookedDate,slot.getText().toString());
+                numberOfPeopleBooked = getNumberOfPeopleBooked(bookedDate, slot.getText().toString());
 
-                if(numberOfPeopleBooked>=5){
+                if (numberOfPeopleBooked >= 5) {
                     slot.setEnabled(false);
                     slot.setBackgroundResource(button_full);
                     slot.setText("Hết chỗ");
                 }
-
-
 
 
                 calendar.add(Calendar.MINUTE, (int) step);
@@ -429,7 +439,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
 //        Calendar calendar = GregorianCalendar.getInstance(); // creates a new calendar instance
 //        calendar.setTime(date);   // assigns calendar to given date
 //        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        double step = salonSlotTime; //30 mins
+        step = salonSlotTime; //30 mins
         DateFormat dateFormat = new SimpleDateFormat("HH:mm");
         Date date = new Date();
         String currentHour = dateFormat.format(date);
@@ -445,17 +455,17 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
 
 
         if (minSlotHour <= Integer.parseInt(spliCurrentHour[0])) {
-                       if (Integer.parseInt(spliCurrentHour[1]) + step >= 60) {
-                    minSlot = (Integer.parseInt(spliCurrentHour[0]) + 1) + ":00";
-                    minSlotHour = Integer.parseInt(spliCurrentHour[0]);
-                    splitMinSlot = spliCurrentHour;
+            if (Integer.parseInt(spliCurrentHour[1]) + step >= 60) {
+                minSlot = (Integer.parseInt(spliCurrentHour[0]) + 1) + ":00";
+                minSlotHour = Integer.parseInt(spliCurrentHour[0]);
+                splitMinSlot = spliCurrentHour;
 
-                } else {
-                    minSlot = (Integer.parseInt(spliCurrentHour[0]) + ":" + (int) step);
-                    minSlotHour = Integer.parseInt(spliCurrentHour[0]);
+            } else {
+                minSlot = (Integer.parseInt(spliCurrentHour[0]) + ":" + (int) step);
+                minSlotHour = Integer.parseInt(spliCurrentHour[0]);
 
 
-                }
+            }
 
 
         } else {
@@ -471,8 +481,8 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
         }
 
 
-// number of button will generate
-        double run = (maxSlotHour - minSlotHour) / (step / 60) + Integer.parseInt(splitMaxSlot[1]) / step - Integer.parseInt(splitMinSlot[1]) / step -1;
+        // number of button will generate
+        double run = (maxSlotHour - minSlotHour) / (step / 60) + Integer.parseInt(splitMaxSlot[1]) / step - Integer.parseInt(splitMinSlot[1]) / step - 1;
 
         Calendar calendar = Calendar.getInstance();
         Calendar calendar2 = Calendar.getInstance();
@@ -492,7 +502,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
             for (int i = 0; i <= run; i++) {
                 slotID++;
                 final Button slot = new Button(this);
-                slot.setId(slotID);
+                slot.setId(i);
 
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 params.setMargins(10, 10, 10, 10);
@@ -508,14 +518,13 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
 
                 linearTimePiker.addView(slot);
 
-                numberOfPeopleBooked=getNumberOfPeopleBooked(bookedDate,slot.getText().toString());
 
-                if(numberOfPeopleBooked>=5){
+                numberOfPeopleBooked = getNumberOfPeopleBooked(bookedDate, slot.getText().toString());
+                if (numberOfPeopleBooked >= 3) {
                     slot.setEnabled(false);
                     slot.setBackgroundResource(button_full);
                     slot.setText("Hết chỗ");
                 }
-
 
                 calendar.add(Calendar.MINUTE, (int) step);
                 slot.setOnClickListener(new View.OnClickListener() {
@@ -552,13 +561,61 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
         }
     }
 
+    public int getNumberOfPeopleBooked(String bookedDate, String bookedTime) {
 
-    public int getNumberOfPeopleBooked(String bookedDate, String bookedTime){
-        if((bookedDate.equals("24/08/2019") && bookedTime.equals("9:30")) || (bookedDate.equals("24/08/2019") && bookedTime.equals("10:30")))
-            return 4;
+        String[] abc = bookedDate.split("/");
+        String bod = abc[2] + "-" + abc[1] + "-" + abc[0];
 
-        return 5;
+        return countNumberOfBooking(bod, bookedTime);
+    }
+
+    public int countNumberOfBooking(String bookedDate, String bookedTime) {
+        int result = 0;
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        String url = "http://192.168.1.4:8080/api/countNumberOfBooking/"+ bookedDate + "/" + bookedTime + "/" + salonId;
+        String respone = "";
+        try {
+            URL urll = new URL(url);
+            HttpGetRequest httpGetRequest = new HttpGetRequest();
+            respone = httpGetRequest.execute(urll.openStream()).get();
+            result = Integer.parseInt(respone);
+
+
+        }catch (Exception e){
+            Toast.makeText(DetailServiceActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+        return result;
     }
 
 
+    private class HttpGetRequest extends AsyncTask<InputStream, Void, String>  {
+
+
+        @Override
+        protected String doInBackground(InputStream... inputStreams) {
+            BufferedReader reader = null;
+            InputStream in = inputStreams[0];
+            StringBuffer response = new StringBuffer();
+            try {
+                reader = new BufferedReader(new InputStreamReader(in));
+                String line = "";
+                while ((line = reader.readLine()) != null) {
+                    response.append(line);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (reader != null) {
+                    try {
+                        reader.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            return response.toString();
+        }
+    }
 }
