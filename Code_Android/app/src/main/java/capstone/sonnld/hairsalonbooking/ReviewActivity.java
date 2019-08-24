@@ -64,7 +64,7 @@ public class ReviewActivity extends AppCompatActivity {
         userId = intent.getExtras().getInt("userId");
         String salonName = intent.getExtras().getString("salonName");
 
-        txtHeading.setText("Đánh giá dịch vụ tại: "+salonName);
+        txtHeading.setText("Đánh giá "+salonName);
 
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override

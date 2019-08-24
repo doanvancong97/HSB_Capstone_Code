@@ -139,24 +139,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
         imgLogo = findViewById(R.id.img_logo);
         txtAvgRating = findViewById(R.id.txt_avg_rating);
 
-        // countdown
 
-        txtCountDown=findViewById(R.id.txtCountDown);
-
-        String endDate = "2019-08-26 23:59:59";
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-        Date date = null;
-        try {
-            date = sdf.parse(endDate);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        long millis = date.getTime();
-
-        timeLeft=millis-now.getTime();
-
-        startCountDown();
 
 
         //Receive data from RecyclerViewServiceByDiscountAdapter
@@ -167,6 +150,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
         String salonServiceName = intent.getExtras().getString("ModelSalonService");
         String description = intent.getExtras().getString("Description");
         String imgUrl = intent.getExtras().getString("Thumbnail");
+        String discountEndDate = intent.getExtras().getString("DiscountEndDate");
         String salonServicePrice = intent.getExtras().getInt("SalonServicePrice") + "";
         int discountValue = intent.getExtras().getInt("DiscountValue");
         String address = intent.getExtras().getString("ModelAddress");
@@ -178,6 +162,35 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
         float avgRating = intent.getExtras().getFloat("AvgRating");
 
 
+        // countdown
+
+        txtCountDown=findViewById(R.id.txtCountDown);
+
+        String endDate = discountEndDate + " 23:59:59";
+        Toast.makeText(this, endDate + "", Toast.LENGTH_LONG).show(); //2019-10-29
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        Date date = null;
+        try {
+            date = sdf.parse(endDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        long millis = date.getTime();
+
+
+
+        timeLeft=millis-now.getTime();
+
+        if(timeLeft>0)
+            startCountDown();
+        else
+            txtCountDown.setText("ĐÃ HẾT HẠN");
+
+
+
+
+
         //set new value for view
         txtSalonName.setText(salonName);
         txtSalonService.setText(uppercaseFirstLetter(salonServiceName) + " (-" + discountValue + "%) ");
@@ -186,7 +199,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
         txtServiceSalePrice.setText(getSalePrice(salonServicePrice, discountValue + ""));
         txtDescription.setText(description);
         txtAddress.setText(address);
-        txtAvgRating.setText("Đánh giá trung bình: " + avgRating);
+        txtAvgRating.setText("Đánh giá trung bình: " + Math.floor(avgRating*10)/10);
         Picasso.with(this).load(imgUrl).into(imgThumb);
         Picasso.with(this).load(logoUrl).into(imgLogo);
 
@@ -348,14 +361,14 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
         Date today = Calendar.getInstance().getTime();
 
         if (bookedDate.equals(dateFormat.format(today))) {
-            Toast.makeText(this, "Today", Toast.LENGTH_SHORT).show();
+
             linearTimePiker.removeAllViews();
             isChoose = false;
             generateSlotToday();
 
 
         } else {
-            Toast.makeText(this, bookedDate, Toast.LENGTH_SHORT).show();
+
             linearTimePiker.removeAllViews();
             isChoose = false;
 
@@ -617,7 +630,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-        String url = "http://192.168.1.5:8080/api/countNumberOfBooking/"+ bookedDate + "/" + bookedTime + "/" + salonId;
+        String url = "http://192.77.1.74:8080/api/countNumberOfBooking/"+ bookedDate + "/" + bookedTime + "/" + salonId;
         String respone = "";
         try {
             URL urll = new URL(url);

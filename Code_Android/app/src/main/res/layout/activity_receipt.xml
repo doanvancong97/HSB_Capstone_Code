@@ -147,10 +147,10 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:gravity="end|center"
 
 
 
-                    android:paddingLeft="20dp"
                     android:text="Thành tiền: "
                     android:textAllCaps="true"
                     android:textColor="@color/black"
@@ -162,8 +162,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="center|end"
-                    android:paddingRight="20dp"
+                    android:gravity="center|start"
+
 
 
 
@@ -178,6 +178,7 @@
 
 
             </LinearLayout>
+
 
 
             <LinearLayout

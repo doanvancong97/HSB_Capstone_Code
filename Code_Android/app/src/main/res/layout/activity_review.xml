@@ -8,11 +8,12 @@
     android:orientation="vertical"
     tools:context=".ReviewActivity">
 
+
     <TextView
         android:id="@+id/txt_heading"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Đánh giá dịch vụ tại Liem barber shop"
+        android:layout_height="150dp"
+        android:text="Đánh giá Liem barber shop"
         android:gravity="center"
         android:textColor="@color/red2"
         android:textSize="25sp"
@@ -34,12 +35,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Đánh giá chi tiết:"
+        android:textColor="@color/red2"
+        android:paddingLeft="20dp"
         />
     <EditText
         android:id="@+id/edt_comment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+
+        android:layout_height="150dp"
         android:inputType="textMultiLine"
+        android:paddingLeft="20dp"
+
         />
     <Button
         android:id="@+id/btn_submit"
