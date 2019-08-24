@@ -458,7 +458,7 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = new Intent(MainActivity.this, HistoryActivity.class);
         intent.putExtra("USER_ID",userID);
-        Toast.makeText(this, userID+"", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, userID+"", Toast.LENGTH_SHORT).show();
         startActivity(intent);
     }
 }

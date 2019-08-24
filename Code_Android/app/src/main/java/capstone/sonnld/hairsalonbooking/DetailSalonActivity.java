@@ -600,7 +600,7 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-        String url = "http://192.168.1.7:8080/api/countNumberOfBooking/" + bookedDate + "/" + bookedTime + "/" + salonId;
+        String url = "http://192.168.1.4:8080/api/countNumberOfBooking/" + bookedDate + "/" + bookedTime + "/" + salonId;
         String respone = "";
         try {
             URL urll = new URL(url);

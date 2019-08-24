@@ -117,6 +117,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
     private  TextView txtCountDown;
     private long timeLeft=259200000;
     Date now = new Date();
+    LinearLayout lnCountDown;
 
 
     @Override
@@ -164,25 +165,46 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
 
         // countdown
 
+        lnCountDown = findViewById(R.id.lnCountDown);
+
         txtCountDown=findViewById(R.id.txtCountDown);
-        String startDate = discountStartDate + "00:00:00";
+        String startDate = discountStartDate + " 00:00:00";
         String endDate = discountEndDate + " 23:59:59";
-        Toast.makeText(this, endDate + "", Toast.LENGTH_LONG).show(); //2019-10-29
+        Toast.makeText(this, startDate + "", Toast.LENGTH_LONG).show(); //2019-10-29
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-        Date date = null;
+        Date eDate = null;
         try {
-            date = sdf.parse(endDate);
+            eDate = sdf.parse(endDate);
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        long millis = date.getTime();
+        long millis = eDate.getTime();
         timeLeft=millis-now.getTime();
 
         if(timeLeft>0)
             startCountDown();
         else
-            txtCountDown.setText("ĐÃ HẾT HẠN");
+            lnCountDown.setVisibility(View.GONE);
+
+
+
+        Date sDate = null;
+        try {
+            sDate = sdf.parse(startDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        timeLeft=sDate.getTime()-now.getTime();
+
+        if(timeLeft<0)
+            startCountDown();
+        else
+            lnCountDown.setVisibility(View.GONE);
+
+
+
 
 
         //set new value for view
@@ -458,7 +480,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
                 if (numberOfPeopleBooked >= bookingPerSlot) {
                     slot.setEnabled(false);
                     slot.setBackgroundResource(button_full);
-                    slot.setText("Hết chỗ");
+
 
                 }
 
@@ -469,7 +491,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
                 slot.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Toast.makeText(DetailServiceActivity.this, slot.getText(), Toast.LENGTH_SHORT).show();
+                       // Toast.makeText(DetailServiceActivity.this, slot.getText(), Toast.LENGTH_SHORT).show();
                         bookedTime = slot.getText().toString();
                         if (isChoose == false) {
                             slot.setBackgroundResource(R.drawable.button_time_choose);
@@ -624,7 +646,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-        String url = "http://192.168.1.7:8080/api/countNumberOfBooking/"+ bookedDate + "/" + bookedTime + "/" + salonId;
+        String url = "http://192.168.1.4:8080/api/countNumberOfBooking/"+ bookedDate + "/" + bookedTime + "/" + salonId;
         String respone = "";
         try {
             URL urll = new URL(url);

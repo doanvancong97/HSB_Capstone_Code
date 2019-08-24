@@ -38,7 +38,7 @@ public class HistoryActivity extends AppCompatActivity {
         //get data from HistoryDetailActivity/ MainActivity
         Intent intent = getIntent();
         userID = intent.getExtras().getInt("USER_ID");
-        Toast.makeText(this, "id="+userID, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "id="+userID, Toast.LENGTH_SHORT).show();
 
         recyclerViewHistory=findViewById(R.id.recycler_view_history);
         recyclerViewHistory.setLayoutManager(new GridLayoutManager(this, 1));
