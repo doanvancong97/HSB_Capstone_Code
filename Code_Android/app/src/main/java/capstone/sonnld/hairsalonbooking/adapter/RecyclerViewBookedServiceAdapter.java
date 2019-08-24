@@ -43,8 +43,8 @@ public class RecyclerViewBookedServiceAdapter extends RecyclerView.Adapter<Recyc
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
         //show item
         serviceName = modelBookingDetails.get(position).getModelSalonService().getModelService().getServiceName();
-        price = modelBookingDetails.get(position).getModelSalonService().getPrice();
-        discountValue = modelBookingDetails.get(position).getModelSalonService().getModelDiscount().getDiscountValue();
+        price = modelBookingDetails.get(position).getModelSalonService().getPrice() + "";
+        discountValue = modelBookingDetails.get(position).getModelSalonService().getModelDiscount().getDiscountValue() +"";
         salePrice = getSalePrice(price, discountValue);
 
         holder.txtSalonServiceName.setText(uppercaseFirstLetter(serviceName));

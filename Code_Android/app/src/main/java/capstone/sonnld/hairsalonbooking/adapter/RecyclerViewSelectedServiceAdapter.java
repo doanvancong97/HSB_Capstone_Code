@@ -43,8 +43,8 @@ public class RecyclerViewSelectedServiceAdapter extends RecyclerView.Adapter<Rec
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
         //show item
         serviceName = modelSalonServices.get(position).getModelService().getServiceName();
-        price = modelSalonServices.get(position).getPrice();
-        discountValue = modelSalonServices.get(position).getModelDiscount().getDiscountValue();
+        price = modelSalonServices.get(position).getPrice() + "";
+        discountValue = modelSalonServices.get(position).getModelDiscount().getDiscountValue() + "";
         salePrice = getSalePrice(price,discountValue);
 
         holder.txtSalonServiceName.setText(uppercaseFirstLetter(serviceName));
@@ -62,8 +62,8 @@ public class RecyclerViewSelectedServiceAdapter extends RecyclerView.Adapter<Rec
 
     public String getSalePrice(String price,String discountValue){
 
-        String sSalePrice = price.substring(0, price.length() - 1);
-        int nSalePrice = Integer.parseInt(sSalePrice);
+
+        int nSalePrice = Integer.parseInt(price);
         int nDiscountValue = Integer.parseInt(discountValue);
         nSalePrice = nSalePrice - (nSalePrice * nDiscountValue / 100);
 

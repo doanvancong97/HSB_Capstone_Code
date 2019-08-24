@@ -94,8 +94,8 @@ public class HistoryDetailActivity extends AppCompatActivity {
 
         int totalPrice = 0;
         for (int i = 0; i < selectedService.size(); i++) {
-            String price = selectedService.get(i).getModelSalonService().getPrice();
-            String discount = selectedService.get(i).getModelSalonService().getModelDiscount().getDiscountValue();
+            String price = selectedService.get(i).getModelSalonService().getPrice() + "";
+            String discount = selectedService.get(i).getModelSalonService().getModelDiscount().getDiscountValue() + "";
             int salePrice = getSalePrice(price, discount);
             totalPrice += salePrice;
         }

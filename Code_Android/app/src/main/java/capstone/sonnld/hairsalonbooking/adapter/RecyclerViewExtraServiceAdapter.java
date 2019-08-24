@@ -25,6 +25,7 @@ public class RecyclerViewExtraServiceAdapter extends RecyclerView.Adapter<Recycl
     private String discountValue;
     private String serviceSalePrice;
     private String price;
+    private int excuteTime;
 
     public RecyclerViewExtraServiceAdapter(Context mContext, ArrayList<ModelSalonService> modelSalonServices) {
         this.mContext = mContext;
@@ -51,13 +52,15 @@ public class RecyclerViewExtraServiceAdapter extends RecyclerView.Adapter<Recycl
         //show item
 
         serviceName = modelSalonServices.get(position).getModelService().getServiceName();
-        discountValue = modelSalonServices.get(position).getModelDiscount().getDiscountValue();
-        price = modelSalonServices.get(position).getPrice();
+        discountValue = modelSalonServices.get(position).getModelDiscount().getDiscountValue() + "";
+        price = modelSalonServices.get(position).getPrice() +"";
         serviceSalePrice = getSalePrice(price,discountValue);
+        excuteTime = modelSalonServices.get(position).getExecuteTime();
 
         holder.txtSalonServiceName.setText(uppercaseFirstLetter(serviceName) + " (-" + discountValue + "%)" );
-        holder.txtPrice.setText(price);
+        holder.txtPrice.setText(price + "k");
         holder.txtSalePrice.setText(serviceSalePrice);
+        holder.txtExecuteTime.setText(excuteTime + " phút");
 
         holder.setItemClickListener(new ItemClickListener() {
             @Override
@@ -79,8 +82,7 @@ public class RecyclerViewExtraServiceAdapter extends RecyclerView.Adapter<Recycl
     }
     public String getSalePrice(String price,String discountValue){
 
-        String sSalePrice = price.substring(0, price.length() - 1);
-        int nSalePrice = Integer.parseInt(sSalePrice);
+        int nSalePrice = Integer.parseInt(price);
         int nDiscountValue = Integer.parseInt(discountValue);
         nSalePrice = nSalePrice - (nSalePrice * nDiscountValue / 100);
 
@@ -101,6 +103,7 @@ public class RecyclerViewExtraServiceAdapter extends RecyclerView.Adapter<Recycl
         TextView txtSalonServiceName;
         TextView txtPrice;
         TextView txtSalePrice;
+        TextView txtExecuteTime;
         CheckBox chkBox;
 
         CardView cardView;
@@ -113,6 +116,7 @@ public class RecyclerViewExtraServiceAdapter extends RecyclerView.Adapter<Recycl
             txtSalonServiceName = itemView.findViewById(R.id.service_name);
             txtPrice = itemView.findViewById(R.id.txt_salon_service_price);
             txtSalePrice = itemView.findViewById(R.id.txt_service_sale_price);
+            txtExecuteTime = itemView.findViewById(R.id.txt_salon_service_time);
             chkBox = itemView.findViewById(R.id.chkBox);
 
             cardView = itemView.findViewById(R.id.card_view_service);

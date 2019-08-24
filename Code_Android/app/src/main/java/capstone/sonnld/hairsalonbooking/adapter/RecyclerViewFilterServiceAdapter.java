@@ -64,8 +64,8 @@ public class RecyclerViewFilterServiceAdapter extends RecyclerView.Adapter<Recyc
                 + modelSalonServices.get(position).getModelSalon().getModelAddress().getStreet();
         saleValue = " - " + modelSalonServices.get(position).getModelDiscount().getDiscountValue() + "%";
         imgUrl = modelSalonServices.get(position).getThumbUrl();
-        price = modelSalonServices.get(position).getPrice();
-        discountValue = modelSalonServices.get(position).getModelDiscount().getDiscountValue();
+        price = modelSalonServices.get(position).getPrice() +"";
+        discountValue = modelSalonServices.get(position).getModelDiscount().getDiscountValue() + "";
 
         holder.txtServicePrice.setText(price);
         holder.txtServiceSalePrice.setText(getSalePrice(price,discountValue));

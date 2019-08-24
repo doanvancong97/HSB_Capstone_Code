@@ -17,7 +17,7 @@ public class ModelDiscount implements Serializable {
     private String discountUnit;
     @SerializedName("discountValue")
     @Expose
-    private String discountValue;
+    private int discountValue;
     @SerializedName("status")
     @Expose
     private String status;
@@ -55,11 +55,11 @@ public class ModelDiscount implements Serializable {
         this.discountUnit = discountUnit;
     }
 
-    public String getDiscountValue() {
+    public int getDiscountValue() {
         return discountValue;
     }
 
-    public void setDiscountValue(String discountValue) {
+    public void setDiscountValue(int discountValue) {
         this.discountValue = discountValue;
     }
 

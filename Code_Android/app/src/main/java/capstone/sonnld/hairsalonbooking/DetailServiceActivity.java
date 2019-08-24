@@ -154,12 +154,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
         }
         long millis = date.getTime();
 
-
-
         timeLeft=millis-now.getTime();
-
-
-
 
         startCountDown();
 
@@ -172,8 +167,8 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
         String salonServiceName = intent.getExtras().getString("ModelSalonService");
         String description = intent.getExtras().getString("Description");
         String imgUrl = intent.getExtras().getString("Thumbnail");
-        String salonServicePrice = intent.getExtras().getString("SalonServicePrice");
-        String discountValue = intent.getExtras().getString("DiscountValue");
+        String salonServicePrice = intent.getExtras().getInt("SalonServicePrice") + "";
+        int discountValue = intent.getExtras().getInt("DiscountValue");
         String address = intent.getExtras().getString("ModelAddress");
         String logoUrl = intent.getExtras().getString("Logo");
         salonStartTime = intent.getExtras().getString("SalonStartTime");
@@ -188,7 +183,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
         txtSalonService.setText(uppercaseFirstLetter(salonServiceName) + " (-" + discountValue + "%) ");
         txtServicePrice.setText(salonServicePrice);
         txtServicePrice.setPaintFlags(txtServicePrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-        txtServiceSalePrice.setText(getSalePrice(salonServicePrice, discountValue));
+        txtServiceSalePrice.setText(getSalePrice(salonServicePrice, discountValue + ""));
         txtDescription.setText(description);
         txtAddress.setText(address);
         txtAvgRating.setText("Đánh giá trung bình: " + avgRating);
@@ -393,8 +388,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
 
     public String getSalePrice(String price, String discountValue) {
 
-        String sSalePrice = price.substring(0, price.length() - 1);
-        int nSalePrice = Integer.parseInt(sSalePrice);
+        int nSalePrice = Integer.parseInt(price);
         int nDiscountValue = Integer.parseInt(discountValue);
         nSalePrice = nSalePrice - (nSalePrice * nDiscountValue / 100);
 
@@ -488,10 +482,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
                         }
                     }
                 });
-
             }
-
-
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -528,11 +519,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
             } else {
                 minSlot = (Integer.parseInt(spliCurrentHour[0]) + ":" + (int) step);
                 minSlotHour = Integer.parseInt(spliCurrentHour[0]);
-
-
             }
-
-
         } else {
 
             if (Integer.parseInt(splitMinSlot[1]) + step >= 60) {
@@ -540,12 +527,8 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
 
             } else {
                 minSlot = (minSlotHour + ":00");
-
             }
-
         }
-
-
         // number of button will generate
         double run = (maxSlotHour - minSlotHour) / (step / 60) + Integer.parseInt(splitMaxSlot[1]) / step - Integer.parseInt(splitMinSlot[1]) / step - 1;
 
@@ -557,7 +540,6 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
 
             Date start = format.parse(minSlot);
             Date end = format.parse(maxSlot);
-
 
             calendar.setTime(start);
             calendar2.setTime(end);
@@ -617,8 +599,6 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
                 });
 
             }
-
-
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -637,7 +617,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-        String url = "http://192.168.1.6:8080/api/countNumberOfBooking/"+ bookedDate + "/" + bookedTime + "/" + salonId;
+        String url = "http://192.168.1.5:8080/api/countNumberOfBooking/"+ bookedDate + "/" + bookedTime + "/" + salonId;
         String respone = "";
         try {
             URL urll = new URL(url);
