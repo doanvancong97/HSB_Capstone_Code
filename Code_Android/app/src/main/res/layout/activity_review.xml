@@ -27,8 +27,6 @@
         android:stepSize="1"
         android:layout_gravity="center"
         android:progressTint="#FFEB3B"
-
-
         />
 
     <TextView

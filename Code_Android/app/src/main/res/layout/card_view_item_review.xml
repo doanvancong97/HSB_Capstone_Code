@@ -56,14 +56,13 @@
 
             <RatingBar
                 android:id="@+id/rating_bar"
-                android:layout_width="250dp"
+                android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_weight="5"
                 android:numStars="5"
                 android:stepSize="0.1"
                 android:isIndicator="true"
                 android:progressTint="#FFEB3B"
-
                 />
 
             <LinearLayout

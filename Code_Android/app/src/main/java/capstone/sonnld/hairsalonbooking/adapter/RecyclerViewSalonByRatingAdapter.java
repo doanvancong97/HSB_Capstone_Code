@@ -25,7 +25,7 @@ public class RecyclerViewSalonByRatingAdapter extends RecyclerView.Adapter<Recyc
     private ArrayList<ModelSalon> modelSalons;
     private String des;
     private String salonName;
-    private String rating;
+    private float rating;
     private String imgUrl;
     private String address;
 
@@ -54,11 +54,11 @@ public class RecyclerViewSalonByRatingAdapter extends RecyclerView.Adapter<Recyc
                 + modelSalons.get(position).getModelAddress().getModelDistrict().getDistrictName() + ", "
                 + modelSalons.get(position).getModelAddress().getModelDistrict().getModelCity().getCityName();
         imgUrl = modelSalons.get(position).getUrl();
-        rating = String.valueOf(modelSalons.get(position).getAverageRating());
+        rating = modelSalons.get(position).getAverageRating();
 
         holder.salonAddress.setText(address);
         holder.salonName.setText(salonName);
-        holder.rating.setText(rating);
+        holder.rating.setText(Math.floor(rating*10)/10 + "");
         Picasso.with(mContext).
                 load(imgUrl)
                 .into(holder.imgSalonThumb);
@@ -75,6 +75,10 @@ public class RecyclerViewSalonByRatingAdapter extends RecyclerView.Adapter<Recyc
                 intent.putExtra("SalonEndTime", modelSalons.get(position).getCloseTime());
                 intent.putExtra("SalonSlotTime", modelSalons.get(position).getSlotTime());
                 intent.putExtra("SalonBookingDay", modelSalons.get(position).getBookingDay());
+                intent.putExtra("SalonBookingPerSlot", modelSalons.get(position).getBookingPerSlot());
+                intent.putExtra("AvgRating", modelSalons.get(position).getAverageRating());
+
+
 
                 mContext.startActivity(intent);
 

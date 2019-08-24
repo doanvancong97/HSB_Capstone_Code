@@ -2,7 +2,9 @@ package capstone.sonnld.hairsalonbooking;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -22,6 +24,11 @@ import com.squareup.picasso.Picasso;
 
 import org.joda.time.DateTime;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -31,9 +38,11 @@ import java.util.Date;
 import java.util.HashMap;
 
 import capstone.sonnld.hairsalonbooking.adapter.RecyclerViewExtraServiceAdapter;
+import capstone.sonnld.hairsalonbooking.adapter.RecyclerViewReviewAdapter;
 import capstone.sonnld.hairsalonbooking.api.HairSalonAPI;
 import capstone.sonnld.hairsalonbooking.api.RetrofitClient;
 import capstone.sonnld.hairsalonbooking.model.ModelAccount;
+import capstone.sonnld.hairsalonbooking.model.ModelReview;
 import capstone.sonnld.hairsalonbooking.model.ModelSalonService;
 import capstone.sonnld.hairsalonbooking.support.SessionManager;
 import retrofit2.Call;
@@ -41,6 +50,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
+import static capstone.sonnld.hairsalonbooking.R.drawable.button_full;
 import static capstone.sonnld.hairsalonbooking.R.drawable.button_time;
 
 public class DetailSalonActivity extends AppCompatActivity implements DatePickerListener {
@@ -52,6 +62,7 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
     private RecyclerView recyclerView;
     private ImageView imgThumb;
     private ImageView imgLogo;
+    private TextView txtAvgRating;
 
     private LinearLayout linearTimePiker;
 
@@ -68,12 +79,18 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
     private int slotID = 0;
     private String bookedTime = "";
 
-    private String salonStartTime ;
-    private String salonEndTime ;
-    private int salonSlotTime ;
-    private int salonBookingDay ;
+    private int salonId;
+    private int numberOfPeopleBooked = 5;
+    private int bookingPerSlot = 0;
+    private double step;
 
+    private String salonStartTime;
+    private String salonEndTime;
+    private int salonSlotTime;
+    private int salonBookingDay;
 
+    private RecyclerView recyclerViewReview;
+    private RecyclerViewReviewAdapter viewReviewAdapter;
     private RecyclerViewExtraServiceAdapter extraServiceAdapter;
     private String bookedDate = "";
     private ArrayList<ModelSalonService> chkService = new ArrayList<>();
@@ -87,36 +104,62 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
         Retrofit retrofit = RetrofitClient.getInstance();
         hairSalonAPI = retrofit.create(HairSalonAPI.class);
 
+        // find view
         txtAddress = findViewById(R.id.txt_address);
         txtSalonName = findViewById(R.id.txtSalonName);
         txtDescription = findViewById(R.id.txt_description2);
         imgThumb = findViewById(R.id.img_thumbnail);
         btnConfirm = findViewById(R.id.btn_confirm);
         imgLogo = findViewById(R.id.img_logo);
+        txtAvgRating = findViewById(R.id.txt_avg_rating);
+        recyclerViewReview = findViewById(R.id.recycler_view_review);
+
         HorizontalPicker picker = (HorizontalPicker) findViewById(R.id.datePicker);
 
-        // initialize it and attach a listener
+        // setup user
+        sessionManager = new SessionManager(getApplicationContext());
+        if (sessionManager.isLogin()) {
+            HashMap<String, String> user = sessionManager.getUserDetail();
+            mUserName = user.get(sessionManager.getUSERNAME());
+            initUserDetail();
+        }
 
-        // at init time
-        picker
-                .setListener(this)
+        // get data from map activity/ RecyclerViewSalonByRatingAdapter
+        Intent intent = getIntent();
+        salonId = intent.getExtras().getInt("SalonId");
+        String salonName = intent.getExtras().getString("SalonName");
+        salonStartTime = intent.getExtras().getString("SalonStartTime");
+        salonEndTime = intent.getExtras().getString("SalonEndTime");
+        salonSlotTime = intent.getExtras().getInt("SalonSlotTime");
+        salonBookingDay = intent.getExtras().getInt("SalonBookingDay");
+        bookingPerSlot = intent.getExtras().getInt("SalonBookingPerSlot");
+        float avgRating = intent.getExtras().getFloat("AvgRating");
+
+        txtSalonName.setText(salonName);
+        txtAvgRating.setText("Đánh giá trung bình: " + Math.floor(avgRating*10)/10);
+        // recycler for review
+        recyclerViewReview = findViewById(R.id.recycler_view_review);
+        recyclerViewReview.setLayoutManager(new GridLayoutManager(DetailSalonActivity.this, 1));
+        getAllReview(salonId);
+
+        //  init time
+        picker.setListener(this)
                 .setTodayDateTextColor(R.color.red2)
-                .setDays(7)
+                .setDays(salonBookingDay)
                 .setOffset(0)
                 .showTodayButton(false)
                 .init();
-
         picker.setDate(new DateTime());
 
         linearTimePiker = findViewById(R.id.linearTimePicker);
 
-        String maxHour = "23:15";
+        String maxHour = salonEndTime;
         String[] splitMaxHour = maxHour.split(":");
         int maxH = Integer.parseInt(splitMaxHour[0]);
-        String minHour = "8:15";
+        String minHour = salonStartTime;
         String[] splitMinHour = minHour.split(":");
         int minH = Integer.parseInt(splitMinHour[0]);
-        double step = 15;
+        double step = salonSlotTime;
 
         double run = (maxH - minH) / (step / 60) + Integer.parseInt(splitMaxHour[1]) / step - Integer.parseInt(splitMinHour[1]) / step;
 
@@ -177,25 +220,6 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
             e.printStackTrace();
         }
 
-
-        // setup user
-        sessionManager = new SessionManager(getApplicationContext());
-        if (sessionManager.isLogin()) {
-            HashMap<String, String> user = sessionManager.getUserDetail();
-            mUserName = user.get(sessionManager.getUSERNAME());
-            initUserDetail();
-        }
-
-        // get data from map activity/ RecyclerViewSalonByRatingAdapter
-        Intent intent = getIntent();
-        int salonId = intent.getExtras().getInt("SalonId");
-        String salonName = intent.getExtras().getString("SalonName");
-        salonStartTime = intent.getExtras().getString("SalonStartTime");
-        salonEndTime = intent.getExtras().getString("SalonEndTime");
-        salonSlotTime = intent.getExtras().getInt("SalonSlotTime");
-        salonBookingDay = intent.getExtras().getInt("SalonBookingDay");
-
-        txtSalonName.setText(salonName);
         // recycler for extra service
         recyclerView = findViewById(R.id.recycler_view_salon_service);
         recyclerView.setLayoutManager(new GridLayoutManager(DetailSalonActivity.this, 1));
@@ -211,7 +235,7 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
                 if (fullName == null) {
                     Toast.makeText(DetailSalonActivity.this,
                             "Hãy đăng nhập để tiếp tục đặt lịch!", Toast.LENGTH_LONG).show();
-                    startActivity(new Intent(DetailSalonActivity.this,LoginActivity.class));
+                    startActivity(new Intent(DetailSalonActivity.this, LoginActivity.class));
                 } else if (chkService.size() == 0) {
                     Toast.makeText(DetailSalonActivity.this, "Bạn chưa chọn dịch vụ!", Toast.LENGTH_LONG).show();
 
@@ -237,6 +261,25 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
         });
     }
 
+    private void getAllReview(int salonId) {
+        Call<ArrayList<ModelReview>> listCall = hairSalonAPI.getAllReviewBySalonId(salonId);
+        listCall.enqueue(new Callback<ArrayList<ModelReview>>() {
+            @Override
+            public void onResponse(Call<ArrayList<ModelReview>> call, Response<ArrayList<ModelReview>> response) {
+                ArrayList<ModelReview> modelReviews = response.body();
+                displayAllReview(modelReviews);
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<ModelReview>> call, Throwable t) {
+
+            }
+        });
+    }
+    public void displayAllReview(ArrayList<ModelReview> modelReviews) {
+        viewReviewAdapter = new RecyclerViewReviewAdapter(this, modelReviews);
+        recyclerViewReview.setAdapter(viewReviewAdapter);
+    }
     private void initUserDetail() {
         Call<ModelAccount> call = hairSalonAPI.getUserDetail(mUserName);
         call.enqueue(new Callback<ModelAccount>() {
@@ -262,20 +305,20 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
             public void onResponse(Call call, Response response) {
                 ArrayList<ModelSalonService> services = (ArrayList<ModelSalonService>) response.body();
                 String imgUrl = services.get(0).getModelSalon().getUrl();
-                        String address = services.get(0).getModelSalon().getModelAddress().getStreetNumber() + ", "
-                                + services.get(0).getModelSalon().getModelAddress().getStreet();
-                        String logUrl = services.get(0).getModelSalon().getLogoUrl();
-                        String des = services.get(0).getModelSalon().getDescription();
+                String address = services.get(0).getModelSalon().getModelAddress().getStreetNumber() + ", "
+                        + services.get(0).getModelSalon().getModelAddress().getStreet();
+                String logUrl = services.get(0).getModelSalon().getLogoUrl();
+                String des = services.get(0).getModelSalon().getDescription();
 
-                        txtDescription.setText(des);
-                        txtAddress.setText(address);
-                        Picasso.with(DetailSalonActivity.this).
-                                load(logUrl)
-                                .into(imgLogo);
-                        Picasso.with(DetailSalonActivity.this).
-                                load(imgUrl)
-                                .into(imgThumb);
-                        displayExtraService(services);
+                txtDescription.setText(des);
+                txtAddress.setText(address);
+                Picasso.with(DetailSalonActivity.this).
+                        load(logUrl)
+                        .into(imgLogo);
+                Picasso.with(DetailSalonActivity.this).
+                        load(imgUrl)
+                        .into(imgThumb);
+                displayExtraService(services);
             }
 
             @Override
@@ -380,10 +423,22 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
 
                     minute = "0" + calendar.getTime().getMinutes();
                 else minute = calendar.getTime().getMinutes() + "";
+
                 slot.setText(calendar.getTime().getHours() + ":" + minute);
 
 
                 linearTimePiker.addView(slot);
+
+                numberOfPeopleBooked = getNumberOfPeopleBooked(bookedDate, slot.getText().toString());
+
+                if (numberOfPeopleBooked >= bookingPerSlot) {
+                    slot.setEnabled(false);
+                    slot.setBackgroundResource(button_full);
+                    slot.setText("Hết chỗ");
+
+                }
+
+
                 calendar.add(Calendar.MINUTE, (int) step);
 
                 // onclick select time
@@ -410,10 +465,7 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
                         }
                     }
                 });
-
             }
-
-
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -426,7 +478,7 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
 //        Calendar calendar = GregorianCalendar.getInstance(); // creates a new calendar instance
 //        calendar.setTime(date);   // assigns calendar to given date
 //        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        double step = salonSlotTime; //30 mins
+        step = salonSlotTime; //30 mins
         DateFormat dateFormat = new SimpleDateFormat("HH:mm");
         Date date = new Date();
         String currentHour = dateFormat.format(date);
@@ -450,11 +502,7 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
             } else {
                 minSlot = (Integer.parseInt(spliCurrentHour[0]) + ":" + (int) step);
                 minSlotHour = Integer.parseInt(spliCurrentHour[0]);
-
-
             }
-
-
         } else {
 
             if (Integer.parseInt(splitMinSlot[1]) + step >= 60) {
@@ -462,14 +510,10 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
 
             } else {
                 minSlot = (minSlotHour + ":00");
-
             }
-
         }
-
-
-// number of button will generate
-        double run = (maxSlotHour - minSlotHour) / (step / 60) + Integer.parseInt(splitMaxSlot[1]) / step - Integer.parseInt(splitMinSlot[1]) / step -1;
+        // number of button will generate
+        double run = (maxSlotHour - minSlotHour) / (step / 60) + Integer.parseInt(splitMaxSlot[1]) / step - Integer.parseInt(splitMinSlot[1]) / step - 1;
 
         Calendar calendar = Calendar.getInstance();
         Calendar calendar2 = Calendar.getInstance();
@@ -480,7 +524,6 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
             Date start = format.parse(minSlot);
             Date end = format.parse(maxSlot);
 
-
             calendar.setTime(start);
             calendar2.setTime(end);
             String minute = "";
@@ -489,7 +532,7 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
             for (int i = 0; i <= run; i++) {
                 slotID++;
                 final Button slot = new Button(this);
-                slot.setId(slotID);
+                slot.setId(i);
 
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 params.setMargins(10, 10, 10, 10);
@@ -502,8 +545,16 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
                 else minute = calendar.getTime().getMinutes() + "";
                 slot.setText(calendar.getTime().getHours() + ":" + minute);
 
-
                 linearTimePiker.addView(slot);
+
+
+                numberOfPeopleBooked = getNumberOfPeopleBooked(bookedDate, slot.getText().toString());
+                if (numberOfPeopleBooked >= bookingPerSlot) {
+                    slot.setEnabled(false);
+                    slot.setBackgroundResource(button_full);
+                    slot.setText("Hết chỗ");
+                }
+
                 calendar.add(Calendar.MINUTE, (int) step);
                 slot.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -522,7 +573,6 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
                             b.setBackgroundResource(button_time);
                             b.setTextColor(Color.parseColor("#DB1507"));
 
-
                             slot.setBackgroundResource(R.drawable.button_time_choose);
                             slot.setTextColor(Color.WHITE);
                             isChoose = true;
@@ -532,10 +582,66 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
                 });
 
             }
-
-
         } catch (ParseException e) {
             e.printStackTrace();
+        }
+    }
+
+    public int getNumberOfPeopleBooked(String bookedDate, String bookedTime) {
+
+        String[] abc = bookedDate.split("/");
+        String bod = abc[2] + "-" + abc[1] + "-" + abc[0];
+
+        return countNumberOfBooking(bod, bookedTime);
+    }
+
+    public int countNumberOfBooking(String bookedDate, String bookedTime) {
+        int result = 0;
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        String url = "http://192.168.1.7:8080/api/countNumberOfBooking/" + bookedDate + "/" + bookedTime + "/" + salonId;
+        String respone = "";
+        try {
+            URL urll = new URL(url);
+            DetailSalonActivity.HttpGetRequest httpGetRequest = new DetailSalonActivity.HttpGetRequest();
+            respone = httpGetRequest.execute(urll.openStream()).get();
+            result = Integer.parseInt(respone);
+
+
+        } catch (Exception e) {
+            Toast.makeText(DetailSalonActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+        return result;
+    }
+
+
+    private class HttpGetRequest extends AsyncTask<InputStream, Void, String> {
+
+
+        @Override
+        protected String doInBackground(InputStream... inputStreams) {
+            BufferedReader reader = null;
+            InputStream in = inputStreams[0];
+            StringBuffer response = new StringBuffer();
+            try {
+                reader = new BufferedReader(new InputStreamReader(in));
+                String line = "";
+                while ((line = reader.readLine()) != null) {
+                    response.append(line);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (reader != null) {
+                    try {
+                        reader.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            return response.toString();
         }
     }
 }

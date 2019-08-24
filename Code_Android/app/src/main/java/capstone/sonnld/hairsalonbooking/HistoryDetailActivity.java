@@ -10,15 +10,21 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import capstone.sonnld.hairsalonbooking.adapter.RecyclerViewBookedServiceAdapter;
 import capstone.sonnld.hairsalonbooking.api.HairSalonAPI;
 import capstone.sonnld.hairsalonbooking.api.RetrofitClient;
+import capstone.sonnld.hairsalonbooking.dto.RatingDTO;
 import capstone.sonnld.hairsalonbooking.model.ModelAccount;
 import capstone.sonnld.hairsalonbooking.model.ModelBooking;
 import capstone.sonnld.hairsalonbooking.model.ModelBookingDetail;
@@ -42,6 +48,7 @@ public class HistoryDetailActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private Button btnCancel;
     private Button btnReview;
+    private LinearLayout lnReview;
 
     private TextView txtBookedDate;
     private TextView txtBookedTime;
@@ -52,6 +59,16 @@ public class HistoryDetailActivity extends AppCompatActivity {
     private int bookingId;
     private int userID;
     private String salonName;
+
+    //view value
+    private RatingBar ratingBar;
+    private Button btnSubmit;
+    private EditText edtComment;
+    private TextView txtSalonName;
+    // value to submit
+    private int rating;
+    private String comment;
+    private Date createdDate;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +78,7 @@ public class HistoryDetailActivity extends AppCompatActivity {
         Retrofit retrofit = RetrofitClient.getInstance();
         hairSalonAPI = retrofit.create(HairSalonAPI.class);
 
+        //find view
         txtDirection = findViewById(R.id.txtDirection);
         txtTotalPrice = findViewById(R.id.txt_total);
         btnCancel = findViewById(R.id.btn_cancel);
@@ -69,6 +87,11 @@ public class HistoryDetailActivity extends AppCompatActivity {
         txtAddress = findViewById(R.id.txt_address);
         txtUsername = findViewById(R.id.txt_username);
         btnReview = findViewById(R.id.btn_review);
+        lnReview = findViewById(R.id.rating_layout);
+        ratingBar = findViewById(R.id.rating_bar);
+        btnSubmit = findViewById(R.id.btn_submit);
+        txtSalonName = findViewById(R.id.txt_salon_name);
+        edtComment = findViewById(R.id.edt_comment);
 
         // get session
         sessionManager = new SessionManager(getApplicationContext());
@@ -84,11 +107,9 @@ public class HistoryDetailActivity extends AppCompatActivity {
         String bookedTime = intent.getExtras().getString("BookedTime");
         bookingId = intent.getExtras().getInt("BookingId");
         salonName = intent.getExtras().getString("SalonName");
-        String[] bookedDateArr = bookedDate.split("-");
-        String[] bookedTimeArr = bookedTime.split(":");
-
         String status = intent.getExtras().getString("BookingStatus");
         String address = intent.getExtras().getString("ModelAddress");
+
         ArrayList<ModelBookingDetail> selectedService =
                 (ArrayList<ModelBookingDetail>) intent.getSerializableExtra("SelectedService");
 
@@ -100,10 +121,14 @@ public class HistoryDetailActivity extends AppCompatActivity {
             totalPrice += salePrice;
         }
 
+        //set data to view
+        String[] bookedDateArr = bookedDate.split("-");
+        String[] bookedTimeArr = bookedTime.split(":");
         txtTotalPrice.setText(totalPrice + "k");
         txtBookedDate.setText(bookedDateArr[2]+"/"+bookedDateArr[1]+"/"+bookedDateArr[0]);
         txtBookedTime.setText(bookedTimeArr[0]+":"+bookedTimeArr[1]);
         txtAddress.setText(address);
+        txtSalonName.setText("Đánh giá salon " + salonName);
 
         //recycler view setup
         recyclerView = findViewById(R.id.recycler_selected_service);
@@ -148,21 +173,78 @@ public class HistoryDetailActivity extends AppCompatActivity {
         });
 
 
-        // setup btn review
+        // setup btn review/review layout
         btnReview.setVisibility(View.GONE);
+        lnReview.setVisibility(View.GONE);
         if(status.equals("finish")){
-            btnReview.setVisibility(View.VISIBLE);
+            lnReview.setVisibility(View.VISIBLE);
         }
 
-        btnReview.setOnClickListener(new View.OnClickListener() {
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent openReviewActivity = new Intent(HistoryDetailActivity.this, ReviewActivity.class);
-                openReviewActivity.putExtra("userId",userID);
-                openReviewActivity.putExtra("salonName",salonName);
-                openReviewActivity.putExtra("bookingId",bookingId);
 
-                startActivity(openReviewActivity);
+                submitReview();
+            }
+        });
+
+//        btnReview.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent openReviewActivity = new Intent(HistoryDetailActivity.this, ReviewActivity.class);
+//                openReviewActivity.putExtra("userId",userID);
+//                openReviewActivity.putExtra("salonName",salonName);
+//                openReviewActivity.putExtra("bookingId",bookingId);
+//
+//                startActivity(openReviewActivity);
+//            }
+//        });
+    }
+
+    public void submitReview(){
+        getSalonIdByBookingId();
+    }
+
+    public void getSalonIdByBookingId(){
+        Call<Integer> integerCall = hairSalonAPI.getSalonIdByBookingId(bookingId);
+        integerCall.enqueue(new Callback<Integer>() {
+            @Override
+            public void onResponse(Call<Integer> call, Response<Integer> response) {
+                int salonId = response.body();
+                rating = (int) ratingBar.getRating();
+                comment = edtComment.getText().toString();
+                SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
+                createdDate = new Date(System.currentTimeMillis());
+                String sCreatedDate = formatter.format(createdDate);
+
+                RatingDTO ratingDTO = new RatingDTO();
+                ratingDTO.setBookingId(bookingId);
+                ratingDTO.setComment(comment);
+                ratingDTO.setCreatedDate(sCreatedDate);
+                ratingDTO.setRating(rating);
+                ratingDTO.setUserId(userID);
+                ratingDTO.setSalonId(salonId);
+
+                Call<ModelBooking> modelBookingCall = hairSalonAPI.addReviewToBooking(ratingDTO);
+                modelBookingCall.enqueue(new Callback<ModelBooking>() {
+                    @Override
+                    public void onResponse(Call<ModelBooking> call, Response<ModelBooking> response) {
+                        if(response.code() == 200){
+                            Toast.makeText(HistoryDetailActivity.this, "Đã đăng tải bình luận",Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(HistoryDetailActivity.this, MainActivity.class);
+                            startActivity(intent);
+                        }
+                    }
+                    @Override
+                    public void onFailure(Call<ModelBooking> call, Throwable t) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(Call<Integer> call, Throwable t) {
+
             }
         });
     }
@@ -191,8 +273,7 @@ public class HistoryDetailActivity extends AppCompatActivity {
 
     public int getSalePrice(String price, String discountValue) {
 
-        String sSalePrice = price.substring(0, price.length() - 1);
-        int nSalePrice = Integer.parseInt(sSalePrice);
+        int nSalePrice = Integer.parseInt(price);
         int nDiscountValue = Integer.parseInt(discountValue);
         nSalePrice = nSalePrice - (nSalePrice * nDiscountValue / 100);
 

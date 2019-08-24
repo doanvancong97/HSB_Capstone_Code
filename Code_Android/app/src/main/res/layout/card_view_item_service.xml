@@ -17,7 +17,7 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="5"
+            android:layout_weight="6"
             android:orientation="vertical"
             android:weightSum="2"
 
@@ -31,7 +31,7 @@
                 android:gravity="center|start"
                 android:text="Name"
                 android:textColor="@color/black"
-                android:textSize="20dp" />
+                android:textSize="18dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -48,7 +48,7 @@
                     android:paddingTop="5dp"
                     android:text="Price"
                     android:textColor="@color/black"
-                    android:textSize="18dp" />
+                    android:textSize="15dp" />
 
                 <TextView
                     android:id="@+id/txt_service_sale_price"
@@ -59,7 +59,7 @@
                     android:paddingLeft="10dp"
                     android:text="sale price"
                     android:textColor="@color/red"
-                    android:textSize="20dp"
+                    android:textSize="18dp"
                     android:textStyle="bold" />
 
 
@@ -85,8 +85,8 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:gravity="center"
-                    android:paddingTop="5dp"
+                    android:paddingLeft="10dp"
+                    android:gravity="center|left"
                     android:text="30 phút"
                     android:textColor="@color/black"
                     android:textSize="18dp" />
@@ -98,7 +98,7 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="2"
+            android:layout_weight="1"
             android:gravity="right"
             >
 

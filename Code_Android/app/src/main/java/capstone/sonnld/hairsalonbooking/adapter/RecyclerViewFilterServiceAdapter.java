@@ -61,14 +61,16 @@ public class RecyclerViewFilterServiceAdapter extends RecyclerView.Adapter<Recyc
         des = modelSalonServices.get(position).getModelSalon().getDescription();
         serviceName = modelSalonServices.get(position).getModelService().getServiceName();
         salonAddress = modelSalonServices.get(position).getModelSalon().getModelAddress().getStreetNumber() + ", "
-                + modelSalonServices.get(position).getModelSalon().getModelAddress().getStreet();
+                + modelSalonServices.get(position).getModelSalon().getModelAddress().getStreet() + ", "
+                + modelSalonServices.get(position).getModelSalon().getModelAddress().getModelDistrict().getDistrictName() + ", "
+                + modelSalonServices.get(position).getModelSalon().getModelAddress().getModelDistrict().getModelCity().getCityName();
         saleValue = " - " + modelSalonServices.get(position).getModelDiscount().getDiscountValue() + "%";
         imgUrl = modelSalonServices.get(position).getThumbUrl();
-        price = modelSalonServices.get(position).getPrice() +"";
+        price = modelSalonServices.get(position).getPrice() + "";
         discountValue = modelSalonServices.get(position).getModelDiscount().getDiscountValue() + "";
 
-        holder.txtServicePrice.setText(price);
-        holder.txtServiceSalePrice.setText(getSalePrice(price,discountValue));
+        holder.txtServicePrice.setText(price + "k");
+        holder.txtServiceSalePrice.setText(getSalePrice(price, discountValue));
         holder.txtSalonServiceName.setText(uppercaseFirstLetter(serviceName));
         holder.txtSalonAddress.setText(salonAddress);
         holder.txtSaleValue.setText(saleValue);
@@ -88,18 +90,22 @@ public class RecyclerViewFilterServiceAdapter extends RecyclerView.Adapter<Recyc
                 intent.putExtra("SalonServicePrice", modelSalonServices.get(position).getPrice());
                 intent.putExtra("DiscountValue", modelSalonServices.get(position).getModelDiscount().getDiscountValue());
                 intent.putExtra("SalonName", modelSalonServices.get(position).getModelSalon().getName());
-                intent.putExtra("Description", des);
+                intent.putExtra("Description", modelSalonServices.get(position).getModelSalon().getDescription());
                 intent.putExtra("Thumbnail", modelSalonServices.get(position).getModelSalon().getUrl());
                 intent.putExtra("Logo", modelSalonServices.get(position).getModelSalon().getLogoUrl());
                 intent.putExtra("ModelAddress", modelSalonServices.get(position).getModelSalon().getModelAddress().getStreetNumber() + ", "
                         + modelSalonServices.get(position).getModelSalon().getModelAddress().getStreet() + ", "
                         + modelSalonServices.get(position).getModelSalon().getModelAddress().getModelDistrict().getDistrictName() + ", "
                         + modelSalonServices.get(position).getModelSalon().getModelAddress().getModelDistrict().getModelCity().getCityName());
-                intent.putExtra("SalonStartTime",modelSalonServices.get(position).getModelSalon().getOpenTime());
-                intent.putExtra("SalonCloseTime",modelSalonServices.get(position).getModelSalon().getCloseTime());
-                intent.putExtra("SalonSlotTime",modelSalonServices.get(position).getModelSalon().getSlotTime());
-                intent.putExtra("SalonBookingDay",modelSalonServices.get(position).getModelSalon().getBookingDay());
-                // data need to be received in DetailSalonA
+
+                intent.putExtra("SalonStartTime", modelSalonServices.get(position).getModelSalon().getOpenTime());
+                intent.putExtra("SalonCloseTime", modelSalonServices.get(position).getModelSalon().getCloseTime());
+                intent.putExtra("SalonSlotTime", modelSalonServices.get(position).getModelSalon().getSlotTime());
+                intent.putExtra("SalonBookingDay", modelSalonServices.get(position).getModelSalon().getBookingDay());
+                intent.putExtra("BookingPerSlot", modelSalonServices.get(position).getModelSalon().getBookingPerSlot());
+                intent.putExtra("AvgRating", modelSalonServices.get(position).getModelSalon().getAverageRating());
+                intent.putExtra("DiscountEndDate", modelSalonServices.get(position).getModelDiscount().getValidUntil());
+
                 mContext.startActivity(intent);
 
             }
@@ -108,17 +114,16 @@ public class RecyclerViewFilterServiceAdapter extends RecyclerView.Adapter<Recyc
         holder.txtSalonServiceName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext, modelSalonServices.get(position).getModelService().getServiceName(),Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, modelSalonServices.get(position).getModelService().getServiceName(), Toast.LENGTH_LONG).show();
             }
         });
 
 
     }
 
-    public String getSalePrice(String price,String discountValue){
+    public String getSalePrice(String price, String discountValue) {
 
-        String sSalePrice = price.substring(0, price.length() - 1);
-        int nSalePrice = Integer.parseInt(sSalePrice);
+        int nSalePrice = Integer.parseInt(price);
         int nDiscountValue = Integer.parseInt(discountValue);
         nSalePrice = nSalePrice - (nSalePrice * nDiscountValue / 100);
 

@@ -54,8 +54,7 @@ public class RecyclerViewBookedServiceAdapter extends RecyclerView.Adapter<Recyc
 
     public String getSalePrice(String price, String discountValue) {
 
-        String sSalePrice = price.substring(0, price.length() - 1);
-        int nSalePrice = Integer.parseInt(sSalePrice);
+        int nSalePrice = Integer.parseInt(price);
         int nDiscountValue = Integer.parseInt(discountValue);
         nSalePrice = nSalePrice - (nSalePrice * nDiscountValue / 100);
 

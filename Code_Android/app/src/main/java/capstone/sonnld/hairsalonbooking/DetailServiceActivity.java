@@ -108,9 +108,10 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
     private int salonId;
 
     private int numberOfPeopleBooked = 5;
-    int bookingPerSlot = 0;
-    int countB = 0;
-    double step;
+    private int bookingPerSlot = 0;
+
+    private double step;
+
 //countdown
     private CountDownTimer countDownTimer;
     private  TextView txtCountDown;
@@ -140,9 +141,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
         txtAvgRating = findViewById(R.id.txt_avg_rating);
 
 
-
-
-        //Receive data from RecyclerViewServiceByDiscountAdapter
+        //Receive data from RecyclerViewServiceByDiscountAdapter/ RecyclerViewFilterServiceAdapter
         Intent intent = getIntent();
         salonId = intent.getExtras().getInt("SalonID");
         bookingPerSlot = intent.getExtras().getInt("BookingPerSlot");
@@ -151,6 +150,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
         String description = intent.getExtras().getString("Description");
         String imgUrl = intent.getExtras().getString("Thumbnail");
         String discountEndDate = intent.getExtras().getString("DiscountEndDate");
+        String discountStartDate = intent.getExtras().getString("DiscountStartDate");
         String salonServicePrice = intent.getExtras().getInt("SalonServicePrice") + "";
         int discountValue = intent.getExtras().getInt("DiscountValue");
         String address = intent.getExtras().getString("ModelAddress");
@@ -165,7 +165,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
         // countdown
 
         txtCountDown=findViewById(R.id.txtCountDown);
-
+        String startDate = discountStartDate + "00:00:00";
         String endDate = discountEndDate + " 23:59:59";
         Toast.makeText(this, endDate + "", Toast.LENGTH_LONG).show(); //2019-10-29
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -177,9 +177,6 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
             e.printStackTrace();
         }
         long millis = date.getTime();
-
-
-
         timeLeft=millis-now.getTime();
 
         if(timeLeft>0)
@@ -188,13 +185,10 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
             txtCountDown.setText("ĐÃ HẾT HẠN");
 
 
-
-
-
         //set new value for view
         txtSalonName.setText(salonName);
         txtSalonService.setText(uppercaseFirstLetter(salonServiceName) + " (-" + discountValue + "%) ");
-        txtServicePrice.setText(salonServicePrice);
+        txtServicePrice.setText(salonServicePrice + "k");
         txtServicePrice.setPaintFlags(txtServicePrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         txtServiceSalePrice.setText(getSalePrice(salonServicePrice, discountValue + ""));
         txtDescription.setText(description);
@@ -630,7 +624,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-        String url = "http://192.77.1.74:8080/api/countNumberOfBooking/"+ bookedDate + "/" + bookedTime + "/" + salonId;
+        String url = "http://192.168.1.7:8080/api/countNumberOfBooking/"+ bookedDate + "/" + bookedTime + "/" + salonId;
         String respone = "";
         try {
             URL urll = new URL(url);

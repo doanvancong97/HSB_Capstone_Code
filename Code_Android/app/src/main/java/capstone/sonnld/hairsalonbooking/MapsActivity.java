@@ -78,6 +78,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private String salonEndTime ;
     private int salonSlotTime ;
     private int salonBookingDay ;
+    private int bookingPerSlot = 0;
+    private float avgRating = 0;
 
 
     @Override
@@ -190,9 +192,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                         Toast.makeText(MapsActivity.this, marker.getSnippet(), Toast.LENGTH_SHORT).show();
                         int id = Integer.parseInt(marker.getSnippet());
-
                         getSalonById(id);
-
                         salon_service_name.setText(marker.getTitle());
                         salon_address.setText(marker.getTag().toString());
                         lnDeatailOfMarker.setVisibility(View.VISIBLE);
@@ -201,11 +201,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             @Override
                             public void onClick(View view) {
 
-                                Toast.makeText(MapsActivity.this, "Đang chuyển tới trang chủ của " + marker.getTitle() + "...", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(MapsActivity.this, DetailSalonActivity.class);
                                 intent.putExtra("SalonId", Integer.parseInt(marker.getSnippet()));
                                 intent.putExtra("SalonName", marker.getTitle());
-
                                 startActivity(intent);
                                 finish();
                             }
@@ -215,7 +213,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                     }
                 });
-
 
             }
             mMap.addCircle(new CircleOptions()
@@ -236,7 +233,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                     for (int i = 0; i < modelSalonServices.size(); i++) {
                         address = modelSalonServices.get(i).getModelSalon().getModelAddress().getStreetNumber() + ", "
-                                + modelSalonServices.get(i).getModelSalon().getModelAddress().getStreet();
+                                + modelSalonServices.get(i).getModelSalon().getModelAddress().getStreet() + ", "
+                                + modelSalonServices.get(i).getModelSalon().getModelAddress().getModelDistrict().getDistrictName() + ", "
+                                + modelSalonServices.get(i).getModelSalon().getModelAddress().getModelDistrict().getModelCity().getCityName();
                         String salonName = modelSalonServices.get(i).getModelSalon().getName();
                         int salonId = modelSalonServices.get(i).getModelSalon().getSalonId();
                         String logoUrl = modelSalonServices.get(i).getModelSalon().getLogoUrl();
@@ -288,7 +287,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                     @Override
                                     public void onClick(View view) {
 
-                                        Toast.makeText(MapsActivity.this, "Đang chuyển tới trang chủ của " + marker.getTitle() + "...", Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent(MapsActivity.this, DetailSalonActivity.class);
                                         intent.putExtra("SalonId", Integer.parseInt(marker.getSnippet()));
                                         intent.putExtra("SalonName", marker.getTitle());
@@ -296,6 +294,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                         intent.putExtra("SalonEndTime",salonEndTime);
                                         intent.putExtra("SalonSlotTime",salonSlotTime);
                                         intent.putExtra("SalonBookingDay",salonBookingDay);
+                                        intent.putExtra("SalonBookingPerSlot",bookingPerSlot);
+                                        intent.putExtra("AvgRating",avgRating);
                                         startActivity(intent);
                                         finish();
                                     }
@@ -339,6 +339,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 salonEndTime = modelSalonServices.get(0).getModelSalon().getCloseTime();
                 salonSlotTime =  modelSalonServices.get(0).getModelSalon().getSlotTime();
                 salonBookingDay =  modelSalonServices.get(0).getModelSalon().getBookingDay();
+                bookingPerSlot =  modelSalonServices.get(0).getModelSalon().getBookingPerSlot();
+                avgRating =  modelSalonServices.get(0).getModelSalon().getAverageRating();
             }
 
             @Override
