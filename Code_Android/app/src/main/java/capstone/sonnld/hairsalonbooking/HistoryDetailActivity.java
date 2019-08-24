@@ -100,7 +100,7 @@ public class HistoryDetailActivity extends AppCompatActivity {
             totalPrice += salePrice;
         }
 
-        txtTotalPrice.setText("Tổng tiền là: " + totalPrice + "k");
+        txtTotalPrice.setText(totalPrice + "k");
         txtBookedDate.setText(bookedDateArr[2]+"/"+bookedDateArr[1]+"/"+bookedDateArr[0]);
         txtBookedTime.setText(bookedTimeArr[0]+":"+bookedTimeArr[1]);
         txtAddress.setText(address);

@@ -143,7 +143,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
 
         txtCountDown=findViewById(R.id.txtCountDown);
 
-        String endDate = "2019-08-23 00:00:00";
+        String endDate = "2019-08-26 23:59:59";
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         Date date = null;
@@ -458,6 +458,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
                     slot.setEnabled(false);
                     slot.setBackgroundResource(button_full);
                     slot.setText("Hết chỗ");
+
                 }
 
 
@@ -636,7 +637,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-        String url = "http://192.168.1.4:8080/api/countNumberOfBooking/"+ bookedDate + "/" + bookedTime + "/" + salonId;
+        String url = "http://192.168.1.6:8080/api/countNumberOfBooking/"+ bookedDate + "/" + bookedTime + "/" + salonId;
         String respone = "";
         try {
             URL urll = new URL(url);

@@ -92,7 +92,7 @@ public class BookingDetailActivity extends AppCompatActivity {
             int salePrice = getSalePrice(price, discount);
             totalPrice += salePrice;
         }
-        txtTotalPrice.setText("Tổng cộng: " + totalPrice + "K");
+        txtTotalPrice.setText(totalPrice + "K");
         txtBookedDate.setText(bookedDateArr[2]+"/"+bookedDateArr[1]+"/"+bookedDateArr[0]);
         txtBookedTime.setText(bookedTime);
         txtAddress.setText(address);
