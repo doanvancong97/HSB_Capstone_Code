@@ -253,8 +253,6 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
             public void onTick(long millisUntilFinished) {
                 timeLeft=millisUntilFinished;
                 updateCountDownText();
-
-
             }
 
             @Override
