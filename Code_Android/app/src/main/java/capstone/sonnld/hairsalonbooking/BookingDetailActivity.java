@@ -87,8 +87,8 @@ public class BookingDetailActivity extends AppCompatActivity {
         // setup value
         int totalPrice = 0;
         for (int i = 0; i < modelSalonServices.size(); i++) {
-            String price = modelSalonServices.get(i).getPrice();
-            String discount = modelSalonServices.get(i).getModelDiscount().getDiscountValue();
+            String price = modelSalonServices.get(i).getPrice() + "";
+            String discount = modelSalonServices.get(i).getModelDiscount().getDiscountValue() + "";
             int salePrice = getSalePrice(price, discount);
             totalPrice += salePrice;
         }
@@ -161,8 +161,7 @@ public class BookingDetailActivity extends AppCompatActivity {
 
     public int getSalePrice(String price, String discountValue) {
 
-        String sSalePrice = price.substring(0, price.length() - 1);
-        int nSalePrice = Integer.parseInt(sSalePrice);
+        int nSalePrice = Integer.parseInt(price);
         int nDiscountValue = Integer.parseInt(discountValue);
         nSalePrice = nSalePrice - (nSalePrice * nDiscountValue / 100);
 

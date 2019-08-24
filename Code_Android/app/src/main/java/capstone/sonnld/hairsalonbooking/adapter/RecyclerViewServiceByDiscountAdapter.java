@@ -59,13 +59,13 @@ public class RecyclerViewServiceByDiscountAdapter extends RecyclerView.Adapter<R
                 + modelSalonServices.get(position).getModelSalon().getModelAddress().getModelDistrict().getModelCity().getCityName();
         saleValue = " - " + modelSalonServices.get(position).getModelDiscount().getDiscountValue() + "%";
         imgUrl = modelSalonServices.get(position).getThumbUrl();
-        price = modelSalonServices.get(position).getPrice();
-        discountValue = modelSalonServices.get(position).getModelDiscount().getDiscountValue();
+        price = modelSalonServices.get(position).getPrice() + "";
+        discountValue = modelSalonServices.get(position).getModelDiscount().getDiscountValue() + "";
         String salonName = modelSalonServices.get(position).getModelSalon().getName();
 
 
         holder.txtSalonName.setText(salonName);
-        holder.txtServicePrice.setText(price);
+        holder.txtServicePrice.setText(price + "k");
         holder.txtServiceSalePrice.setText(getSalePrice(price,discountValue));
         holder.txtSalonServiceName.setText(uppercaseFirstLetter(serviceName));
         holder.txtSalonAddress.setText(salonAddress);
@@ -108,11 +108,9 @@ public class RecyclerViewServiceByDiscountAdapter extends RecyclerView.Adapter<R
 
     public String getSalePrice(String price,String discountValue){
 
-        String sSalePrice = price.substring(0, price.length() - 1);
-        int nSalePrice = Integer.parseInt(sSalePrice);
+        int nSalePrice = Integer.parseInt(price);
         int nDiscountValue = Integer.parseInt(discountValue);
         nSalePrice = nSalePrice - (nSalePrice * nDiscountValue / 100);
-
         return "" + nSalePrice + "K";
     }
 

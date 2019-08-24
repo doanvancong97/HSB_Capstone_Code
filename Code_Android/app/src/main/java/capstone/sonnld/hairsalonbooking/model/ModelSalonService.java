@@ -7,6 +7,9 @@ import java.io.Serializable;
 
 public class ModelSalonService implements Serializable {
 
+    @SerializedName("executeTime")
+    @Expose
+    private Integer executeTime;
     @SerializedName("modelDiscount")
     @Expose
     private ModelDiscount modelDiscount;
@@ -18,7 +21,7 @@ public class ModelSalonService implements Serializable {
     private ModelService modelService;
     @SerializedName("price")
     @Expose
-    private String price;
+    private Integer price;
     @SerializedName("salon_service_id")
     @Expose
     private Integer salonServiceId;
@@ -28,6 +31,14 @@ public class ModelSalonService implements Serializable {
     @SerializedName("thumb_url")
     @Expose
     private String thumbUrl;
+
+    public Integer getExecuteTime() {
+        return executeTime;
+    }
+
+    public void setExecuteTime(Integer executeTime) {
+        this.executeTime = executeTime;
+    }
 
     public ModelDiscount getModelDiscount() {
         return modelDiscount;
@@ -53,11 +64,11 @@ public class ModelSalonService implements Serializable {
         this.modelService = modelService;
     }
 
-    public String getPrice() {
+    public Integer getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(Integer price) {
         this.price = price;
     }
 
