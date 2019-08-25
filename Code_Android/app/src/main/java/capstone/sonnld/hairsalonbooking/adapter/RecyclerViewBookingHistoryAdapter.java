@@ -25,7 +25,8 @@ public class RecyclerViewBookingHistoryAdapter extends RecyclerView.Adapter<Recy
     private Context mContext;
     private ArrayList<ModelBooking> listModelBooking;
 
-    private final String CANCEL = "Đã hủy";
+    private final String CANCEL = "Bạn đã hủy ";
+    private final String SALON_CANCEL = "Hủy bởi salon";
     private final String PROCESS = "Đang xử lý";
     private final String FINISH = "Hoàn thành";
     private String salonName;
@@ -77,9 +78,12 @@ public class RecyclerViewBookingHistoryAdapter extends RecyclerView.Adapter<Recy
         if(status.equals("process")){
             holder.txtStatus.setTextColor(Color.BLUE);
             holder.txtStatus.setText(PROCESS);
-        }else if(status.equals("cancel")){
+        }else if(status.equals("cancel")) {
             holder.txtStatus.setTextColor(Color.RED);
             holder.txtStatus.setText(CANCEL);
+        }else if(status.equals("salonCancel")){
+            holder.txtStatus.setTextColor(Color.RED);
+            holder.txtStatus.setText(SALON_CANCEL);
         }else if(status.equals("finish")){
             holder.txtStatus.setTextColor(Color.GREEN);
             holder.txtStatus.setText(FINISH);

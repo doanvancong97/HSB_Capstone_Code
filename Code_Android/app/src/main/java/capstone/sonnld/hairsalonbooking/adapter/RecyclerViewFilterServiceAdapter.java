@@ -68,10 +68,12 @@ public class RecyclerViewFilterServiceAdapter extends RecyclerView.Adapter<Recyc
         imgUrl = modelSalonServices.get(position).getThumbUrl();
         price = modelSalonServices.get(position).getPrice() + "";
         discountValue = modelSalonServices.get(position).getModelDiscount().getDiscountValue() + "";
+        String salonName = modelSalonServices.get(position).getModelSalon().getName();
+
 
         holder.txtServicePrice.setText(price + "k");
         holder.txtServiceSalePrice.setText(getSalePrice(price, discountValue));
-        holder.txtSalonServiceName.setText(uppercaseFirstLetter(serviceName));
+        holder.txtSalonServiceName.setText(salonName + " - " + uppercaseFirstLetter(serviceName));
         holder.txtSalonAddress.setText(salonAddress);
         holder.txtSaleValue.setText(saleValue);
         Picasso.with(mContext).
@@ -105,7 +107,7 @@ public class RecyclerViewFilterServiceAdapter extends RecyclerView.Adapter<Recyc
                 intent.putExtra("BookingPerSlot", modelSalonServices.get(position).getModelSalon().getBookingPerSlot());
                 intent.putExtra("AvgRating", modelSalonServices.get(position).getModelSalon().getAverageRating());
                 intent.putExtra("DiscountEndDate", modelSalonServices.get(position).getModelDiscount().getValidUntil());
-
+                intent.putExtra("DiscountStartDate",modelSalonServices.get(position).getModelDiscount().getValidFrom());
                 mContext.startActivity(intent);
 
             }

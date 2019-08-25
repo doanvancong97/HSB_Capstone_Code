@@ -6,6 +6,7 @@ import android.graphics.Paint;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +15,10 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import capstone.sonnld.hairsalonbooking.DetailServiceActivity;
 import capstone.sonnld.hairsalonbooking.R;
@@ -63,7 +67,38 @@ public class RecyclerViewServiceByDiscountAdapter extends RecyclerView.Adapter<R
         discountValue = modelSalonServices.get(position).getModelDiscount().getDiscountValue() + "";
         String salonName = modelSalonServices.get(position).getModelSalon().getName();
 
+        String discountStartDate = modelSalonServices.get(position).getModelDiscount().getValidFrom()+" 00:00:00";
+        String discountEndDate = modelSalonServices.get(position).getModelDiscount().getValidUntil()+" 23:59:59";
 
+        Date now = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        Date sDate = null;
+        try {
+            sDate = sdf.parse(discountStartDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        long ss = now.getTime()-sDate.getTime();
+
+        Date eDate = null;
+        try {
+            eDate = sdf.parse(discountEndDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        long ss2 = eDate.getTime()-now.getTime();
+
+
+        if(modelSalonServices.get(position).getModelDiscount().getDiscountValue() == 0 || ss < 0 || ss2 < 0){
+            holder.txtSaleValue.setVisibility(View.GONE);
+            holder.txtServiceSalePrice.setVisibility(View.GONE);
+            holder.txtServicePrice.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
+            holder.txtServicePrice.setGravity(Gravity.CENTER);
+        }else {
+            holder.txtServicePrice.setPaintFlags(holder.txtServicePrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        }
         holder.txtSalonName.setText(salonName);
         holder.txtServicePrice.setText(price + "k");
         holder.txtServiceSalePrice.setText(getSalePrice(price,discountValue));
@@ -147,7 +182,7 @@ public class RecyclerViewServiceByDiscountAdapter extends RecyclerView.Adapter<R
             txtSaleValue = itemView.findViewById(R.id.txt_sale_value);
             imgServiceThumb = itemView.findViewById(R.id.salon_img);
             cardView = itemView.findViewById(R.id.card_view_salon_service);
-            txtServicePrice.setPaintFlags(txtServicePrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
         }
     }
 }

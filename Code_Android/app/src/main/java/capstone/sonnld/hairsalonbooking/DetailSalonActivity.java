@@ -95,6 +95,8 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
     private String bookedDate = "";
     private ArrayList<ModelSalonService> chkService = new ArrayList<>();
 
+    private static final String BASE_URL = "http://192.168.1.7:8080/api/";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -434,8 +436,6 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
                 if (numberOfPeopleBooked >= bookingPerSlot) {
                     slot.setEnabled(false);
                     slot.setBackgroundResource(button_full);
-                    slot.setText("Hết chỗ");
-
                 }
 
 
@@ -552,7 +552,6 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
                 if (numberOfPeopleBooked >= bookingPerSlot) {
                     slot.setEnabled(false);
                     slot.setBackgroundResource(button_full);
-                    slot.setText("Hết chỗ");
                 }
 
                 calendar.add(Calendar.MINUTE, (int) step);
@@ -600,7 +599,7 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-        String url = "http://192.168.1.4:8080/api/countNumberOfBooking/" + bookedDate + "/" + bookedTime + "/" + salonId;
+        String url = BASE_URL + "countNumberOfBooking/" + bookedDate + "/" + bookedTime + "/" + salonId;
         String respone = "";
         try {
             URL urll = new URL(url);
@@ -616,7 +615,7 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
     }
 
 
-    private class HttpGetRequest extends AsyncTask<InputStream, Void, String> {
+    private static class HttpGetRequest extends AsyncTask<InputStream, Void, String> {
 
 
         @Override

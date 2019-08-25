@@ -12,6 +12,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -112,6 +113,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
 
     private double step;
 
+    private static final String BASE_URL = "http://192.168.1.7:8080/api/";
 //countdown
     private CountDownTimer countDownTimer;
     private  TextView txtCountDown;
@@ -166,11 +168,10 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
         // countdown
 
         lnCountDown = findViewById(R.id.lnCountDown);
-
         txtCountDown=findViewById(R.id.txtCountDown);
         String startDate = discountStartDate + " 00:00:00";
         String endDate = discountEndDate + " 23:59:59";
-        Toast.makeText(this, startDate + "", Toast.LENGTH_LONG).show(); //2019-10-29
+       // Toast.makeText(this, startDate + "", Toast.LENGTH_LONG).show(); //2019-10-29
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         Date eDate = null;
@@ -187,8 +188,6 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
         else
             lnCountDown.setVisibility(View.GONE);
 
-
-
         Date sDate = null;
         try {
             sDate = sdf.parse(startDate);
@@ -203,16 +202,20 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
         else
             lnCountDown.setVisibility(View.GONE);
 
-
-
-
-
         //set new value for view
         txtSalonName.setText(salonName);
-        txtSalonService.setText(uppercaseFirstLetter(salonServiceName) + " (-" + discountValue + "%) ");
+
         txtServicePrice.setText(salonServicePrice + "k");
-        txtServicePrice.setPaintFlags(txtServicePrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-        txtServiceSalePrice.setText(getSalePrice(salonServicePrice, discountValue + ""));
+        if(discountValue ==0){
+            txtServiceSalePrice.setVisibility(View.GONE);
+            txtServicePrice.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
+            txtServicePrice.setGravity(Gravity.CENTER);
+            txtSalonService.setText(uppercaseFirstLetter(salonServiceName));
+        }else{
+            txtServicePrice.setPaintFlags(txtServicePrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            txtServiceSalePrice.setText(getSalePrice(salonServicePrice, discountValue + ""));
+            txtSalonService.setText(uppercaseFirstLetter(salonServiceName) + " (-" + discountValue + "%) ");
+        }
         txtDescription.setText(description);
         txtAddress.setText(address);
         txtAvgRating.setText("Đánh giá trung bình: " + Math.floor(avgRating*10)/10);
@@ -481,7 +484,6 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
                     slot.setEnabled(false);
                     slot.setBackgroundResource(button_full);
 
-
                 }
 
 
@@ -516,7 +518,6 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
             e.printStackTrace();
         }
     }
-
 
     public void generateSlotToday() {
 
@@ -598,14 +599,13 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
                 if (numberOfPeopleBooked >= bookingPerSlot) {
                     slot.setEnabled(false);
                     slot.setBackgroundResource(button_full);
-                    slot.setText("Hết chỗ");
                 }
 
                 calendar.add(Calendar.MINUTE, (int) step);
                 slot.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Toast.makeText(DetailServiceActivity.this, slot.getText(), Toast.LENGTH_SHORT).show();
+                     //   Toast.makeText(DetailServiceActivity.this, slot.getText(), Toast.LENGTH_SHORT).show();
                         bookedTime = slot.getText().toString();
                         if (isChoose == false) {
                             slot.setBackgroundResource(R.drawable.button_time_choose);
@@ -646,7 +646,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-        String url = "http://192.168.1.4:8080/api/countNumberOfBooking/"+ bookedDate + "/" + bookedTime + "/" + salonId;
+        String url = BASE_URL + "countNumberOfBooking/"+ bookedDate + "/" + bookedTime + "/" + salonId;
         String respone = "";
         try {
             URL urll = new URL(url);
@@ -656,13 +656,12 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
 
 
         }catch (Exception e){
-            Toast.makeText(DetailServiceActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+          //  Toast.makeText(DetailServiceActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
         return result;
     }
 
-
-    private class HttpGetRequest extends AsyncTask<InputStream, Void, String>  {
+    private static class HttpGetRequest extends AsyncTask<InputStream, Void, String>  {
 
 
         @Override

@@ -58,7 +58,6 @@ public class LoginActivity extends AppCompatActivity {
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-                Toast.makeText(LoginActivity.this, response.code() + "", Toast.LENGTH_SHORT).show();
                 if(response.code() == 200){
                     loading.setVisibility(View.VISIBLE);
                     final Handler handler = new Handler();

@@ -52,9 +52,7 @@ public class ReviewActivity extends AppCompatActivity {
 
         // init view
         ratingBar = findViewById(R.id.rating_bar);
-
         btnSubmit = findViewById(R.id.btn_submit);
-
         edtComment = findViewById(R.id.edt_comment);
         txtHeading = findViewById(R.id.txt_heading);
 

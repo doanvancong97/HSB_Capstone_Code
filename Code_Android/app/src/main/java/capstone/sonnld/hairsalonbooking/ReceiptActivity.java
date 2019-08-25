@@ -82,6 +82,7 @@ public class ReceiptActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent goMainActivity = new Intent(ReceiptActivity.this, MainActivity.class);
                 startActivity(goMainActivity);
+                finish();
             }
         });
 

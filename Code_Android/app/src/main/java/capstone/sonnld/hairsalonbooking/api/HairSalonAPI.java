@@ -21,8 +21,8 @@ public interface HairSalonAPI {
     @GET("salonservice/getAllActiveSalonService")
     Call<ArrayList<ModelSalonService>> getAllServiceByDiscountValue();
 
-    @GET("salonservice/{id}")
-    Call<ArrayList<ModelSalonService>> getSalonServiceBySalonId(@Path("id") int id);
+    @GET("salonservice/{salonId}")
+    Call<ArrayList<ModelSalonService>> getSalonServiceBySalonId(@Path("salonId") int id);
 
     @GET("users-details/{username}")
     Call<ModelAccount> getUserDetail(@Path("username") String username);
