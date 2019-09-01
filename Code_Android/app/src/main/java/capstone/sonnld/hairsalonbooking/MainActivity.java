@@ -17,6 +17,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -61,7 +62,6 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout lnWelcome;
     private TextView txtWelcome;
     private NavigationView navigationview;
-    MenuItem menuHistory;
 
     // recycler
     private RecyclerView recyclerView;
@@ -74,9 +74,7 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar mToolbar;
 
     // search
-    private TextView txtService;
     private SearchView mSearchView;
-
 
     // adapter
     private RecyclerViewFilterServiceAdapter filterServiceAdapter;
@@ -142,8 +140,6 @@ public class MainActivity extends AppCompatActivity {
             lnWelcome.setVisibility(View.VISIBLE);
             initUserDetail();
             btn_ReLogin.setVisibility(View.GONE);
-
-
 
         }
 
@@ -343,6 +339,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ModelAccount> call, Response<ModelAccount> response) {
                 ModelAccount currentAcc = response.body();
+
                 String avatarUrl = currentAcc.getAvatar();
                 String fullName = currentAcc.getFullname();
                 userID = currentAcc.getUserId();
@@ -459,6 +456,15 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(MainActivity.this, HistoryActivity.class);
         intent.putExtra("USER_ID",userID);
         //Toast.makeText(this, userID+"", Toast.LENGTH_SHORT).show();
+        startActivity(intent);
+    }
+
+    public void findBestSalon(MenuItem item){
+
+    }
+
+    public void findBestService(MenuItem item){
+        Intent intent = new Intent(MainActivity.this, FindBestServiceActivity.class);
         startActivity(intent);
     }
 }

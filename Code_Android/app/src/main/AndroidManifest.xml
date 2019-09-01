@@ -15,7 +15,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:label">
-        <activity android:name=".ReviewActivity"></activity>
+        <activity android:name=".FindBestServiceActivity"></activity>
+        <activity android:name=".ReviewActivity" />
         <activity android:name=".HistoryDetailActivity" />
         <activity android:name=".HistoryActivity" />
         <activity android:name=".ReceiptActivity" />

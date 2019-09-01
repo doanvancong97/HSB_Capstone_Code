@@ -49,7 +49,7 @@ public class ModelSalon implements Serializable {
     private String url;
     @SerializedName("bookingDay")
     @Expose
-    private int bookingDay;
+    private Integer bookingDay;
     @SerializedName("bookingPerSlot")
     @Expose
     private int bookingPerSlot;

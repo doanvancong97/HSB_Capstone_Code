@@ -95,7 +95,7 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
     private String bookedDate = "";
     private ArrayList<ModelSalonService> chkService = new ArrayList<>();
 
-    private static final String BASE_URL = "http://192.168.1.7:8080/api/";
+    private String BASE_URL = "http://192.168.1.7:8080/api/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +105,7 @@ public class DetailSalonActivity extends AppCompatActivity implements DatePicker
         //init retro
         Retrofit retrofit = RetrofitClient.getInstance();
         hairSalonAPI = retrofit.create(HairSalonAPI.class);
+        BASE_URL = RetrofitClient.getBaseUrl();
 
         // find view
         txtAddress = findViewById(R.id.txt_address);

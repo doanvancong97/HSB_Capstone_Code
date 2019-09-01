@@ -20,6 +20,10 @@ public class RetrofitClient {
         return ourInstance;
     }
 
+    public static String getBaseUrl() {
+        return BASE_URL;
+    }
+
     private RetrofitClient() {
 
     }

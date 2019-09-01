@@ -20,11 +20,12 @@
                 <item
                     android:id="@+id/nav_lesson"
                     android:icon="@drawable/new_salon2"
-                    android:title="Mới khai trương" />
+                    android:onClick="findBestSalon"
+                    android:title="Tìm salon tốt nhất" />
                 <item
-
                     android:icon="@drawable/sale2"
-                    android:title="Giảm giá sốc" />
+                    android:onClick="findBestService"
+                    android:title="Tìm dịch vụ tốt nhất" />
                 <item
                     android:icon="@drawable/location_icon"
                     android:title="Gần đây" />

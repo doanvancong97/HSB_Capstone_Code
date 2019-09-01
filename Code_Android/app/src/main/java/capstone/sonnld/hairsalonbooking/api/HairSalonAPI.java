@@ -61,4 +61,8 @@ public interface HairSalonAPI {
 
     @GET("review/getAllReviewBySalonId/{id}")
     Call<ArrayList<ModelReview>> getAllReviewBySalonId(@Path("id") int salonId);
+
+    @GET("salonservice/searchServiceByName/{serviceName}")
+    Call<ArrayList<ModelSalonService>> searchServiceByName(@Path("serviceName") String serviceName);
+
 }

@@ -4,11 +4,14 @@ import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
 
 import capstone.sonnld.hairsalonbooking.api.HairSalonAPI;
 import capstone.sonnld.hairsalonbooking.api.RetrofitClient;
@@ -64,21 +67,12 @@ public class LoginActivity extends AppCompatActivity {
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-
                             loading.setVisibility(View.GONE);
                         }
                     }, 3000);
-
-                    Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
-                    sessionManager.createSession(edtUsername.getText().toString().trim());
-
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    intent.putExtra("username",edtUsername.getText().toString());
-                    finish();
-                    startActivity(intent);
+                    checkLockAcc(edtUsername.getText().toString().trim());
                 } else {
                     txtResult.setText("Tên đăng nhập hoặc mật khẩu không đúng!");
-
                 }
             }
 
@@ -91,6 +85,31 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    private void checkLockAcc(String mUserName) {
+        Call<ModelAccount> call = hairSalonAPI.getUserDetail(mUserName);
+        call.enqueue(new Callback<ModelAccount>() {
+            @Override
+            public void onResponse(Call<ModelAccount> call, Response<ModelAccount> response) {
+                ModelAccount currentAcc = response.body();
+                if(currentAcc.getStatus().equals("disable")){
+                    Toast.makeText(LoginActivity.this,
+                            "Tài khoản của bạn đã bị khóa.Hãy liên hệ admin!", Toast.LENGTH_LONG).show();
+                }else{
+                    Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+                    sessionManager.createSession(edtUsername.getText().toString().trim());
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    intent.putExtra("username",edtUsername.getText().toString());
+                    finish();
+                    startActivity(intent);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ModelAccount> call, Throwable t) {
+
+            }
+        });
+    }
 
     public void clickToLogin(View view) {
 

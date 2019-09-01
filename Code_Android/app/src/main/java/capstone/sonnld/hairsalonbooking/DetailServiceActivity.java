@@ -113,8 +113,9 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
 
     private double step;
 
-    private static final String BASE_URL = "http://192.168.1.7:8080/api/";
-//countdown
+    private  String BASE_URL = "http://192.168.1.7:8080/api/";
+
+    //countdown
     private CountDownTimer countDownTimer;
     private  TextView txtCountDown;
     private long timeLeft=259200000;
@@ -129,6 +130,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
         // intit retro
         Retrofit retrofit = RetrofitClient.getInstance();
         hairSalonAPI = retrofit.create(HairSalonAPI.class);
+        BASE_URL = RetrofitClient.getBaseUrl();
 
         // find view
         txtAddress = findViewById(R.id.txt_address);
