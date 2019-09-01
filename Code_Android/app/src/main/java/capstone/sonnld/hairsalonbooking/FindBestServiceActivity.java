@@ -109,6 +109,11 @@ public class FindBestServiceActivity extends AppCompatActivity {
                 // add 3 best service
                 ArrayList<ModelSalonService> bestServices = new ArrayList<>();
                 for (int i = 0; i < 3; i++){
+                    ModelSalonService service = serviceArrayList.get(i);
+                    System.out.println("Service name: " + service.getModelService().getServiceName()
+                    + ", Discount point: " + service.getDiscountPoint()
+                    + ", Rating point : " + service.getRatingPoint()
+                    + ", Avg point: " + service.getAvgPoint() + "\n");
                     bestServices.add(serviceArrayList.get(i));
                 }
                 displayServices(bestServices);

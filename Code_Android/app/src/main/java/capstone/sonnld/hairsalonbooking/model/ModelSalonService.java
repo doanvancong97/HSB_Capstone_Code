@@ -32,21 +32,33 @@ public class ModelSalonService implements Serializable {
     @Expose
     private String thumbUrl;
 
-    private transient int discountPoint;
-    private transient int ratingPoint;
-    private transient int distancePoint;
+    private transient double discountPoint;
+    private transient double ratingPoint;
+    private transient double distancePoint;
     private transient double avgPoint;
 
-    public int getRatingPoint() {
+    public double getDiscountPoint() {
+        return discountPoint;
+    }
+
+    public void setDiscountPoint(double discountPoint) {
+        this.discountPoint = discountPoint;
+    }
+
+    public double getRatingPoint() {
         return ratingPoint;
     }
 
-    public void setRatingPoint(int ratingPoint) {
+    public void setRatingPoint(double ratingPoint) {
         this.ratingPoint = ratingPoint;
     }
 
-    public int getDistancePoint() {
+    public double getDistancePoint() {
         return distancePoint;
+    }
+
+    public void setDistancePoint(double distancePoint) {
+        this.distancePoint = distancePoint;
     }
 
     public void setDistancePoint(int distancePoint) {
@@ -59,10 +71,6 @@ public class ModelSalonService implements Serializable {
 
     public void setAvgPoint(double avgPoint) {
         this.avgPoint = avgPoint;
-    }
-
-    public int getDiscountPoint() {
-        return discountPoint;
     }
 
     public void setDiscountPoint(int discountPoint) {
