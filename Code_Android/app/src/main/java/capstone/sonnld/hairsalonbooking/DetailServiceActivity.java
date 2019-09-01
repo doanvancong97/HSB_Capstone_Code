@@ -113,7 +113,7 @@ public class DetailServiceActivity extends AppCompatActivity implements DatePick
 
     private double step;
 
-    private  String BASE_URL = "http://192.168.1.7:8080/api/";
+    private  String BASE_URL = "http://192.168.1.11:8080/api/";
 
     //countdown
     private CountDownTimer countDownTimer;
