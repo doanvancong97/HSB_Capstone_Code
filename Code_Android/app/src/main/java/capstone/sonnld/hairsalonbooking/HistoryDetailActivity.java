@@ -150,7 +150,7 @@ public class HistoryDetailActivity extends AppCompatActivity {
         });
 
         // setup btn cancel
-        if(!status.equals("process")){
+        if(!status.equals("1process")){
             btnCancel.setVisibility(View.GONE);
         }
         btnCancel.setOnClickListener(new View.OnClickListener() {
@@ -176,7 +176,7 @@ public class HistoryDetailActivity extends AppCompatActivity {
         // setup btn review/review layout
         btnReview.setVisibility(View.GONE);
         lnReview.setVisibility(View.GONE);
-        if(status.equals("finish")){
+        if(status.equals("4finish")){
             lnReview.setVisibility(View.VISIBLE);
         }
 

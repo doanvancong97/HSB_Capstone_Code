@@ -7,12 +7,11 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,10 +26,8 @@ import java.util.Comparator;
 import java.util.List;
 
 import capstone.sonnld.hairsalonbooking.adapter.RecyclerViewBestServiceAdapter;
-import capstone.sonnld.hairsalonbooking.adapter.RecyclerViewSalonByRatingAdapter;
 import capstone.sonnld.hairsalonbooking.api.HairSalonAPI;
 import capstone.sonnld.hairsalonbooking.api.RetrofitClient;
-import capstone.sonnld.hairsalonbooking.model.ModelSalon;
 import capstone.sonnld.hairsalonbooking.model.ModelSalonService;
 import capstone.sonnld.hairsalonbooking.support.GeoPoint;
 import retrofit2.Call;
@@ -47,7 +44,9 @@ public class FindBestServiceActivity extends AppCompatActivity {
     private Button btnSearch;
     private EditText edtSearch;
     private RecyclerView recyclerViewBestService;
-    LatLng you = null;
+    private RecyclerViewBestServiceAdapter recyclerViewSalonByRatingAdapter;
+    private ArrayList<ModelSalonService> bestServices = new ArrayList<>();
+    private LatLng you = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +81,11 @@ public class FindBestServiceActivity extends AppCompatActivity {
                 // get service list
                 ArrayList<ModelSalonService> serviceArrayList = response.body();
                 if (serviceArrayList == null) {
-                    Toast.makeText(FindBestServiceActivity.this, "Ko có dv nào", Toast.LENGTH_SHORT).show();
+                    //clear old list
+                    bestServices.clear();
+                    recyclerViewSalonByRatingAdapter.notifyDataSetChanged();
+                    Toast.makeText(FindBestServiceActivity.this, "Không tìm thấy dịch vụ nào", Toast.LENGTH_SHORT).show();
+
                 } else {
                     // sort by discount
                     Collections.sort(serviceArrayList, new Comparator<ModelSalonService>() {
@@ -92,9 +95,17 @@ public class FindBestServiceActivity extends AppCompatActivity {
                         }
 
                     });
-                    // add point
+                    // add discount point
                     for (int i = 0; i < serviceArrayList.size(); i++) {
-                        serviceArrayList.get(i).setDiscountPoint(serviceArrayList.size() - i);
+                        if (i > 0) {
+                            if (serviceArrayList.get(i).getModelDiscount().getDiscountValue() == serviceArrayList.get(i - 1).getModelDiscount().getDiscountValue()) {
+                                serviceArrayList.get(i).setDiscountPoint(serviceArrayList.get(i - 1).getDiscountPoint());
+                            }else{
+                                serviceArrayList.get(i).setDiscountPoint(serviceArrayList.get(i - 1).getDiscountPoint() - 1);
+                            }
+                        } else {
+                            serviceArrayList.get(i).setDiscountPoint(serviceArrayList.size() - i);
+                        }
                     }
 
                     // sort by rating
@@ -105,9 +116,17 @@ public class FindBestServiceActivity extends AppCompatActivity {
                         }
 
                     });
-                    // add point
+                    // add rating point
                     for (int i = 0; i < serviceArrayList.size(); i++) {
-                        serviceArrayList.get(i).setRatingPoint(serviceArrayList.size() - i);
+                        if (i > 0) {
+                            if (serviceArrayList.get(i).getModelSalon().getAverageRating() == serviceArrayList.get(i - 1).getModelSalon().getAverageRating()) {
+                                serviceArrayList.get(i).setRatingPoint(serviceArrayList.get(i - 1).getRatingPoint());
+                            }else{
+                                serviceArrayList.get(i).setRatingPoint(serviceArrayList.get(i - 1).getRatingPoint() - 1);
+                            }
+                        } else {
+                            serviceArrayList.get(i).setRatingPoint(serviceArrayList.size() - i);
+                        }
                     }
                     // get distance
                     LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -150,15 +169,25 @@ public class FindBestServiceActivity extends AppCompatActivity {
                         }
 
                     });
-                    // add point
+                    // add distance point
                     for (int i = 0; i < serviceArrayList.size(); i++) {
-                        serviceArrayList.get(i).setDistancePoint(serviceArrayList.size() - i);
+                        if (i > 0) {
+                            if (serviceArrayList.get(i).getDistance() == serviceArrayList.get(i - 1).getDistance()) {
+                                serviceArrayList.get(i).setDistancePoint(serviceArrayList.get(i - 1).getDistancePoint());
+                            }else{
+                                serviceArrayList.get(i).setDistancePoint(serviceArrayList.get(i - 1).getDistancePoint() - 1);
+                            }
+                        } else {
+                            serviceArrayList.get(i).setDistancePoint(serviceArrayList.size() - i);
+                        }
+
                     }
 
                     // caculate avgPoint
                     for (int i = 0; i < serviceArrayList.size(); i++) {
-                        double avgPoint = (serviceArrayList.get(i).getDiscountPoint()
-                                + serviceArrayList.get(i).getRatingPoint()) / 2;
+                        double avgPoint = (serviceArrayList.get(i).getDiscountPoint() * 0.4
+                                + serviceArrayList.get(i).getRatingPoint() * 0.3
+                                + serviceArrayList.get(i).getDistancePoint() * 0.3);
                         serviceArrayList.get(i).setAvgPoint(avgPoint);
                     }
                     // sort by avg point
@@ -169,21 +198,27 @@ public class FindBestServiceActivity extends AppCompatActivity {
                         }
 
                     });
-                    // add 3 best service
-                    ArrayList<ModelSalonService> bestServices = new ArrayList<>();
-                    for (int i = 0; i < 3; i++) {
+                    // add maximun 3 best service
+                    int nMaxService = 3;
+                    if (nMaxService > serviceArrayList.size()) {
+                        nMaxService = serviceArrayList.size();
+                    }
+
+                    for (int i = 0; i < nMaxService; i++) {
                         ModelSalonService service = serviceArrayList.get(i);
-                        System.out.println("Service name: " + service.getModelService().getServiceName()
-                                + ", Discount point: " + service.getDiscountPoint()
-                                + ", Rating point : " + service.getRatingPoint()
-                                + ", Distance is: " + service.getDistance()
-                                + ", distance point : " + service.getDistancePoint()
-                                + ", Avg point: " + service.getAvgPoint() + "\n");
+                        System.out.println(
+                                "\n Service name: " + service.getModelService().getServiceName()
+                                        + ", Discount is: " + service.getModelDiscount().getDiscountValue()
+                                        + ", Discount point: " + service.getDiscountPoint()
+                                        + ", Rating is: " + service.getModelSalon().getAverageRating()
+                                        + ", Rating point : " + service.getRatingPoint()
+                                        + ", Distance is: " + service.getDistance()
+                                        + ", distance point : " + service.getDistancePoint()
+                                        + ", Avg point: " + service.getAvgPoint() + "\n");
                         bestServices.add(serviceArrayList.get(i));
                     }
                     displayServices(bestServices);
                 }
-
 
             }
 
@@ -195,7 +230,7 @@ public class FindBestServiceActivity extends AppCompatActivity {
     }
 
     private void displayServices(ArrayList<ModelSalonService> serviceArrayList) {
-        RecyclerViewBestServiceAdapter recyclerViewSalonByRatingAdapter =
+        recyclerViewSalonByRatingAdapter =
                 new RecyclerViewBestServiceAdapter(FindBestServiceActivity.this, serviceArrayList);
         recyclerViewBestService.setAdapter(recyclerViewSalonByRatingAdapter);
     }

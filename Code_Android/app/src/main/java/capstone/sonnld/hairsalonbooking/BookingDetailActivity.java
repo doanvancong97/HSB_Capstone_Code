@@ -132,7 +132,7 @@ public class BookingDetailActivity extends AppCompatActivity {
         BookingDTO bookingDTO = new BookingDTO(userId,
                 txtUsername.getText().toString(), phone,
                 bookedDate, txtBookedTime.getText().toString(),
-                "process", bookingDetailsDTOList);
+                "1process", bookingDetailsDTOList);
 
         Call<BookingDTO> call = hairSalonAPI.postBooking(bookingDTO);
 

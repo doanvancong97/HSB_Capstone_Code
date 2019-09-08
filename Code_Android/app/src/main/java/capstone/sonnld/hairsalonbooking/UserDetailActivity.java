@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.squareup.picasso.Picasso;
 
 import capstone.sonnld.hairsalonbooking.api.HairSalonAPI;
@@ -31,6 +32,7 @@ public class UserDetailActivity extends AppCompatActivity {
     private TextView txtEmail;
     private TextView txtPhone;
     private ModelAccount currentAcc;
+    private int userID;
 
     // session
     private SessionManager sessionManager;
@@ -69,6 +71,7 @@ public class UserDetailActivity extends AppCompatActivity {
                 String avatarUrl = currentAcc.getAvatar();
                 String email = currentAcc.getEmail();
                 String phoneNumer = currentAcc.getPhoneNumber();
+                userID = currentAcc.getUserId();
                 fullname = currentAcc.getFullname();
                 Picasso.with(UserDetailActivity.this).load(avatarUrl).into(imgAvatar);
                 txtUsername.setText(fullname);
@@ -92,6 +95,7 @@ public class UserDetailActivity extends AppCompatActivity {
 
     public void clicktoLogout(View view) {
 
+        FirebaseMessaging.getInstance().unsubscribeFromTopic("User" + userID);
         sessionManager.logout();
         startActivity(new Intent(this,MainActivity.class));
         finish();

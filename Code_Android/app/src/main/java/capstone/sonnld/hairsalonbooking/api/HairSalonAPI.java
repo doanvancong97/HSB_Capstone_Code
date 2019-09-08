@@ -42,7 +42,7 @@ public interface HairSalonAPI {
     @GET("bookingHistories/{id}")
     Call<ArrayList<ModelBooking>> getBookingHistoryByUserID(@Path("id") int accountId);
 
-    @POST("cancelBooking/{id}")
+    @POST("customerCancelBooking/{id}")
     Call<ModelBooking> cancelBooking(@Path("id") int bookingId);
 
     @GET("countNumberOfBooking/{bookedDate}/{bookedTime}/{salonId}")

@@ -26,6 +26,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
@@ -292,7 +293,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
     }
 
 
@@ -345,6 +345,9 @@ public class MainActivity extends AppCompatActivity {
                 userID = currentAcc.getUserId();
                 Picasso.with(MainActivity.this).load(avatarUrl).into(imgAvatar);
                 txtWelcome.setText("Xin chào, " + fullName);
+
+                //create topic with user id
+                FirebaseMessaging.getInstance().subscribeToTopic("User" + userID);
             }
 
             @Override

@@ -75,16 +75,16 @@ public class RecyclerViewBookingHistoryAdapter extends RecyclerView.Adapter<Recy
         bookedTime = "Thời gian: " + bookedTimeArr[0]+":"+bookedTimeArr[1];
         imgUrl = listModelBooking.get(position).getModelBookingDetailsCollection().get(0).getModelSalonService().getModelSalon().getUrl();
 
-        if(status.equals("process")){
+        if(status.equals("1process")){
             holder.txtStatus.setTextColor(Color.BLUE);
             holder.txtStatus.setText(PROCESS);
-        }else if(status.equals("cancel")) {
+        }else if(status.equals("2cancel")) {
             holder.txtStatus.setTextColor(Color.RED);
             holder.txtStatus.setText(CANCEL);
-        }else if(status.equals("salonCancel")){
+        }else if(status.equals("3salonCancel")){
             holder.txtStatus.setTextColor(Color.RED);
             holder.txtStatus.setText(SALON_CANCEL);
-        }else if(status.equals("finish")){
+        }else if(status.equals("4finish")){
             holder.txtStatus.setTextColor(Color.GREEN);
             holder.txtStatus.setText(FINISH);
         }
