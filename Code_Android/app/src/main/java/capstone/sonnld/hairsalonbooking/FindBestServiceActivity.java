@@ -13,8 +13,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -47,6 +49,9 @@ public class FindBestServiceActivity extends AppCompatActivity {
     private RecyclerViewBestServiceAdapter recyclerViewSalonByRatingAdapter;
     private ArrayList<ModelSalonService> bestServices = new ArrayList<>();
     private LatLng you = null;
+    private Spinner spDiscount, spRating, spLocation;
+    private int discountPriority=1, ratingPriority=1, locationPriority=1;
+    private String[] arrSpinner = {"Thấp", "Trung bình","Cao"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,18 +67,45 @@ public class FindBestServiceActivity extends AppCompatActivity {
         btnSearch = findViewById(R.id.btn_search);
         edtSearch = findViewById(R.id.edt_search);
 
+        //trong so
+
+        spDiscount= findViewById(R.id.spDiscount);
+        spRating= findViewById(R.id.spRating);
+        spLocation= findViewById(R.id.spLocation);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(FindBestServiceActivity.this,android.R.layout.simple_spinner_item, arrSpinner);
+        spDiscount.setAdapter(adapter);
+        spRating.setAdapter(adapter);
+        spLocation.setAdapter(adapter);
+
+
+
         recyclerViewBestService.setLayoutManager(new GridLayoutManager(FindBestServiceActivity.this, 1));
 
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                discountPriority = spDiscount.getSelectedItemPosition()+1;
+                ratingPriority = spRating.getSelectedItemPosition()+1;
+                locationPriority = spLocation.getSelectedItemPosition()+1;
+
+
+
+
+                bestServices.clear();
                 String searchValue = edtSearch.getText().toString();
                 searchService(searchValue);
+
+
             }
         });
     }
 
     private void searchService(String searchVal) {
+
+        final double totalPriority= discountPriority+ratingPriority+locationPriority;
+
         Call<ArrayList<ModelSalonService>> listCall = hairSalonAPI.searchServiceByName(searchVal);
         listCall.enqueue(new Callback<ArrayList<ModelSalonService>>() {
             @Override
@@ -185,9 +217,9 @@ public class FindBestServiceActivity extends AppCompatActivity {
 
                     // caculate avgPoint
                     for (int i = 0; i < serviceArrayList.size(); i++) {
-                        double avgPoint = (serviceArrayList.get(i).getDiscountPoint() * 0.4
-                                + serviceArrayList.get(i).getRatingPoint() * 0.3
-                                + serviceArrayList.get(i).getDistancePoint() * 0.3);
+                        double avgPoint = (serviceArrayList.get(i).getDiscountPoint() * (discountPriority/totalPriority)
+                                + serviceArrayList.get(i).getRatingPoint() * (ratingPriority/totalPriority)
+                                + serviceArrayList.get(i).getDistancePoint() * (locationPriority/totalPriority));
                         serviceArrayList.get(i).setAvgPoint(avgPoint);
                     }
                     // sort by avg point
@@ -203,7 +235,7 @@ public class FindBestServiceActivity extends AppCompatActivity {
                     if (nMaxService > serviceArrayList.size()) {
                         nMaxService = serviceArrayList.size();
                     }
-
+                    bestServices.clear();
                     for (int i = 0; i < nMaxService; i++) {
                         ModelSalonService service = serviceArrayList.get(i);
                         System.out.println(
