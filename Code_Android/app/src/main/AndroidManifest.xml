@@ -15,7 +15,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:label">
-        <activity android:name=".FindBestServiceActivity"></activity>
+        <activity android:name=".NotificationActivity"></activity>
+        <activity android:name=".FindBestServiceActivity" />
         <activity android:name=".ReviewActivity" />
         <activity android:name=".HistoryDetailActivity" />
         <activity android:name=".HistoryActivity" />
@@ -46,7 +47,7 @@
 
         <service android:name=".service.FireBaseService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 

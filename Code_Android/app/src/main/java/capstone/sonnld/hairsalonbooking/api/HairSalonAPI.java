@@ -7,6 +7,7 @@ import capstone.sonnld.hairsalonbooking.dto.BookingDTO;
 import capstone.sonnld.hairsalonbooking.dto.RatingDTO;
 import capstone.sonnld.hairsalonbooking.model.ModelAccount;
 import capstone.sonnld.hairsalonbooking.model.ModelBooking;
+import capstone.sonnld.hairsalonbooking.model.ModelBookingDetail;
 import capstone.sonnld.hairsalonbooking.model.ModelReview;
 import capstone.sonnld.hairsalonbooking.model.ModelSalon;
 import capstone.sonnld.hairsalonbooking.model.ModelSalonService;
@@ -64,5 +65,8 @@ public interface HairSalonAPI {
 
     @GET("salonservice/searchServiceByName/{serviceName}")
     Call<ArrayList<ModelSalonService>> searchServiceByName(@Path("serviceName") String serviceName);
+
+    @GET("booking-details/getBookingDetailByBookingId/{bookingId}")
+    Call<ArrayList<ModelBookingDetail>> getBookingDetailByBookingId(@Path("bookingId") int bookingId);
 
 }

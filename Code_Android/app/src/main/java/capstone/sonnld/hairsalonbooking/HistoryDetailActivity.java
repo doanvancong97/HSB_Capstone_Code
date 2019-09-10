@@ -2,6 +2,7 @@ package capstone.sonnld.hairsalonbooking;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -54,7 +55,9 @@ public class HistoryDetailActivity extends AppCompatActivity {
     private TextView txtBookedTime;
     private TextView txtTotalPrice;
     private TextView txtAddress;
+    private TextView txtStatus;
     private TextView txtDirection;
+    private Button btnMain;
 
     private int bookingId;
     private int userID;
@@ -91,6 +94,8 @@ public class HistoryDetailActivity extends AppCompatActivity {
         ratingBar = findViewById(R.id.rating_bar);
         btnSubmit = findViewById(R.id.btn_submit);
         txtSalonName = findViewById(R.id.txt_salon_name);
+        btnMain = findViewById(R.id.btn_go_to_main);
+        txtStatus = findViewById(R.id.txt_status);
         edtComment = findViewById(R.id.edt_comment);
 
         // get session
@@ -101,7 +106,7 @@ public class HistoryDetailActivity extends AppCompatActivity {
             initUserDetail();
         }
 
-        // get data from RecyclerViewBookingHistoryAdapter
+        // get data from RecyclerViewBookingHistoryAdapter/ Firebase service
         final Intent intent = getIntent();
         String bookedDate = intent.getExtras().getString("BookedDate");
         String bookedTime = intent.getExtras().getString("BookedTime");
@@ -109,7 +114,6 @@ public class HistoryDetailActivity extends AppCompatActivity {
         salonName = intent.getExtras().getString("SalonName");
         String status = intent.getExtras().getString("BookingStatus");
         String address = intent.getExtras().getString("ModelAddress");
-
         ArrayList<ModelBookingDetail> selectedService =
                 (ArrayList<ModelBookingDetail>) intent.getSerializableExtra("SelectedService");
 
@@ -129,7 +133,22 @@ public class HistoryDetailActivity extends AppCompatActivity {
         txtBookedTime.setText(bookedTimeArr[0]+":"+bookedTimeArr[1]);
         txtAddress.setText(address);
         txtSalonName.setText("Đánh giá salon " + salonName);
-
+        if(status.equals("1process")){
+            txtStatus.setText("Đang xử lý");
+            txtStatus.setTextColor(Color.BLUE);
+        }
+        if(status.equals("2cancel")){
+            txtStatus.setText("Bạn đã hủy");
+            txtStatus.setTextColor(Color.RED);
+        }
+        if(status.equals("3salonCancel")){
+            txtStatus.setText("Bị hủy bởi salon");
+            txtStatus.setTextColor(Color.RED);
+        }
+        if(status.equals("4finish")){
+            txtStatus.setText("Đã hoàn thành");
+            txtStatus.setTextColor(Color.GREEN);
+        }
         //recycler view setup
         recyclerView = findViewById(R.id.recycler_selected_service);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
@@ -146,6 +165,15 @@ public class HistoryDetailActivity extends AppCompatActivity {
                 Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
                 mapIntent.setPackage("com.google.android.apps.maps");
                 startActivity(mapIntent);
+            }
+        });
+
+        btnMain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentMain = new Intent(HistoryDetailActivity.this, MainActivity.class);
+                startActivity(intentMain);
+                finish();
             }
         });
 
