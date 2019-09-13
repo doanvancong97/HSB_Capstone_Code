@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import capstone.sonnld.hairsalonbooking.dto.BookingDTO;
+import capstone.sonnld.hairsalonbooking.dto.NotifyDTO;
 import capstone.sonnld.hairsalonbooking.dto.RatingDTO;
 import capstone.sonnld.hairsalonbooking.model.ModelAccount;
 import capstone.sonnld.hairsalonbooking.model.ModelBooking;
 import capstone.sonnld.hairsalonbooking.model.ModelBookingDetail;
+import capstone.sonnld.hairsalonbooking.model.ModelNotify;
 import capstone.sonnld.hairsalonbooking.model.ModelReview;
 import capstone.sonnld.hairsalonbooking.model.ModelSalon;
 import capstone.sonnld.hairsalonbooking.model.ModelSalonService;
@@ -68,5 +70,17 @@ public interface HairSalonAPI {
 
     @GET("booking-details/getBookingDetailByBookingId/{bookingId}")
     Call<ArrayList<ModelBookingDetail>> getBookingDetailByBookingId(@Path("bookingId") int bookingId);
+
+    @POST("notify/saveNotify")
+    Call<ModelNotify> saveNotify(@Body NotifyDTO notifyDTO);
+
+    @GET("notify/getAllNotifyByCusId/{id}")
+    Call<List<ModelNotify>> getAllNotifyByCusId(@Path("id") int id);
+
+    @POST("notify/updateNotifyIsRead/{id}")
+    Call<ModelNotify> updateIsRead(@Path("id") int bookingID);
+
+    @GET("notify/countUnOpenNotify/{id}")
+    Call<Integer> countUnOpenNotify(@Path("id") int id);
 
 }

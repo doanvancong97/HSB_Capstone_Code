@@ -19,7 +19,7 @@ public class SessionManager {
     private final String LOGIN = "IS_LOGIN";
     private final String USERNAME = "USERNAME";
 
-
+    private int userID;
 
 
     public SessionManager(Context context) {
@@ -35,6 +35,14 @@ public class SessionManager {
 
     public void setSharedPreferences(SharedPreferences sharedPreferences) {
         this.sharedPreferences = sharedPreferences;
+    }
+
+    public int getUserID() {
+        return userID;
+    }
+
+    public void setUserID(int userID) {
+        this.userID = userID;
     }
 
     public SharedPreferences.Editor getEditor() {
@@ -69,9 +77,10 @@ public class SessionManager {
         return USERNAME;
     }
 
-    public void createSession(String username) {
+    public void createSession(String username, int userID) {
         editor.putBoolean(LOGIN, true);
         editor.putString(USERNAME, username);
+        editor.putInt("userId", userID);
         editor.apply();
 
 
@@ -87,6 +96,7 @@ public class SessionManager {
 
         HashMap<String, String> user = new HashMap<>();
         user.put(USERNAME, sharedPreferences.getString(USERNAME, null));
+        user.put("userId", String.valueOf(sharedPreferences.getInt("userId", 0)));
         return user;
 
 

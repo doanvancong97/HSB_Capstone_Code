@@ -11,19 +11,28 @@ import android.graphics.Color;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.view.View;
 
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
 import capstone.sonnld.hairsalonbooking.HistoryDetailActivity;
+import capstone.sonnld.hairsalonbooking.MainActivity;
 import capstone.sonnld.hairsalonbooking.R;
 import capstone.sonnld.hairsalonbooking.api.HairSalonAPI;
 import capstone.sonnld.hairsalonbooking.api.RetrofitClient;
+import capstone.sonnld.hairsalonbooking.dto.NotifyDTO;
+import capstone.sonnld.hairsalonbooking.model.ModelAccount;
 import capstone.sonnld.hairsalonbooking.model.ModelBookingDetail;
+import capstone.sonnld.hairsalonbooking.model.ModelNotify;
+import capstone.sonnld.hairsalonbooking.support.SessionManager;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -40,6 +49,12 @@ public class FireBaseService extends FirebaseMessagingService {
     int bookId;
     String status;
 
+    //Session Login
+    private SessionManager sessionManager;
+    private String mUserName;
+    private int userID;
+    private int salonId;
+
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
@@ -49,9 +64,21 @@ public class FireBaseService extends FirebaseMessagingService {
         hairSalonAPI = retrofit.create(HairSalonAPI.class);
 
 
+        sessionManager = new SessionManager(getApplicationContext());
+        if (sessionManager.isLogin()) {
+
+            HashMap<String, String> user = sessionManager.getUserDetail();
+            mUserName = user.get(sessionManager.getUSERNAME());
+            userID = Integer.parseInt(user.get("userId"));
+
+        }
+
+
+
         showNotify(remoteMessage.getData());
 
     }
+
 
     private void showNotify(Map<String, String> data) {
 
@@ -63,11 +90,52 @@ public class FireBaseService extends FirebaseMessagingService {
         } else {
             status = "hoàn thành";
         }
+        salonId = Integer.parseInt(data.get("salonId"));
+
+
+
+        // save notify to DB
+        saveNotifyToDB();
+
 
         //onclick notify
         getListBookingDetail(bookId);
 
 
+    }
+
+    private void updateNotifyNumber() {
+        countUnOpenNotify();
+    }
+
+    private void countUnOpenNotify() {
+        Call<Integer> integerCall = hairSalonAPI.countUnOpenNotify(userID);
+        integerCall.enqueue(new Callback<Integer>() {
+            @Override
+            public void onResponse(Call<Integer> call, Response<Integer> response) {
+                int numberOfNotify = response.body();
+                Intent intent = new Intent();
+                intent.putExtra("extra", numberOfNotify);
+                intent.setAction("capstone.sonnld.hairsalonbooking.onMessageReceived");
+                sendBroadcast(intent);
+            }
+
+            @Override
+            public void onFailure(Call<Integer> call, Throwable t) {
+
+            }
+        });
+    }
+    private void saveNotifyToDB() {
+        String statusCode = "";
+        if(status.equals("bị hủy")){
+            statusCode = "3salonCancel";
+        }else if(status.equals("hoàn thành")){
+            statusCode = "4finish";
+        }
+        String isRead = "no";
+        NotifyDTO notifyDTO = new NotifyDTO(bookDate,bookTime,userID,salonId,bookId,statusCode,isRead);
+        saveNotify(notifyDTO);
     }
 
     private void getListBookingDetail(int id) {
@@ -87,10 +155,11 @@ public class FireBaseService extends FirebaseMessagingService {
                 String salonName = selectedService.get(0).getModelSalonService().getModelSalon().getName();
                 String statusCode = "";
                 if(status.equals("bị hủy")){
-                    statusCode = "2cancel";
+                    statusCode = "3salonCancel";
                 }else if(status.equals("hoàn thành")){
                     statusCode = "4finish";
                 }
+
 
                 // setup notify
                 NotificationManager notificationManager
@@ -110,7 +179,6 @@ public class FireBaseService extends FirebaseMessagingService {
                     notificationManager.createNotificationChannel(notificationChannel);
                 }
 
-
                 Intent intent = new Intent(FireBaseService.this, HistoryDetailActivity.class);
                 intent.putExtra("BookedDate", bookDate);
                 intent.putExtra("BookedTime", bookTime);
@@ -119,6 +187,7 @@ public class FireBaseService extends FirebaseMessagingService {
                 intent.putExtra("BookingStatus", statusCode);
                 intent.putExtra("ModelAddress", address);
                 intent.putExtra("SelectedService", selectedService);
+                intent.putExtra("Seen","yes");
 
                 PendingIntent pendingIntent = PendingIntent.getActivity(FireBaseService.this,
                         1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -134,10 +203,29 @@ public class FireBaseService extends FirebaseMessagingService {
                         .setContentText("Lịch đặt chỗ ngày " + bookDate + " lúc " + bookTime + "đã " + status)
                         .setContentInfo("");
                 notificationManager.notify(new Random().nextInt(), builder.build());
+
+
             }
 
             @Override
             public void onFailure(Call<ArrayList<ModelBookingDetail>> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void saveNotify(NotifyDTO notifyDTO) {
+        Call<ModelNotify> modelNotifyCall = hairSalonAPI.saveNotify(notifyDTO);
+
+        modelNotifyCall.enqueue(new Callback<ModelNotify>() {
+            @Override
+            public void onResponse(Call<ModelNotify> call, Response<ModelNotify> response) {
+                // update number of notify
+                updateNotifyNumber();
+            }
+
+            @Override
+            public void onFailure(Call<ModelNotify> call, Throwable t) {
 
             }
         });

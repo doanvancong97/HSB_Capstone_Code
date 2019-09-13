@@ -29,6 +29,7 @@ import capstone.sonnld.hairsalonbooking.dto.RatingDTO;
 import capstone.sonnld.hairsalonbooking.model.ModelAccount;
 import capstone.sonnld.hairsalonbooking.model.ModelBooking;
 import capstone.sonnld.hairsalonbooking.model.ModelBookingDetail;
+import capstone.sonnld.hairsalonbooking.model.ModelNotify;
 import capstone.sonnld.hairsalonbooking.support.SessionManager;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -72,6 +73,13 @@ public class HistoryDetailActivity extends AppCompatActivity {
     private int rating;
     private String comment;
     private Date createdDate;
+
+    String bookedDate;
+    String bookedTime;
+    String status;
+    String address;
+    String isRead;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,132 +116,166 @@ public class HistoryDetailActivity extends AppCompatActivity {
 
         // get data from RecyclerViewBookingHistoryAdapter/ Firebase service
         final Intent intent = getIntent();
-        String bookedDate = intent.getExtras().getString("BookedDate");
-        String bookedTime = intent.getExtras().getString("BookedTime");
+        bookedDate = intent.getExtras().getString("BookedDate");
+        bookedTime = intent.getExtras().getString("BookedTime");
         bookingId = intent.getExtras().getInt("BookingId");
         salonName = intent.getExtras().getString("SalonName");
-        String status = intent.getExtras().getString("BookingStatus");
-        String address = intent.getExtras().getString("ModelAddress");
-        ArrayList<ModelBookingDetail> selectedService =
-                (ArrayList<ModelBookingDetail>) intent.getSerializableExtra("SelectedService");
-
-        int totalPrice = 0;
-        for (int i = 0; i < selectedService.size(); i++) {
-            String price = selectedService.get(i).getModelSalonService().getPrice() + "";
-            String discount = selectedService.get(i).getModelSalonService().getModelDiscount().getDiscountValue() + "";
-            int salePrice = getSalePrice(price, discount);
-            totalPrice += salePrice;
+        status = intent.getExtras().getString("BookingStatus");
+        address = intent.getExtras().getString("ModelAddress");
+        if(intent.getExtras().getString("Seen") == null){
+            isRead = "no";
+        }else{
+            isRead = intent.getExtras().getString("Seen");
         }
 
-        //set data to view
-        String[] bookedDateArr = bookedDate.split("-");
-        String[] bookedTimeArr = bookedTime.split(":");
-        txtTotalPrice.setText(totalPrice + "k");
-        txtBookedDate.setText(bookedDateArr[2]+"/"+bookedDateArr[1]+"/"+bookedDateArr[0]);
-        txtBookedTime.setText(bookedTimeArr[0]+":"+bookedTimeArr[1]);
-        txtAddress.setText(address);
-        txtSalonName.setText("Đánh giá salon " + salonName);
-        if(status.equals("1process")){
-            txtStatus.setText("Đang xử lý");
-            txtStatus.setTextColor(Color.BLUE);
-        }
-        if(status.equals("2cancel")){
-            txtStatus.setText("Bạn đã hủy");
-            txtStatus.setTextColor(Color.RED);
-        }
-        if(status.equals("3salonCancel")){
-            txtStatus.setText("Bị hủy bởi salon");
-            txtStatus.setTextColor(Color.RED);
-        }
-        if(status.equals("4finish")){
-            txtStatus.setText("Đã hoàn thành");
-            txtStatus.setTextColor(Color.GREEN);
-        }
-        //recycler view setup
-        recyclerView = findViewById(R.id.recycler_selected_service);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
-        RecyclerViewBookedServiceAdapter serviceAdapter =
-                new RecyclerViewBookedServiceAdapter(this, selectedService);
-        recyclerView.setAdapter(serviceAdapter);
+        setupViews();
 
-        // btn direction to salon
-        txtDirection.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Uri gmmIntentUri = Uri.parse("google.navigation:q="+ txtAddress.getText().toString());
-                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-                mapIntent.setPackage("com.google.android.apps.maps");
-                startActivity(mapIntent);
-            }
-        });
-
-        btnMain.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intentMain = new Intent(HistoryDetailActivity.this, MainActivity.class);
-                startActivity(intentMain);
-                finish();
-            }
-        });
-
-        // setup btn cancel
-        if(!status.equals("1process")){
-            btnCancel.setVisibility(View.GONE);
-        }
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(HistoryDetailActivity.this);
-                builder.setTitle("Hủy đơn đặt chỗ")
-                        .setMessage("Bạn có muốn hủy đơn đặt chỗ không?")
-                        .setPositiveButton("Có", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                cancelBooking();
-                            }
-                        })
-                        .setNegativeButton("Không", null);
-                AlertDialog dialog = builder.create();
-                dialog.show();
-
-            }
-        });
-
-
-        // setup btn review/review layout
-        btnReview.setVisibility(View.GONE);
-        lnReview.setVisibility(View.GONE);
-        if(status.equals("4finish")){
-            lnReview.setVisibility(View.VISIBLE);
-        }
-
-        btnSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                submitReview();
-            }
-        });
-
-//        btnReview.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent openReviewActivity = new Intent(HistoryDetailActivity.this, ReviewActivity.class);
-//                openReviewActivity.putExtra("userId",userID);
-//                openReviewActivity.putExtra("salonName",salonName);
-//                openReviewActivity.putExtra("bookingId",bookingId);
-//
-//                startActivity(openReviewActivity);
-//            }
-//        });
     }
 
-    public void submitReview(){
+    private void setupViews() {
+        Call<ArrayList<ModelBookingDetail>> call = hairSalonAPI.getBookingDetailByBookingId(bookingId);
+
+        call.enqueue(new Callback<ArrayList<ModelBookingDetail>>() {
+            @Override
+            public void onResponse(Call<ArrayList<ModelBookingDetail>> call, Response<ArrayList<ModelBookingDetail>> response) {
+
+                ArrayList<ModelBookingDetail> selectedService = response.body();
+
+                int totalPrice = 0;
+                for (int i = 0; i < selectedService.size(); i++) {
+                    String price = selectedService.get(i).getModelSalonService().getPrice() + "";
+                    String discount = selectedService.get(i).getModelSalonService().getModelDiscount().getDiscountValue() + "";
+                    int salePrice = getSalePrice(price, discount);
+                    totalPrice += salePrice;
+                }
+
+                //update notify is read status
+                updateIsRead();
+
+                //set data to view
+                String[] bookedDateArr = bookedDate.split("-");
+                String[] bookedTimeArr = bookedTime.split(":");
+                txtTotalPrice.setText(totalPrice + "k");
+                txtBookedDate.setText(bookedDateArr[2] + "/" + bookedDateArr[1] + "/" + bookedDateArr[0]);
+                txtBookedTime.setText(bookedTimeArr[0] + ":" + bookedTimeArr[1]);
+                txtAddress.setText(address);
+                txtSalonName.setText("Đánh giá salon " + salonName);
+                if (status.equals("1process")) {
+                    txtStatus.setText("Đang xử lý");
+                    txtStatus.setTextColor(Color.BLUE);
+                }
+                if (status.equals("2cancel")) {
+                    txtStatus.setText("Bạn đã hủy");
+                    txtStatus.setTextColor(Color.RED);
+                }
+                if (status.equals("3salonCancel")) {
+                    txtStatus.setText("Bị hủy bởi salon");
+                    txtStatus.setTextColor(Color.RED);
+                }
+                if (status.equals("4finish")) {
+                    txtStatus.setText("Đã hoàn thành");
+                    txtStatus.setTextColor(Color.GREEN);
+                }
+                //recycler view setup
+                recyclerView = findViewById(R.id.recycler_selected_service);
+                recyclerView.setLayoutManager(new GridLayoutManager(HistoryDetailActivity.this, 1));
+                RecyclerViewBookedServiceAdapter serviceAdapter =
+                        new RecyclerViewBookedServiceAdapter(HistoryDetailActivity.this, selectedService);
+                recyclerView.setAdapter(serviceAdapter);
+
+                // btn direction to salon
+
+                txtDirection.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        Uri gmmIntentUri = Uri.parse("google.navigation:q=" + txtAddress.getText().toString());
+                        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                        mapIntent.setPackage("com.google.android.apps.maps");
+                        startActivity(mapIntent);
+                    }
+                });
+
+                // back to main activity
+                btnMain.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intentMain = new Intent(HistoryDetailActivity.this, MainActivity.class);
+                        finish();
+                        startActivity(intentMain);
+
+                    }
+                });
+
+                // setup btn cancel
+                if (!status.equals("1process")) {
+                    btnCancel.setVisibility(View.GONE);
+                }
+                btnCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(HistoryDetailActivity.this);
+                        builder.setTitle("Hủy đơn đặt chỗ")
+                                .setMessage("Bạn có muốn hủy đơn đặt chỗ không?")
+                                .setPositiveButton("Có", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        cancelBooking();
+                                    }
+                                })
+                                .setNegativeButton("Không", null);
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
+
+                    }
+                });
+
+
+                // setup btn review/review layout
+                btnReview.setVisibility(View.GONE);
+                lnReview.setVisibility(View.GONE);
+                if (status.equals("4finish")) {
+                    lnReview.setVisibility(View.VISIBLE);
+                }
+
+                btnSubmit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        submitReview();
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<ModelBookingDetail>> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void updateIsRead() {
+        Call<ModelNotify> modelNotifyCall = hairSalonAPI.updateIsRead(bookingId);
+        modelNotifyCall.enqueue(new Callback<ModelNotify>() {
+            @Override
+            public void onResponse(Call<ModelNotify> call, Response<ModelNotify> response) {
+
+
+            }
+
+            @Override
+            public void onFailure(Call<ModelNotify> call, Throwable t) {
+
+            }
+        });
+    }
+
+
+    public void submitReview() {
         getSalonIdByBookingId();
     }
 
-    public void getSalonIdByBookingId(){
+    public void getSalonIdByBookingId() {
         Call<Integer> integerCall = hairSalonAPI.getSalonIdByBookingId(bookingId);
         integerCall.enqueue(new Callback<Integer>() {
             @Override
@@ -241,7 +283,7 @@ public class HistoryDetailActivity extends AppCompatActivity {
                 int salonId = response.body();
                 rating = (int) ratingBar.getRating();
                 comment = edtComment.getText().toString();
-                SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
                 createdDate = new Date(System.currentTimeMillis());
                 String sCreatedDate = formatter.format(createdDate);
 
@@ -257,12 +299,13 @@ public class HistoryDetailActivity extends AppCompatActivity {
                 modelBookingCall.enqueue(new Callback<ModelBooking>() {
                     @Override
                     public void onResponse(Call<ModelBooking> call, Response<ModelBooking> response) {
-                        if(response.code() == 200){
-                            Toast.makeText(HistoryDetailActivity.this, "Đã đăng tải bình luận",Toast.LENGTH_LONG).show();
+                        if (response.code() == 200) {
+                            Toast.makeText(HistoryDetailActivity.this, "Đã đăng tải bình luận", Toast.LENGTH_LONG).show();
                             Intent intent = new Intent(HistoryDetailActivity.this, MainActivity.class);
                             startActivity(intent);
                         }
                     }
+
                     @Override
                     public void onFailure(Call<ModelBooking> call, Throwable t) {
 
@@ -282,11 +325,11 @@ public class HistoryDetailActivity extends AppCompatActivity {
         call.enqueue(new Callback<ModelBooking>() {
             @Override
             public void onResponse(Call<ModelBooking> call, Response<ModelBooking> response) {
-                if(response.code() == 200){
+                if (response.code() == 200) {
                     Toast.makeText(HistoryDetailActivity.this, "Hủy đơn đặt chỗ thành công",
                             Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(HistoryDetailActivity.this, HistoryActivity.class);
-                    intent.putExtra("USER_ID",userID);
+                    intent.putExtra("USER_ID", userID);
                     startActivity(intent);
                     finish();
                 }

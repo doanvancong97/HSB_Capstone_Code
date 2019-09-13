@@ -91,12 +91,13 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ModelAccount> call, Response<ModelAccount> response) {
                 ModelAccount currentAcc = response.body();
+                int userId = currentAcc.getUserId();
                 if(currentAcc.getStatus().equals("disable")){
                     Toast.makeText(LoginActivity.this,
                             "Tài khoản của bạn đã bị khóa.Hãy liên hệ admin!", Toast.LENGTH_LONG).show();
                 }else{
                     Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
-                    sessionManager.createSession(edtUsername.getText().toString().trim());
+                    sessionManager.createSession(edtUsername.getText().toString().trim(), userId);
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     intent.putExtra("username",edtUsername.getText().toString());
                     finish();

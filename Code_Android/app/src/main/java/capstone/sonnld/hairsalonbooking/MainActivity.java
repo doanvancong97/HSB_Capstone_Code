@@ -1,8 +1,11 @@
 package capstone.sonnld.hairsalonbooking;
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -60,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
     private HairSalonAPI hairSalonAPI;
 
     private Button btn_ReLogin;
+    private ImageView btnNotify;
     private LinearLayout lnWelcome;
     private TextView txtWelcome;
     private NavigationView navigationview;
@@ -97,6 +101,9 @@ public class MainActivity extends AppCompatActivity {
     private String mUserName;
     private ImageView imgAvatar;
 
+
+    // notify
+    private TextView txtNumberNotify;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,7 +144,9 @@ public class MainActivity extends AppCompatActivity {
 
             HashMap<String, String> user = sessionManager.getUserDetail();
             mUserName = user.get(sessionManager.getUSERNAME());
-
+            userID = Integer.parseInt(user.get("userId"));
+            //create topic with user id
+            FirebaseMessaging.getInstance().subscribeToTopic("User" + userID);
             lnWelcome.setVisibility(View.VISIBLE);
             initUserDetail();
             btn_ReLogin.setVisibility(View.GONE);
@@ -145,6 +154,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         //onclick login
+
         btn_ReLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -157,6 +167,9 @@ public class MainActivity extends AppCompatActivity {
                 }
                 HashMap<String, String> user = sessionManager.getUserDetail();
                 mUserName = user.get(sessionManager.getUSERNAME());
+                userID = Integer.parseInt(user.get("userId"));
+                //create topic with user id
+                FirebaseMessaging.getInstance().subscribeToTopic("User" + userID);
                 initUserDetail();
 
             }
@@ -293,6 +306,65 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // setup notify
+        btnNotify = findViewById(R.id.btn_notify);
+        btnNotify.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, NotificationActivity.class);
+                intent.putExtra("cusId", userID);
+                startActivity(intent);
+            }
+        });
+        // count un open notify
+        txtNumberNotify = findViewById(R.id.txt_number_notify);
+
+        countUnOpenNotify();
+    }
+
+    private class MyBroadcastReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle extras = intent.getExtras();
+            int state = extras.getInt("extra");
+            System.out.println("Extra hereeee: " + state);
+            updateView(String.valueOf(state));// update your textView in the main layout
+        }
+    }
+
+    private void updateView(String state) {
+        txtNumberNotify.setText(state);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("capstone.sonnld.hairsalonbooking.onMessageReceived");
+        MyBroadcastReceiver receiver = new MyBroadcastReceiver();
+        registerReceiver(receiver, intentFilter);
+    }
+
+    private void countUnOpenNotify() {
+        Call<Integer> integerCall = hairSalonAPI.countUnOpenNotify(userID);
+        integerCall.enqueue(new Callback<Integer>() {
+            @Override
+            public void onResponse(Call<Integer> call, Response<Integer> response) {
+                int numberOfNotify = response.body();
+                System.out.println(numberOfNotify+ "hereeeee");
+                txtNumberNotify.setText(String.valueOf(numberOfNotify));
+                if(txtNumberNotify.getText().equals("0")){
+                    txtNumberNotify.setVisibility(View.GONE);
+                }else{
+                    txtNumberNotify.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Integer> call, Throwable t) {
+
+            }
+        });
     }
 
 
@@ -304,11 +376,11 @@ public class MainActivity extends AppCompatActivity {
 
             HashMap<String, String> user = sessionManager.getUserDetail();
             mUserName = user.get(sessionManager.getUSERNAME());
-
+            userID = Integer.parseInt(user.get("userId"));
             lnWelcome.setVisibility(View.VISIBLE);
             initUserDetail();
             btn_ReLogin.setVisibility(View.GONE);
-
+            countUnOpenNotify();
 
         }else {
             btn_ReLogin.setVisibility(View.VISIBLE);
