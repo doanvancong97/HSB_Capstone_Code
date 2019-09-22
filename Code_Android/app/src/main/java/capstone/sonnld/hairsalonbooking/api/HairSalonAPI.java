@@ -21,17 +21,9 @@ import retrofit2.http.Path;
 
 public interface HairSalonAPI {
 
-    @GET("salonservice/getAllActiveSalonService")
-    Call<ArrayList<ModelSalonService>> getAllServiceByDiscountValue();
-
-    @GET("salonservice/{salonId}")
-    Call<ArrayList<ModelSalonService>> getSalonServiceBySalonId(@Path("salonId") int id);
-
+    // user account
     @GET("users-details/{username}")
     Call<ModelAccount> getUserDetail(@Path("username") String username);
-
-    @POST("booking")
-    Call<BookingDTO> postBooking(@Body BookingDTO bookingDTO);
 
     @POST("login")
     Call<Void> checkLogin(@Body ModelAccount modelAccount);
@@ -41,6 +33,35 @@ public interface HairSalonAPI {
 
     @POST("sign-up")
     Call<String> registerUser(@Body ModelAccount modelAccount);
+
+    // review
+    @POST("addReviewToBooking")
+    Call<ModelBooking> addReviewToBooking(@Body RatingDTO ratingDTO);
+
+    @GET("review/getAllReviewBySalonId/{id}")
+    Call<ArrayList<ModelReview>> getAllReviewBySalonId(@Path("id") int salonId);
+
+    // salon API
+    @GET("salon/getAllSalonByRating")
+    Call<ArrayList<ModelSalon>> getAllSalonByRating();
+
+    @GET("salon/getSalonIdByBookingId/{id}")
+    Call<Integer> getSalonIdByBookingId(@Path("id") int bookingId);
+
+
+    // salon service
+    @GET("salonservice/searchServiceByName/{serviceName}")
+    Call<ArrayList<ModelSalonService>> searchServiceByName(@Path("serviceName") String serviceName);
+
+    @GET("salonservice/getAllActiveSalonService")
+    Call<ArrayList<ModelSalonService>> getAllServiceByDiscountValue();
+
+    @GET("salonservice/{salonId}")
+    Call<ArrayList<ModelSalonService>> getSalonServiceBySalonId(@Path("salonId") int id);
+
+    // booking
+    @GET("booking-details/getBookingDetailByBookingId/{bookingId}")
+    Call<ArrayList<ModelBookingDetail>> getBookingDetailByBookingId(@Path("bookingId") int bookingId);
 
     @GET("bookingHistories/{id}")
     Call<ArrayList<ModelBooking>> getBookingHistoryByUserID(@Path("id") int accountId);
@@ -52,25 +73,10 @@ public interface HairSalonAPI {
     Call<Integer> countNumberOfBooking(@Path("bookedDate") String bookedDate,
                                        @Path("bookedTime") String bookedTime,
                                        @Path("salonId") int salonId);
+    @POST("booking")
+    Call<BookingDTO> postBooking(@Body BookingDTO bookingDTO);
 
-    @POST("addReviewToBooking")
-    Call<ModelBooking> addReviewToBooking(@Body RatingDTO ratingDTO);
-
-    @GET("salon/getAllSalonByRating")
-    Call<ArrayList<ModelSalon>> getAllSalonByRating();
-
-    @GET("salon/getSalonIdByBookingId/{id}")
-    Call<Integer> getSalonIdByBookingId(@Path("id") int bookingId);
-
-    @GET("review/getAllReviewBySalonId/{id}")
-    Call<ArrayList<ModelReview>> getAllReviewBySalonId(@Path("id") int salonId);
-
-    @GET("salonservice/searchServiceByName/{serviceName}")
-    Call<ArrayList<ModelSalonService>> searchServiceByName(@Path("serviceName") String serviceName);
-
-    @GET("booking-details/getBookingDetailByBookingId/{bookingId}")
-    Call<ArrayList<ModelBookingDetail>> getBookingDetailByBookingId(@Path("bookingId") int bookingId);
-
+    // notify API
     @POST("notify/saveNotify")
     Call<ModelNotify> saveNotify(@Body NotifyDTO notifyDTO);
 

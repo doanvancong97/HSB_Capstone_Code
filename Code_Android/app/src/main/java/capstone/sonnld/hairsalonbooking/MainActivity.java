@@ -535,7 +535,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void findBestSalon(MenuItem item){
-
+        Intent intent = new Intent(MainActivity.this, FindBestSalonActivity.class);
+        startActivity(intent);
     }
 
     public void findBestService(MenuItem item){

@@ -15,7 +15,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:label">
-        <activity android:name=".NotificationActivity"></activity>
+        <activity android:name=".FindBestSalonActivity"></activity>
+        <activity android:name=".NotificationActivity" />
         <activity android:name=".FindBestServiceActivity" />
         <activity android:name=".ReviewActivity" />
         <activity android:name=".HistoryDetailActivity" />

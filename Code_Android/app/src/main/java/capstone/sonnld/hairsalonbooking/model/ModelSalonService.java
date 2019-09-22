@@ -32,7 +32,7 @@ public class ModelSalonService implements Serializable {
     @Expose
     private String thumbUrl;
 
-    private  transient double distance;
+    private transient double distance;
     private transient double discountPoint;
     private transient double ratingPoint;
     private transient double distancePoint;

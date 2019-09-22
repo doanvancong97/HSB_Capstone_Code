@@ -78,8 +78,6 @@ public class FindBestServiceActivity extends AppCompatActivity {
         spRating.setAdapter(adapter);
         spLocation.setAdapter(adapter);
 
-
-
         recyclerViewBestService.setLayoutManager(new GridLayoutManager(FindBestServiceActivity.this, 1));
 
         btnSearch.setOnClickListener(new View.OnClickListener() {

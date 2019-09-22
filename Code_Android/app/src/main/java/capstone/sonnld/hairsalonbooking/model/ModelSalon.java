@@ -56,6 +56,67 @@ public class ModelSalon implements Serializable {
     @SerializedName("averageRating")
     @Expose
     private float averageRating;
+    @SerializedName("avgDiscount")
+    @Expose
+    private float avgDiscount;
+
+    private transient double distance;
+    private transient double discountPoint;
+    private transient double ratingPoint;
+    private transient double distancePoint;
+    private transient double avgPoint;
+
+    public void setBookingDay(Integer bookingDay) {
+        this.bookingDay = bookingDay;
+    }
+
+    public float getAvgDiscount() {
+        return avgDiscount;
+    }
+
+    public void setAvgDiscount(float avgDiscount) {
+        this.avgDiscount = avgDiscount;
+    }
+
+    public double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(double distance) {
+        this.distance = distance;
+    }
+
+    public double getDiscountPoint() {
+        return discountPoint;
+    }
+
+    public void setDiscountPoint(double discountPoint) {
+        this.discountPoint = discountPoint;
+    }
+
+    public double getRatingPoint() {
+        return ratingPoint;
+    }
+
+    public void setRatingPoint(double ratingPoint) {
+        this.ratingPoint = ratingPoint;
+    }
+
+    public double getDistancePoint() {
+        return distancePoint;
+    }
+
+    public void setDistancePoint(double distancePoint) {
+        this.distancePoint = distancePoint;
+    }
+
+    public double getAvgPoint() {
+        return avgPoint;
+    }
+
+    public void setAvgPoint(double avgPoint) {
+        this.avgPoint = avgPoint;
+    }
 
     public float getAverageRating() {
         return averageRating;
