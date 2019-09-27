@@ -88,9 +88,6 @@ public class FindBestServiceActivity extends AppCompatActivity {
                 ratingPriority = spRating.getSelectedItemPosition()+1;
                 locationPriority = spLocation.getSelectedItemPosition()+1;
 
-
-
-
                 bestServices.clear();
                 String searchValue = edtSearch.getText().toString();
                 searchService(searchValue);

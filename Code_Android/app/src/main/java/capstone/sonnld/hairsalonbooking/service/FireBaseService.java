@@ -51,7 +51,6 @@ public class FireBaseService extends FirebaseMessagingService {
 
     //Session Login
     private SessionManager sessionManager;
-    private String mUserName;
     private int userID;
     private int salonId;
 
@@ -68,12 +67,9 @@ public class FireBaseService extends FirebaseMessagingService {
         if (sessionManager.isLogin()) {
 
             HashMap<String, String> user = sessionManager.getUserDetail();
-            mUserName = user.get(sessionManager.getUSERNAME());
             userID = Integer.parseInt(user.get("userId"));
 
         }
-
-
 
         showNotify(remoteMessage.getData());
 
@@ -92,15 +88,11 @@ public class FireBaseService extends FirebaseMessagingService {
         }
         salonId = Integer.parseInt(data.get("salonId"));
 
-
-
         // save notify to DB
         saveNotifyToDB();
 
-
         //onclick notify
         getListBookingDetail(bookId);
-
 
     }
 
@@ -192,6 +184,12 @@ public class FireBaseService extends FirebaseMessagingService {
                 PendingIntent pendingIntent = PendingIntent.getActivity(FireBaseService.this,
                         1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
+                // format date time
+                String[] bookedDateArr = bookDate.split("-");
+                String formatedBookDate = bookedDateArr[2]+"/"+bookedDateArr[1]+"/"+bookedDateArr[0];
+                String[] bookedTimeArr = bookTime.split(":");
+                String formatedBookTime = bookedTimeArr[0]+":"+bookedTimeArr[1];
+
                 NotificationCompat.Builder builder = new NotificationCompat.Builder(FireBaseService.this, NOTIFY_CHANEL_ID);
                 builder.setAutoCancel(true)
                         .setDefaults(Notification.DEFAULT_ALL)
@@ -200,10 +198,9 @@ public class FireBaseService extends FirebaseMessagingService {
                         .setAutoCancel(true)
                         .setContentIntent(pendingIntent)
                         .setContentTitle("Lịch đặt chỗ đã " + status)
-                        .setContentText("Lịch đặt chỗ ngày " + bookDate + " lúc " + bookTime + "đã " + status)
+                        .setContentText("Lịch đặt chỗ ngày " + formatedBookDate + " lúc " + formatedBookTime + " đã " + status)
                         .setContentInfo("");
                 notificationManager.notify(new Random().nextInt(), builder.build());
-
 
             }
 

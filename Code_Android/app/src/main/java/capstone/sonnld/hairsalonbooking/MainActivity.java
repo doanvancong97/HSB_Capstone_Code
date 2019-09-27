@@ -333,6 +333,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateView(String state) {
+        txtNumberNotify.setVisibility(View.VISIBLE);
         txtNumberNotify.setText(state);
     }
 
@@ -355,7 +356,8 @@ public class MainActivity extends AppCompatActivity {
                 txtNumberNotify.setText(String.valueOf(numberOfNotify));
                 if(txtNumberNotify.getText().equals("0")){
                     txtNumberNotify.setVisibility(View.GONE);
-                }else{
+                }
+                if(!txtNumberNotify.getText().equals("0")){
                     txtNumberNotify.setVisibility(View.VISIBLE);
                 }
             }

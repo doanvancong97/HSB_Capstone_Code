@@ -91,7 +91,6 @@ public class FindBestSalonActivity extends AppCompatActivity {
                 bestSalons.clear();
                 searchSalon();
 
-
             }
         });
 
@@ -258,6 +257,8 @@ public class FindBestSalonActivity extends AppCompatActivity {
         recyclerViewBestSalon.setLayoutManager(new GridLayoutManager(FindBestSalonActivity.this, 1));
         recyclerViewSalonByRatingAdapter  = new RecyclerViewSalonByRatingAdapter(this, bestSalons);
         recyclerViewBestSalon.setAdapter(recyclerViewSalonByRatingAdapter);
+        Toast.makeText(FindBestSalonActivity.this, "Đã cập nhật kết quả tìm kiếm", Toast.LENGTH_SHORT).show();
+
     }
 
     public GeoPoint getLocationFromAddress(String strAddress) {

@@ -80,7 +80,7 @@ public class BookingDetailActivity extends AppCompatActivity {
         String fullname = intent.getExtras().getString("fullname");
         userId = intent.getExtras().getInt("userId");
 
-        Toast.makeText(this, userId + "", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, userId + "", Toast.LENGTH_SHORT).show();
         phone = intent.getExtras().getString("phoneNum");
         String des = intent.getExtras().getString("description");
 
