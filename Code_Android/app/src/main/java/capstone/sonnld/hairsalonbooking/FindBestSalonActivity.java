@@ -224,7 +224,7 @@ public class FindBestSalonActivity extends AppCompatActivity {
 
                     });
                     // add maximun 3 best service
-                    int nMaxService = 3;
+                    int nMaxService = 1;
                     if (nMaxService > modelSalons.size()) {
                         nMaxService = modelSalons.size();
                     }
